@@ -1,0 +1,9 @@
+/.git*
+/tmp
+/.bin
+/.files
+!/.files/.config/terminfo
+/*.txt
+/*.md
+/Makefile
+/sync.sh
