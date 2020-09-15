@@ -28,6 +28,24 @@
 - yj 5.0.0
 - zoxide 0.4.3
 
+## Install
+
+### Build Image
+
+```sh
+git clone git@github.com/rafi/awesome-cli-binaries.git
+cd awesome-cli-binaries
+make
+ls -alp ./.bin
+```
+
+### Remote Copy .files/.bin
+
+```sh
+./setup.sh -h
+./setup.sh --root <ssh-server-address>
+```
+
 ## TODO
 
 - [ ] neovim

@@ -215,6 +215,8 @@ alias kingress-wide='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.
 # alias krestarts='kubectl get pod -o=custom-columns=NAME:.metadata.labels.app,RESTARTS:.status.containerStatuses[*].restartCount,REASON:.status.containerStatuses[*].lastState.terminated.reason,EXIT_CODE:status.containerStatuses[*].lastState.terminated.exitCode --sort-by="{.status.containerStatuses[:1].restartCount}"'
 alias krestarts='kubectl get pod -o=custom-columns=NAME:.metadata.name,RESTARTS:.status.containerStatuses[*].restartCount,REASON:.status.containerStatuses[*].lastState.terminated.reason,EXIT_CODE:status.containerStatuses[*].lastState.terminated.exitCode,LAST_RESTART_TIME:.status.containerStatuses[*].lastState.terminated.finishedAt,MEMORY_LIMIT:.spec.containers[*].resources.limits.memory --sort-by="{.status.containerStatuses[:1].restartCount}"'
 
+alias knotready='kubectl get pod --no-headers --field-selector=status.phase!=Running'
+
 # Order events by creation timestamp
 alias kevents='kubectl get events --sort-by=.metadata.creationTimestamp'
 

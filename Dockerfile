@@ -269,8 +269,10 @@ RUN $root/bin/zoxide --version
 FROM debian:stable-slim
 
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="34"
+LABEL io.rafi.revision="35"
 
-COPY --from=builder $root/bin $root
+ENV root /opt
+
+COPY --from=builder $root/bin $root/bin
 
 #  vim: set ts=2 sw=4 tw=80 et :
