@@ -65,6 +65,11 @@ if [ "$LC_IDENTIFICATION" = "rafi" ] || [[ "$LC_IDENTIFICATION" == rafael* ]]; t
 	set -o vi
 fi
 
+# See https://github.com/junegunn/fzf
+if [ -f "$XDG_CONFIG_HOME/key-bindings.bash" ]; then
+	. "$XDG_CONFIG_HOME/key-bindings.bash"
+fi
+
 # Setup fast colorful prompt display
 eval "$(starship init bash)"
 
