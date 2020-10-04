@@ -57,7 +57,8 @@ ssh() {
 	else
 		TERM=xterm
 	fi
-	LC_IDENTIFICATION=$USER command ssh -o SendEnv=LC_IDENTIFICATION "$@"
+	export LC_IDENTIFICATION="${LC_IDENTIFICATION:-$USER}"
+	command ssh -o SendEnv=LC_IDENTIFICATION "$@"
 }
 
 # Enable readline vi-mode for myself only

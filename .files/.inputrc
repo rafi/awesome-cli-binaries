@@ -50,11 +50,12 @@ set visible-stats on
 # Color files by types
 # Note that this may cause completion text blink in some terminals (e.g. xterm).
 set colored-stats On
+
 # Color the common prefix
 set colored-completion-prefix On
 
 # vi mode
-#set editing-mode vi
+# set editing-mode vi
 # toggle cursor on different modes
 set show-mode-in-prompt on
 set keyseq-timeout 100
@@ -70,7 +71,7 @@ $endif
 # ---
 set keymap emacs
 
-"\ee": vi-editing-mode
+"\C-x": vi-editing-mode
 "\C-p": history-search-backward
 "\C-n": history-search-forward
 
@@ -81,6 +82,7 @@ set keymap emacs
 # ---
 set keymap vi-insert
 
+"\C-x": emacs-editing-mode
 "\C-p": history-search-backward
 "\C-n": history-search-forward
 "\C-a": beginning-of-line
@@ -104,6 +106,7 @@ set keymap vi-insert
 # ---
 set keymap vi-command
 
+"\C-x": emacs-editing-mode
 "\C-a": beginning-of-line
 "\C-e": end-of-line
 "\C-b": backward-char
