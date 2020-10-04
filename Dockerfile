@@ -27,8 +27,9 @@ ENV ncurses_version 6.2
 ENV tmux_version 3.1b
 
 # others
-ENV bat_version 0.15.4
+ENV bat_version 0.16.0
 ENV chafa_version 1.4.1
+ENV duf_version 0.3.1
 ENV dyff_version 1.0.3
 ENV fd_version 8.1.1
 ENV fzf_version 0.22.0
@@ -37,12 +38,13 @@ ENV heksa_version 1.13.0
 ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
 ENV jq_version 1.6
+ENV kubectlfuzzy_version 1.7.0
 ENV lf_version r16
 ENV mkcert_version 1.4.1
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1
-ENV starship_version 0.44.0
+ENV starship_version 0.45.2
 ENV stern_version 1.11.0
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
@@ -107,6 +109,16 @@ RUN curl -LO "$chafa_url" && \
     mv chafa $root/bin/ && \
     rm -fr $chafa_name.tar.gz
 RUN $root/bin/chafa --version
+
+# duf
+ENV duf_name duf_${duf_version}_linux_x86_64
+ENV duf_url https://github.com/muesli/duf/releases/download/v${duf_version}/${duf_name}.tar.gz
+RUN curl -LO "$duf_url" && \
+    tar -xvzo -f $duf_name.tar.gz duf && \
+    chmod 775 duf && \
+    mv duf $root/bin/ && \
+    rm -fr $duf_name.tar.gz
+RUN $root/bin/duf --help
 
 # dyff
 ENV dyff_name dyff-linux-amd64
@@ -176,6 +188,15 @@ RUN curl -LO "$jq_url" && \
     chmod 775 $jq_name && \
     mv $jq_name $root/bin/jq
 RUN $root/bin/jq --version
+
+# kubectl-fuzzy
+ENV kubectlfuzzy_name kubectl-fuzzy_${kubectlfuzzy_version}_linux_amd64
+ENV kubectlfuzzy_url https://github.com/d-kuro/kubectl-fuzzy/releases/download/v$kubectlfuzzy_version/$kubectlfuzzy_name.tar.gz
+RUN curl -LO "$kubectlfuzzy_url" && \
+    tar xvzof $kubectlfuzzy_name.tar.gz kubectl-fuzzy && \
+    mv kubectl-fuzzy $root/bin/ && \
+    rm -fr $kubectlfuzzy_name.tar.gz
+RUN $root/bin/kubectl-fuzzy version
 
 # lf
 ENV lf_name lf-linux-amd64

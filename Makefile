@@ -4,7 +4,7 @@ OUT:=.bin
 .PHONY: docker all
 .DEFAULT:
 
-TARGETS:=bat chafa dyff fd fzf glow heksa hexyl ht jq lf mkcert ncdu reg rg starship stern tmux yank yj zoxide
+TARGETS:=bat chafa duf dyff fd fzf glow heksa hexyl ht jq kubectl-fuzzy lf mkcert ncdu reg rg starship stern tmux yank yj zoxide
 
 all: $(TARGETS)
 
