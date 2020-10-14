@@ -5,7 +5,7 @@ set shell bash
 set shellopts '-eu'
 set ifs "\n"
 
-set color256
+# set color256
 set icons
 set hidden
 set incsearch
@@ -20,11 +20,11 @@ set timefmt '2006-01-02 15:04:05 -0700'
 set previewer ~/.config/lf/preview
 
 # Secure logs and socket
-${{
-	if [ -S "${TMPDIR:-/tmp/}lf.${USER}.sock" ]; then
-		chmod o-rwx "${TMPDIR:-/tmp/}lf.${USER}."*
-	fi
-}}
+# ${{
+# 	if [ -S "${TMPDIR:-/tmp/}lf.${USER}.sock" ]; then
+# 		chmod o-rwx "${TMPDIR:-/tmp/}lf.${USER}."*
+# 	fi
+# }}
 
 # keyboard mappings
 # ---
