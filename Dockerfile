@@ -29,22 +29,22 @@ ENV tmux_version 3.1b
 # others
 ENV bat_version 0.16.0
 ENV chafa_version 1.4.1
-ENV duf_version 0.3.1
-ENV dyff_version 1.0.3
+ENV duf_version 0.4.0
+ENV dyff_version 1.1.0
 ENV fd_version 8.1.1
-ENV fzf_version 0.22.0
-ENV glow_version 0.2.0
+ENV fzf_version 0.23.1
+ENV glow_version 1.0.1
 ENV heksa_version 1.13.0
 ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
 ENV jq_version 1.6
-ENV kubectlfuzzy_version 1.7.0
-ENV lf_version r16
+ENV kubectlfuzzy_version 1.8.0
+ENV lf_version r17
 ENV mkcert_version 1.4.1
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1
-ENV starship_version 0.45.2
+ENV starship_version 0.46.0
 ENV stern_version 1.11.0
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
@@ -118,7 +118,7 @@ RUN curl -LO "$duf_url" && \
     chmod 775 duf && \
     mv duf $root/bin/ && \
     rm -fr $duf_name.tar.gz
-RUN $root/bin/duf --help
+RUN $root/bin/duf -version
 
 # dyff
 ENV dyff_name dyff-linux-amd64
