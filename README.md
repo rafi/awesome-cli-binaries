@@ -6,14 +6,14 @@
 
 ## Utility List
 
-- tmux 3.1b (+ncurses 6.2 +libevent 2.1.12)
+- tmux 3.1c (+ncurses 6.2 +libevent 2.1.12)
 - bat 0.16.0
 - chafa 1.4.1
 - duf 0.4.0
 - dyff 1.1.0
 - fd 8.1.1
-- fzf 0.23.1
-- glow 1.0.1
+- fzf 0.24.2
+- glow 1.1.0
 - heksa 1.13.0
 - hexyl 0.8.0
 - httpiego 0.6.0
@@ -24,11 +24,11 @@
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 12.1.1
-- starship 0.46.0
+- starship 0.46.2
 - stern 1.11.0
 - yank 1.2.0
 - yj 5.0.0
-- zoxide 0.4.3
+- zoxide 0.5.0
 
 ## Install
 

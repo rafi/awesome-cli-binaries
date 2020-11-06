@@ -24,7 +24,7 @@ CMD ["bash"]
 # tmux ncurses libevent
 ENV libevent_version 2.1.12
 ENV ncurses_version 6.2
-ENV tmux_version 3.1b
+ENV tmux_version 3.1c
 
 # others
 ENV bat_version 0.16.0
@@ -32,8 +32,8 @@ ENV chafa_version 1.4.1
 ENV duf_version 0.4.0
 ENV dyff_version 1.1.0
 ENV fd_version 8.1.1
-ENV fzf_version 0.23.1
-ENV glow_version 1.0.1
+ENV fzf_version 0.24.2
+ENV glow_version 1.1.0
 ENV heksa_version 1.13.0
 ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
@@ -44,11 +44,11 @@ ENV mkcert_version 1.4.1
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1
-ENV starship_version 0.46.0
+ENV starship_version 0.46.2
 ENV stern_version 1.11.0
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
-ENV zoxide_version 0.4.3
+ENV zoxide_version 0.5.0
 
 # libevent
 ENV libevent_name libevent-${libevent_version}-stable
@@ -139,11 +139,11 @@ RUN $root/bin/fd --version
 
 # fzf
 ENV fzf_name fzf-${fzf_version}-linux_amd64
-ENV fzf_url https://github.com/junegunn/fzf-bin/releases/download/$fzf_version/$fzf_name.tgz
+ENV fzf_url https://github.com/junegunn/fzf/releases/download/$fzf_version/$fzf_name.tar.gz
 RUN curl -LO "$fzf_url" && \
-    tar xvzof $fzf_name.tgz && \
+    tar xvzof $fzf_name.tar.gz && \
     mv fzf $root/bin/ && \
-    rm -fr $fzf_name.tgz
+    rm -fr $fzf_name.tar.gz
 RUN $root/bin/fzf --version
 
 # glow
