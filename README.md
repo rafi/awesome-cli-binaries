@@ -7,12 +7,12 @@
 ## Utility List
 
 - tmux 3.1c (+ncurses 6.2 +libevent 2.1.12)
-- bat 0.16.0
+- bat 0.17.1
 - chafa 1.4.1
 - duf 0.4.0
 - dyff 1.1.0
 - fd 8.1.1
-- fzf 0.24.2
+- fzf 0.24.4
 - glow 1.1.0
 - heksa 1.13.0
 - hexyl 0.8.0
@@ -25,7 +25,7 @@
 - reg 0.16.1
 - ripgrep 12.1.1
 - starship 0.46.2
-- stern 1.11.0
+- stern 1.13.1
 - yank 1.2.0
 - yj 5.0.0
 - zoxide 0.5.0

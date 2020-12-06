@@ -27,12 +27,12 @@ ENV ncurses_version 6.2
 ENV tmux_version 3.1c
 
 # others
-ENV bat_version 0.16.0
+ENV bat_version 0.17.1
 ENV chafa_version 1.4.1
 ENV duf_version 0.4.0
 ENV dyff_version 1.1.0
 ENV fd_version 8.1.1
-ENV fzf_version 0.24.2
+ENV fzf_version 0.24.4
 ENV glow_version 1.1.0
 ENV heksa_version 1.13.0
 ENV hexyl_version 0.8.0
@@ -45,7 +45,7 @@ ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1
 ENV starship_version 0.46.2
-ENV stern_version 1.11.0
+ENV stern_version 1.13.1
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
 ENV zoxide_version 0.5.0
@@ -252,11 +252,13 @@ RUN curl -LO "$starship_url" && \
 RUN $root/bin/starship -V
 
 # stern
-ENV stern_name stern_linux_amd64
-ENV stern_url https://github.com/wercker/stern/releases/download/$stern_version/$stern_name
+ENV stern_name stern_${stern_version}_linux_amd64
+ENV stern_url https://github.com/stern/stern/releases/download/v$stern_version/$stern_name.tar.gz
 RUN curl -LO "$stern_url" && \
-    chmod 775 $stern_name && \
-    mv $stern_name $root/bin/stern
+    tar xvzof $stern_name.tar.gz && \
+    chmod 775 $stern_name/stern && \
+    mv $stern_name/stern $root/bin/ && \
+    rm -fr $stern_name.tar.gz
 RUN $root/bin/stern --version
 
 # yank
