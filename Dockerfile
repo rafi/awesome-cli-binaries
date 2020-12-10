@@ -26,30 +26,6 @@ ENV libevent_version 2.1.12
 ENV ncurses_version 6.2
 ENV tmux_version 3.1c
 
-# others
-ENV bat_version 0.17.1
-ENV chafa_version 1.4.1
-ENV duf_version 0.4.0
-ENV dyff_version 1.1.0
-ENV fd_version 8.1.1
-ENV fzf_version 0.24.4
-ENV glow_version 1.1.0
-ENV heksa_version 1.13.0
-ENV hexyl_version 0.8.0
-ENV httpiego_version 0.6.0
-ENV jq_version 1.6
-ENV kubectlfuzzy_version 1.8.0
-ENV lf_version r17
-ENV mkcert_version 1.4.1
-ENV ncdu_version 1.15.1
-ENV reg_version 0.16.1
-ENV ripgrep_version 12.1.1
-ENV starship_version 0.46.2
-ENV stern_version 1.13.1
-ENV yank_version 1.2.0
-ENV yj_version 5.0.0
-ENV zoxide_version 0.5.0
-
 # libevent
 ENV libevent_name libevent-${libevent_version}-stable
 ENV libevent_url https://github.com/libevent/libevent/releases/download/release-${libevent_version}-stable/${libevent_name}.tar.gz
@@ -90,6 +66,30 @@ RUN curl -LO "$tmux_url" && \
     cd .. && \
     rm -fr $tmux_name.tar.gz $tmux_name
 RUN $root/bin/tmux -V
+
+# app versions
+ENV bat_version 0.17.1
+ENV chafa_version 1.4.1
+ENV duf_version 0.4.0
+ENV dyff_version 1.1.0
+ENV fd_version 8.2.1
+ENV fzf_version 0.24.4
+ENV glow_version 1.1.0
+ENV heksa_version 1.13.0
+ENV hexyl_version 0.8.0
+ENV httpiego_version 0.6.0
+ENV jq_version 1.6
+ENV kubectlfuzzy_version 1.8.0
+ENV lf_version r17
+ENV mkcert_version 1.4.1
+ENV ncdu_version 1.15.1
+ENV reg_version 0.16.1
+ENV ripgrep_version 12.1.1
+ENV starship_version 0.46.2
+ENV stern_version 1.13.1
+ENV yank_version 1.2.0
+ENV yj_version 5.0.0
+ENV zoxide_version 0.5.0
 
 # bat
 ENV bat_name bat-v${bat_version}-x86_64-unknown-linux-musl
