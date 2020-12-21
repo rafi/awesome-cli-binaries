@@ -22,7 +22,7 @@ docker:
 	docker build -t $(IMAGE) .
 
 $(TARGETS): docker
-	docker run -a stdout $(IMAGE) /bin/tar -cf - /opt/bin/$@ | $(TAR) xf - --strip-components=2 -C $(OUT)
+	docker run --rm -a stdout $(IMAGE) /bin/tar -cf - /opt/bin/$@ | $(TAR) xf - --strip-components=2 -C $(OUT)
 
 clean:
 	-(cd $(OUT) && rm $(TARGETS))

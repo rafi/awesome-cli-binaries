@@ -19,7 +19,7 @@
 - httpiego 0.6.0
 - jq 1.6
 - kubectl-fuzzy 1.8.0
-- lf r17
+- lf r18
 - mkcert 1.4.1
 - ncdu 1.15.1
 - reg 0.16.1

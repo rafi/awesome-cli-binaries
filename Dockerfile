@@ -80,7 +80,7 @@ ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
 ENV jq_version 1.6
 ENV kubectlfuzzy_version 1.8.0
-ENV lf_version r17
+ENV lf_version r18
 ENV mkcert_version 1.4.1
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
