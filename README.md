@@ -9,6 +9,7 @@
 - tmux 3.1c (+ncurses 6.2 +libevent 2.1.12)
 - bat 0.17.1
 - chafa 1.4.1
+- dua 2.10.7
 - duf 0.4.0
 - dyff 1.1.0
 - fd 8.2.1
@@ -17,6 +18,7 @@
 - heksa 1.13.0
 - hexyl 0.8.0
 - httpiego 0.6.0
+- hyperfine 1.11.0
 - jq 1.6
 - kubectl-fuzzy 1.8.0
 - lf r18

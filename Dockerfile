@@ -70,6 +70,7 @@ RUN $root/bin/tmux -V
 # app versions
 ENV bat_version 0.17.1
 ENV chafa_version 1.4.1
+ENV dua_version 2.10.7
 ENV duf_version 0.4.0
 ENV dyff_version 1.1.0
 ENV fd_version 8.2.1
@@ -78,6 +79,7 @@ ENV glow_version 1.1.0
 ENV heksa_version 1.13.0
 ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
+ENV hyperfine_version 1.11.0
 ENV jq_version 1.6
 ENV kubectlfuzzy_version 1.8.0
 ENV lf_version r18
@@ -106,6 +108,14 @@ RUN curl -L "$chafa_url" \
         | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/chafa' \
     && chmod 770 $root/bin/chafa
 RUN $root/bin/chafa --version
+
+# dua-cli
+ENV dua_name dua-v${dua_version}-x86_64-unknown-linux-musl
+ENV dua_url https://github.com/Byron/dua-cli/releases/download/v${dua_version}/${dua_name}.tar.gz
+RUN curl -L "$dua_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/dua' \
+    && chmod 770 $root/bin/dua
+RUN $root/bin/dua --version
 
 # duf
 ENV duf_name duf_${duf_version}_linux_x86_64
@@ -168,6 +178,14 @@ ENV httpiego_url https://github.com/nojima/httpie-go/releases/download/v$httpieg
 RUN curl -Lo $root/bin/ht "$httpiego_url" \
     && chmod 770 $root/bin/ht
 RUN $root/bin/ht --version
+
+# hyperfine
+ENV hyperfine_name hyperfine-v${hyperfine_version}-x86_64-unknown-linux-musl
+ENV hyperfine_url https://github.com/sharkdp/hyperfine/releases/download/v$hyperfine_version/$hyperfine_name.tar.gz
+RUN curl -L "$hyperfine_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/hyperfine' \
+    && chmod 770 $root/bin/hyperfine
+RUN $root/bin/hyperfine --version
 
 # jq
 ENV jq_name jq-linux64
