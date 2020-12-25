@@ -68,6 +68,7 @@ RUN curl -LO "$tmux_url" && \
 RUN $root/bin/tmux -V
 
 # app versions
+ENV bandwhich_version 0.20.0
 ENV bat_version 0.17.1
 ENV chafa_version 1.4.1
 ENV dua_version 2.10.7
@@ -81,7 +82,6 @@ ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
 ENV hyperfine_version 1.11.0
 ENV jq_version 1.6
-ENV kubectlfuzzy_version 1.8.0
 ENV lf_version r18
 ENV mkcert_version 1.4.1
 ENV ncdu_version 1.15.1
@@ -92,6 +92,14 @@ ENV stern_version 1.13.1
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
 ENV zoxide_version 0.5.0
+
+# bandwhich
+ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl
+ENV bandwhich_url https://github.com/imsnif/bandwhich/releases/download/$bandwhich_version/$bandwhich_name.tar.gz
+RUN curl -L "$bandwhich_url" \
+        | tar -xzoC $root/bin/ bandwhich \
+    && chmod 770 $root/bin/bandwhich
+RUN $root/bin/bandwhich --version
 
 # bat
 ENV bat_name bat-v${bat_version}-x86_64-unknown-linux-musl
@@ -194,14 +202,6 @@ RUN curl -Lo $root/bin/jq "$jq_url" && \
     chmod 770 $root/bin/jq
 RUN $root/bin/jq --version
 
-# kubectl-fuzzy
-ENV kubectlfuzzy_name kubectl-fuzzy_${kubectlfuzzy_version}_linux_amd64
-ENV kubectlfuzzy_url https://github.com/d-kuro/kubectl-fuzzy/releases/download/v$kubectlfuzzy_version/$kubectlfuzzy_name.tar.gz
-RUN curl -L "$kubectlfuzzy_url" \
-        | tar -xzoC $root/bin/ kubectl-fuzzy \
-    && chmod 770 $root/bin/kubectl-fuzzy
-RUN $root/bin/kubectl-fuzzy version
-
 # lf
 ENV lf_name lf-linux-amd64
 ENV lf_url https://github.com/gokcehan/lf/releases/download/$lf_version/$lf_name.tar.gz
@@ -286,7 +286,7 @@ RUN $root/bin/zoxide --version
 FROM debian:stable-slim
 
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="40"
+LABEL io.rafi.revision="41"
 
 ENV root /opt
 

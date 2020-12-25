@@ -7,6 +7,7 @@
 ## Utility List
 
 - tmux 3.1c (+ncurses 6.2 +libevent 2.1.12)
+- bandwidth 0.20.0
 - bat 0.17.1
 - chafa 1.4.1
 - dua 2.10.7
@@ -20,7 +21,6 @@
 - httpiego 0.6.0
 - hyperfine 1.11.0
 - jq 1.6
-- kubectl-fuzzy 1.8.0
 - lf r18
 - mkcert 1.4.1
 - ncdu 1.15.1
