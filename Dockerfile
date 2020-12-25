@@ -94,205 +94,181 @@ ENV zoxide_version 0.5.0
 # bat
 ENV bat_name bat-v${bat_version}-x86_64-unknown-linux-musl
 ENV bat_url https://github.com/sharkdp/bat/releases/download/v$bat_version/$bat_name.tar.gz
-RUN curl -LO "$bat_url" && \
-    tar xvzof $bat_name.tar.gz && \
-    mv $bat_name/bat $root/bin/ && \
-    rm -fr $bat_name.tar.gz $bat_name
+RUN curl -L "$bat_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/bat' \
+    && chmod 770 $root/bin/bat
 RUN $root/bin/bat --version
 
 # chafa
 ENV chafa_name chafa-${chafa_version}-1-x86_64-linux-gnu
 ENV chafa_url https://hpjansson.org/chafa/releases/static/${chafa_name}.tar.gz
-RUN curl -LO "$chafa_url" && \
-    tar -xvzo --strip-components=1 -f $chafa_name.tar.gz && \
-    chmod 775 chafa && \
-    mv chafa $root/bin/ && \
-    rm -fr $chafa_name.tar.gz
+RUN curl -L "$chafa_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/chafa' \
+    && chmod 770 $root/bin/chafa
 RUN $root/bin/chafa --version
 
 # duf
 ENV duf_name duf_${duf_version}_linux_x86_64
 ENV duf_url https://github.com/muesli/duf/releases/download/v${duf_version}/${duf_name}.tar.gz
-RUN curl -LO "$duf_url" && \
-    tar -xvzo -f $duf_name.tar.gz duf && \
-    chmod 775 duf && \
-    mv duf $root/bin/ && \
-    rm -fr $duf_name.tar.gz
+RUN curl -L "$duf_url" \
+        | tar -xzoC $root/bin/ duf \
+    && chmod 770 $root/bin/duf
 RUN $root/bin/duf -version
 
 # dyff
 ENV dyff_name dyff-linux-amd64
 ENV dyff_url https://github.com/homeport/dyff/releases/download/v$dyff_version/$dyff_name
-RUN curl -LO "$dyff_url" && \
-    chmod 775 $dyff_name && \
-    mv $dyff_name $root/bin/dyff
+RUN curl -Lo $root/bin/dyff "$dyff_url" \
+    && chmod 770 $root/bin/dyff
 RUN $root/bin/dyff version
 
 # fd
 ENV fd_name fd-v${fd_version}-x86_64-unknown-linux-musl
 ENV fd_url https://github.com/sharkdp/fd/releases/download/v$fd_version/$fd_name.tar.gz
-RUN curl -LO "$fd_url" && \
-    tar xvzof $fd_name.tar.gz && \
-    mv $fd_name/fd $root/bin/ && \
-    rm -fr $fd_name.tar.gz $fd_name
+RUN curl -L "$fd_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/fd' \
+    && chmod 770 $root/bin/fd
 RUN $root/bin/fd --version
 
 # fzf
 ENV fzf_name fzf-${fzf_version}-linux_amd64
 ENV fzf_url https://github.com/junegunn/fzf/releases/download/$fzf_version/$fzf_name.tar.gz
-RUN curl -LO "$fzf_url" && \
-    tar xvzof $fzf_name.tar.gz && \
-    mv fzf $root/bin/ && \
-    rm -fr $fzf_name.tar.gz
+RUN curl -L "$fzf_url" \
+        | tar -xzoC $root/bin/ fzf \
+    && chmod 770 $root/bin/fzf
 RUN $root/bin/fzf --version
 
 # glow
 ENV glow_name glow_${glow_version}_linux_x86_64
 ENV glow_url https://github.com/charmbracelet/glow/releases/download/v$glow_version/$glow_name.tar.gz
-RUN curl -LO "$glow_url" && \
-    tar xvzof $glow_name.tar.gz glow && \
-    mv glow $root/bin/ && \
-    rm -fr $glow_name.tar.gz
+RUN curl -L "$glow_url" \
+        | tar -xzoC $root/bin/ glow \
+    && chmod 770 $root/bin/glow
 RUN $root/bin/glow --version
 
 # heksa
 ENV heksa_name heksa-v${heksa_version}-linux-amd64
 ENV heksa_url https://github.com/raspi/heksa/releases/download/v$heksa_version/$heksa_name.tar.gz
-RUN curl -LO "$heksa_url" && \
-    tar xvzo --strip-components=3 -f $heksa_name.tar.gz && \
-    mv heksa $root/bin/ && \
-    rm -fr $heksa_name.tar.gz
+RUN curl -L "$heksa_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 3 '*/*/*/heksa' \
+    && chmod 770 $root/bin/heksa
 RUN $root/bin/heksa --version
 
 # hexyl
 ENV hexyl_name hexyl-v${hexyl_version}-x86_64-unknown-linux-gnu
 ENV hexyl_url https://github.com/sharkdp/hexyl/releases/download/v$hexyl_version/$hexyl_name.tar.gz
-RUN curl -LO "$hexyl_url" && \
-    tar xvzo -f $hexyl_name.tar.gz && \
-    mv $hexyl_name/hexyl $root/bin/ && \
-    rm -fr $hexyl_name.tar.gz $hexyl_name
+RUN curl -L "$hexyl_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/hexyl' \
+    && chmod 770 $root/bin/hexyl
 RUN $root/bin/hexyl --version
 
 # httpie-go
 ENV httpiego_name httpie-go_linux_amd64
 ENV httpiego_url https://github.com/nojima/httpie-go/releases/download/v$httpiego_version/$httpiego_name
-RUN curl -LO "$httpiego_url" && \
-    chmod 775 $httpiego_name && \
-    mv $httpiego_name $root/bin/ht
+RUN curl -Lo $root/bin/ht "$httpiego_url" \
+    && chmod 770 $root/bin/ht
 RUN $root/bin/ht --version
 
 # jq
 ENV jq_name jq-linux64
 ENV jq_url https://github.com/stedolan/jq/releases/download/jq-$jq_version/$jq_name
-RUN curl -LO "$jq_url" && \
-    chmod 775 $jq_name && \
-    mv $jq_name $root/bin/jq
+RUN curl -Lo $root/bin/jq "$jq_url" && \
+    chmod 770 $root/bin/jq
 RUN $root/bin/jq --version
 
 # kubectl-fuzzy
 ENV kubectlfuzzy_name kubectl-fuzzy_${kubectlfuzzy_version}_linux_amd64
 ENV kubectlfuzzy_url https://github.com/d-kuro/kubectl-fuzzy/releases/download/v$kubectlfuzzy_version/$kubectlfuzzy_name.tar.gz
-RUN curl -LO "$kubectlfuzzy_url" && \
-    tar xvzof $kubectlfuzzy_name.tar.gz kubectl-fuzzy && \
-    mv kubectl-fuzzy $root/bin/ && \
-    rm -fr $kubectlfuzzy_name.tar.gz
+RUN curl -L "$kubectlfuzzy_url" \
+        | tar -xzoC $root/bin/ kubectl-fuzzy \
+    && chmod 770 $root/bin/kubectl-fuzzy
 RUN $root/bin/kubectl-fuzzy version
 
 # lf
 ENV lf_name lf-linux-amd64
 ENV lf_url https://github.com/gokcehan/lf/releases/download/$lf_version/$lf_name.tar.gz
-RUN curl -LO "$lf_url" && \
-    tar xvzof $lf_name.tar.gz && \
-    mv lf $root/bin/ && \
-    rm -fr $lf_name.tar.gz
+RUN curl -L "$lf_url" \
+        | tar -xzoC $root/bin/ lf \
+    && chmod 770 $root/bin/lf
 RUN USER=root $root/bin/lf --version
 
 # mkcert
 ENV mkcert_name mkcert-v${mkcert_version}-linux-amd64
 ENV mkcert_url https://github.com/FiloSottile/mkcert/releases/download/v$mkcert_version/$mkcert_name
-RUN curl -LO "$mkcert_url" && \
-    chmod 775 $mkcert_name && \
-    mv $mkcert_name $root/bin/mkcert
+RUN curl -Lo $root/bin/mkcert "$mkcert_url" \
+    && chmod 770 $root/bin/mkcert
 RUN $root/bin/mkcert --version
 
 # ncdu
 ENV ncdu_name ncdu-linux-x86_64-${ncdu_version}
 ENV ncdu_url https://dev.yorhel.nl/download/$ncdu_name.tar.gz
-RUN curl -LO "$ncdu_url" && \
-    tar xvzof $ncdu_name.tar.gz && \
-    mv ncdu $root/bin/ && \
-    rm -fr $ncdu_name.tar.gz
+RUN curl -L "$ncdu_url" \
+        | tar -xzoC $root/bin/ ncdu \
+    && chmod 770 $root/bin/ncdu
 RUN $root/bin/ncdu --version
 
 # reg
 ENV reg_name reg-linux-amd64
 ENV reg_url https://github.com/genuinetools/reg/releases/download/v$reg_version/$reg_name
-RUN curl -LO "$reg_url" && \
-    chmod 775 $reg_name && \
-    mv $reg_name $root/bin/reg
+RUN curl -Lo $root/bin/reg "$reg_url" \
+    && chmod 770 $root/bin/reg
 RUN $root/bin/reg version
 
 # ripgrep
 ENV ripgrep_name ripgrep-${ripgrep_version}-x86_64-unknown-linux-musl
 ENV ripgrep_url https://github.com/BurntSushi/ripgrep/releases/download/$ripgrep_version/$ripgrep_name.tar.gz
-RUN curl -LO "$ripgrep_url" && \
-    tar xvzof $ripgrep_name.tar.gz && \
-    mv $ripgrep_name/rg $root/bin/ && \
-    rm -fr $ripgrep_name.tar.gz $ripgrep_name
+RUN curl -L "$ripgrep_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/rg' \
+    && chmod 770 $root/bin/rg
 RUN $root/bin/rg --version
 
 # starship
 ENV starship_name starship-x86_64-unknown-linux-musl
 ENV starship_url https://github.com/starship/starship/releases/download/v$starship_version/$starship_name.tar.gz
-RUN curl -LO "$starship_url" && \
-    tar xvzof $starship_name.tar.gz && \
-    chmod 775 starship && \
-    mv starship $root/bin/ && \
-    rm -fr $starship_name.tar.gz
+RUN curl -L "$starship_url" \
+        | tar -xzoC $root/bin/ starship \
+    && chmod 770 $root/bin/starship
 RUN $root/bin/starship -V
 
 # stern
 ENV stern_name stern_${stern_version}_linux_amd64
 ENV stern_url https://github.com/stern/stern/releases/download/v$stern_version/$stern_name.tar.gz
-RUN curl -LO "$stern_url" && \
-    tar xvzof $stern_name.tar.gz && \
-    chmod 775 $stern_name/stern && \
-    mv $stern_name/stern $root/bin/ && \
-    rm -fr $stern_name.tar.gz
+RUN curl -L "$stern_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/stern' \
+    && chmod 770 $root/bin/stern
 RUN $root/bin/stern --version
 
 # yank
 ENV yank_name yank-${yank_version}
 ENV yank_url https://github.com/mptre/yank/releases/download/v${yank_version}/${yank_name}.tar.gz
-RUN curl -LO "$yank_url" && \
-    tar xvzf $yank_name.tar.gz && \
-    cd $yank_name && \
-    make && \
-    mv yank $root/bin/ && \
-    cd .. && \
-    rm -fr $yank_name.tar.gz $yank_name
+RUN curl -L "$yank_url" \
+        | tar -xzo \
+    && cd $yank_name \
+    && make \
+    && chmod 770 yank \
+    && mv yank $root/bin/ \
+    && cd .. \
+    && rm -rf $yank_name
 RUN $root/bin/yank -v
 
 # yj
 ENV yj_name yj-linux
 ENV yj_url https://github.com/sclevine/yj/releases/download/v$yj_version/$yj_name
-RUN curl -LO "$yj_url" && \
-    chmod 775 $yj_name && \
-    mv $yj_name $root/bin/yj
+RUN curl -Lo $root/bin/yj "$yj_url" \
+    && chmod 770 $root/bin/yj
 RUN $root/bin/yj -v
 
 # zoxide
 ENV zoxide_name zoxide-x86_64-unknown-linux-musl
 ENV zoxide_url https://github.com/ajeetdsouza/zoxide/releases/download/v$zoxide_version/$zoxide_name
-RUN curl -LO "$zoxide_url" && \
-    chmod 775 $zoxide_name && \
-    mv $zoxide_name $root/bin/zoxide
+RUN curl -Lo $root/bin/zoxide "$zoxide_url" \
+    && chmod 770 $root/bin/zoxide
 RUN $root/bin/zoxide --version
 
 FROM debian:stable-slim
 
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="35"
+LABEL io.rafi.revision="40"
 
 ENV root /opt
 
