@@ -14,8 +14,8 @@
 - duf 0.4.0
 - dyff 1.1.0
 - fd 8.2.1
-- fzf 0.24.4
-- glow 1.1.0
+- fzf 0.25.0
+- glow 1.3.0
 - heksa 1.13.0
 - hexyl 0.8.0
 - httpiego 0.6.0
@@ -26,7 +26,7 @@
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 12.1.1
-- starship 0.46.2
+- starship 0.48.0
 - stern 1.13.1
 - yank 1.2.0
 - yj 5.0.0

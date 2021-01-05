@@ -75,8 +75,8 @@ ENV dua_version 2.10.7
 ENV duf_version 0.4.0
 ENV dyff_version 1.1.0
 ENV fd_version 8.2.1
-ENV fzf_version 0.24.4
-ENV glow_version 1.1.0
+ENV fzf_version 0.25.0
+ENV glow_version 1.3.0
 ENV heksa_version 1.13.0
 ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
@@ -87,7 +87,7 @@ ENV mkcert_version 1.4.1
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1
-ENV starship_version 0.46.2
+ENV starship_version 0.48.0
 ENV stern_version 1.13.1
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
