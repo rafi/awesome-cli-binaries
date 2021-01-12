@@ -71,9 +71,9 @@ RUN $root/bin/tmux -V
 ENV bandwhich_version 0.20.0
 ENV bat_version 0.17.1
 ENV chafa_version 1.4.1
-ENV dua_version 2.10.7
-ENV duf_version 0.4.0
-ENV dyff_version 1.1.0
+ENV dua_version 2.10.9
+ENV duf_version 0.5.0
+ENV dyff_version 1.1.3
 ENV fd_version 8.2.1
 ENV fzf_version 0.25.0
 ENV glow_version 1.3.0
@@ -83,7 +83,7 @@ ENV httpiego_version 0.6.0
 ENV hyperfine_version 1.11.0
 ENV jq_version 1.6
 ENV lf_version r18
-ENV mkcert_version 1.4.1
+ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1

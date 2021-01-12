@@ -72,7 +72,9 @@ function _sync_main() {
 	do
 		echo ":: [${host}] copy dotfiles to remote"
 		if ! rsync -rltz ./.files/ "$host":./ || \
-			! rsync -rltzP --exclude '.git*' ./.bin/ "$host":./.local/bin/
+			! rsync -rltzP --exclude '.git*' \
+				--rsync-path='mkdir -p ~/.local/bin && rsync' \
+				./.bin/ "$host":./.local/bin/
 		then
 			echo "[ERROR] failed rsync dotfiles to '${host}'" && exit 3
 		fi
