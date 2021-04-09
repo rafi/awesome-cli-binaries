@@ -8,14 +8,14 @@
 
 - tmux 3.1c (+ncurses 6.2 +libevent 2.1.12)
 - bandwidth 0.20.0
-- bat 0.17.1
+- bat 0.18.0
 - chafa 1.6.0
 - dua 2.10.7
 - duf 0.4.0
 - dyff 1.1.0
 - fd 8.2.1
-- fzf 0.25.0
-- glow 1.3.0
+- fzf 0.27.0
+- glow 1.4.1
 - heksa 1.13.0
 - hexyl 0.8.0
 - httpiego 0.6.0
@@ -26,11 +26,11 @@
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 12.1.1
-- starship 0.50.0
+- starship 0.51.0
 - stern 1.14.0
 - yank 1.2.0
 - yj 5.0.0
-- zoxide 0.5.0
+- zoxide 0.6.0
 
 ## Install
 
