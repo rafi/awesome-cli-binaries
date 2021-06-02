@@ -9,3 +9,18 @@ disabled = true
 
 [hostname]
 ssh_only = false
+
+[nodejs]
+disabled = true
+
+[python]
+disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[rust]
+disabled = true

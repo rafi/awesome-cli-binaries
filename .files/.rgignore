@@ -28,10 +28,10 @@ __pycache__
 *.s?o
 /Applications/
 /Library/
-build/
 bower_modules/
 node_modules/
 gems/
-dist/
 tmp/
 /vendor
+/build/
+/dist/
