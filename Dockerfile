@@ -69,15 +69,15 @@ RUN $root/bin/tmux -V
 
 # app versions
 ENV bandwhich_version 0.20.0
-ENV bat_version 0.18.0
-ENV chafa_version 1.6.0
+ENV bat_version 0.18.1
+ENV chafa_version 1.6.1
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
 ENV dyff_version 1.1.3
 ENV fd_version 8.2.1
-ENV fzf_version 0.27.0
+ENV fzf_version 0.27.2
 ENV glow_version 1.4.1
-ENV heksa_version 1.13.0
+ENV heksa_version 1.14.0
 ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
 ENV hyperfine_version 1.11.0
@@ -87,11 +87,11 @@ ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 12.1.1
-ENV starship_version 0.52.1
-ENV stern_version 1.15.0
+ENV starship_version 0.54.0
+ENV stern_version 1.18.0
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
-ENV zoxide_version 0.6.0
+ENV zoxide_version 0.7.0
 
 # bandwhich
 ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl
@@ -278,8 +278,9 @@ RUN $root/bin/yj -v
 
 # zoxide
 ENV zoxide_name zoxide-x86_64-unknown-linux-musl
-ENV zoxide_url https://github.com/ajeetdsouza/zoxide/releases/download/v$zoxide_version/$zoxide_name
-RUN curl -Lo $root/bin/zoxide "$zoxide_url" \
+ENV zoxide_url https://github.com/ajeetdsouza/zoxide/releases/download/v$zoxide_version/$zoxide_name.tar.gz
+RUN curl -L "$zoxide_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/zoxide' \
     && chmod 770 $root/bin/zoxide
 RUN $root/bin/zoxide --version
 
