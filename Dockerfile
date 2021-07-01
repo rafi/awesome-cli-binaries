@@ -24,7 +24,7 @@ CMD ["bash"]
 # tmux ncurses libevent
 ENV libevent_version 2.1.12
 ENV ncurses_version 6.2
-ENV tmux_version 3.2
+ENV tmux_version 3.2a
 
 # libevent
 ENV libevent_name libevent-${libevent_version}-stable
@@ -82,16 +82,16 @@ ENV hexyl_version 0.8.0
 ENV httpiego_version 0.6.0
 ENV hyperfine_version 1.11.0
 ENV jq_version 1.6
-ENV lf_version r22
+ENV lf_version r24
 ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
-ENV ripgrep_version 12.1.1
-ENV starship_version 0.54.0
-ENV stern_version 1.18.0
+ENV ripgrep_version 13.0.0
+ENV starship_version 0.55.0
+ENV stern_version 1.19.0
 ENV yank_version 1.2.0
 ENV yj_version 5.0.0
-ENV zoxide_version 0.7.0
+ENV zoxide_version 0.7.2
 
 # bandwhich
 ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl

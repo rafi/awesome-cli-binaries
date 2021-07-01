@@ -6,7 +6,7 @@
 
 ## Utility List
 
-- tmux 3.2 (+ncurses 6.2 +libevent 2.1.12)
+- tmux 3.2a (+ncurses 6.2 +libevent 2.1.12)
 - bandwidth 0.20.0
 - bat 0.18.1
 - chafa 1.6.1
@@ -21,16 +21,16 @@
 - httpiego 0.6.0
 - hyperfine 1.11.0
 - jq 1.6
-- lf r22
+- lf r24
 - mkcert 1.4.1
 - ncdu 1.15.1
 - reg 0.16.1
-- ripgrep 12.1.1
-- starship 0.54.0
-- stern 1.18.0
+- ripgrep 13.0.0
+- starship 0.55.0
+- stern 1.19.0
 - yank 1.2.0
 - yj 5.0.0
-- zoxide 0.7.0
+- zoxide 0.7.2
 
 ## Install
 
