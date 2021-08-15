@@ -3,6 +3,10 @@
 # Abort if not running interactively
 [[ $- == *i* ]] || return 0
 
+# Remove the ^S ^Q mappings. See all mappings: stty -a
+stty stop undef
+stty start undef
+
 # Bash settings
 shopt -s cdspell         # Auto-corrects cd misspellings
 shopt -s cmdhist         # Save multi-line commands in history as single line
@@ -12,6 +16,10 @@ shopt -s extglob         # Enable extended pattern-matching features
 shopt -s histreedit      # Add failed commands to the bash history
 shopt -s histappend      # Append each session's history to $HISTFILE
 shopt -s histverify      # Edit a recalled history line before executing
+
+if [[ $DISPLAY ]]; then
+	shopt -s checkwinsize  # Update LINES and COLUMNS after each command
+fi
 
 export HISTSIZE=20000
 export HISTFILESIZE=15000000
@@ -36,6 +44,10 @@ export LESSCHARSET="UTF-8"
 export XDG_CONFIG_HOME="$HOME/.config"
 export  XDG_CACHE_HOME="$HOME/.cache"
 export   XDG_DATA_HOME="$HOME/.local/share"
+
+[ -d "$XDG_CONFIG_HOME" ] || mkdir -m 0750 "$XDG_CONFIG_HOME"
+[ -d "$XDG_CACHE_HOME" ]  || mkdir -m 0750 "$XDG_CACHE_HOME"
+[ -d "$XDG_DATA_HOME" ]   || mkdir -m 0750 "$XDG_DATA_HOME"
 
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -69,7 +81,7 @@ fi
 # Look for terminfo files under data
 if [ -d "$XDG_CONFIG_HOME/terminfo" ]; then
 	export TERMINFO="$XDG_CONFIG_HOME/terminfo"
-	export TERMINFO_DIRS="$XDG_CONFIG_HOME/terminfo:$PREFIX/share/terminfo"
+	export TERMINFO_DIRS="$XDG_CONFIG_HOME/terminfo:/usr/share/terminfo"
 fi
 
 # SSH with common TERM and passing USER who is ssh'ing
@@ -84,9 +96,16 @@ ssh() {
 }
 
 # Enable readline vi-mode for myself only
-if [ "$LC_IDENTIFICATION" = "rafi" ] || [[ "$LC_IDENTIFICATION" == rafael* ]]; then
+if [ "${LC_IDENTIFICATION:-$USER}" = rafi ] \
+	|| [[ "${LC_IDENTIFICATION:-$USER}" == rafael* ]]
+then
 	set -o vi
 fi
+
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/rc"
+
+export FZF_DEFAULT_OPTS="--bind=ctrl-d:page-down,ctrl-u:page-up,ctrl-y:yank,tab:down,btab:up --inline-info --reverse --height 50%"
+export FZF_DEFAULT_COMMAND="rg --hidden --files --glob '!.git' --color=never"
 
 # See https://github.com/junegunn/fzf
 if [ -f "$XDG_CONFIG_HOME/key-bindings.bash" ]; then
@@ -113,12 +132,6 @@ elif [ -f /etc/lsb-release ]; then
 	fi
 fi
 
-if hash fzf 2>/dev/null
-then
-	export FZF_DEFAULT_OPTS="--bind=ctrl-d:page-down,ctrl-u:page-up,ctrl-y:yank,tab:down,btab:up --inline-info --reverse --height 50%"
-	export FZF_DEFAULT_COMMAND="rg --hidden --files --glob '!.git' --color=never"
-fi
-
 # Must be loaded _after_ setting PROMPT_COMMAND
 if command -v zoxide 1>/dev/null 2>&1; then
 	export _ZO_DATA_DIR="$XDG_CACHE_HOME/zoxide"
@@ -139,7 +152,9 @@ alias lld='ls -Gal --color=always | grep ^d --colour=never'
 
 # find
 alias grep='grep --color=auto --exclude-dir=.git'
-alias tree="tree -F --dirsfirst -a -I '.git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store'"
+alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
+alias tree2='tree -L 2'
+alias tree3='tree -L 3'
 
 if ! hash fd 2>/dev/null; then
 	alias f='find . -iname '
@@ -148,33 +163,42 @@ else
 fi
 
 # git
-alias g=git
-alias gcd='cd "$(git rev-parse --show-toplevel)"'
-alias gd='git diff'
-alias gds='git diff --cached'
-alias gfl='git fetch --prune && git lg -15'
-alias gf='git fetch --prune'
-alias gfa='git fetch --all --tags --prune'
-alias gs='git status -sb'
-alias gl='git lg -15'
-alias gll='git lg'
-alias gld='git lgd -15'
-if type _git &> /dev/null; then
-	complete -o default -o nospace -F _git g
+if ! hash git 2>/dev/null; then
+	alias g=git
+	alias gcd='cd "$(git rev-parse --show-toplevel)"'
+	alias gd='git diff'
+	alias gds='git diff --cached'
+	alias gfl='git fetch --prune && git lg -15'
+	alias gf='git fetch --prune'
+	alias gfa='git fetch --all --tags --prune'
+	alias gap='git add -p'
+	alias gai='git add -i'
+	alias gs='git status -sb'
+	alias gl='git lg -15'
+	alias gll='git lg'
+	alias gld='git lgd -15'
+	if type _git &> /dev/null; then
+		complete -o default -o nospace -F _git g
+	fi
 fi
 
 # docker
 alias dps='docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
 alias dls='docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
 alias dim='docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
+alias dip='docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
 alias dgc='docker rmi $(docker images -qf "dangling=true")'
 alias dvc='docker volume ls -qf dangling=true | xargs docker volume rm'
 alias dtop='docker stats $(docker ps --format="{{.Names}}")'
 
 # misc helpers
 alias c=clear
-type colordiff &>/dev/null && alias diff=colordiff
+alias grep='grep --color=auto --exclude-dir=.git'
 alias dut='du -hsx * | sort -rh | head -10'
+alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
+alias ipinfo='curl -s ipinfo.io | jq .'
+hash colordiff 2>/dev/null && alias diff=colordiff
+
 mk() { mkdir -p "$@" && cd "$1"; }
 
 # vim
@@ -187,18 +211,26 @@ else
 fi
 alias v='vim $(fzf)'
 alias vi=vim
+alias ve='tmux split-window -h "$EDITOR"'
 alias vimdiff='vim -d'
 
-# dir change
+# Jump around
+alias cdf='cd "$(dirname "$(fzf)")"'
+alias cdd='cd "$(fd --type d | fzf)"'
+
+# Jump to previous directory with --
+alias -- -="cd -"
+
+# Easier directory navigation
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
-alias -- -="cd -"
 
-# ip
-alias ipsv6="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
-alias ips="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+# IP addresses
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+alias iplocal="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+alias ipremote="ip route get 1 | awk '{print \$NF;exit}'"
 
 function ippublic() {
 	if type dig &> /dev/null; then
@@ -208,10 +240,67 @@ function ippublic() {
 	fi
 }
 
-# memory and processes
-function psg() {
-	ps auxww | grep -i --color=always "$@" | grep -v grep
+# Certificates
+ssl-info() {
+	openssl s_client \
+			-servername "$1" \
+			-connect "$1":443 </dev/null 2>&1 \
+		| openssl x509 -noout -issuer -subject -fingerprint -serial -dates
 }
+
+# Quickly grep a process
+function psg() {
+	ps auxww | grep -i --color=always "$@" | grep -v "grep.*$@"
+}
+
+# Filter and process with fzf and kill it
+function psk() {
+	(date; ps -ef) | fzf \
+		--bind='ctrl-r:reload(date; ps -ef)' \
+		--header=$'Press CTRL-R to reload\n\n' --header-lines=2 \
+		--preview='echo {}' --preview-window=down,3,wrap \
+		--layout=reverse --height=80% | awk '{print $2}' | xargs kill -9
+}
+
+# Select command name with fzf and show memory usage
+function psmem() {
+	ps -o rss= -p "$(pidof "$(ps -ec | fzf | awk '{print $4}')")" \
+		| awk '{print $1*4, "KiB"}'
+}
+
+# Top 15 cpu heavy process
+function topcpu() {
+	ps -ceo pmem,pid,pcpu,rss,vsz,time,command \
+		| awk 'NR<2{print $0;next}{print $0| "sort -k 3 -r"}' | head -15
+}
+
+# Top 15 memory heavy process
+function topmem() {
+	ps -ceo pmem,pid,pcpu,rss,vsz,time,command | sort -k 1 -r | head -15 \
+		| awk '
+				function human(x) {
+					if (x < 1000) { return x }
+					x /= 1024;
+					s = "MGTEPYZ";
+					while (x >= 1000 && length(s) > 1) {
+						x /= 1024;
+						s = substr(s, 2)
+					}
+					return int(x + 0.5) substr(s, 1, 1)
+				}
+				{
+					if (NR > 1) {
+						sub($4, human($4));
+						sub($5, human($5));
+					}
+					print
+				}'
+}
+
+# Kubernetes helpers
+# ---
+# Formatting output: https://kubernetes.io/docs/reference/kubectl/overview/#formatting-output
+# JSONPath support: https://kubernetes.io/docs/reference/kubectl/jsonpath/
 
 # kubernetes
 alias k=kubectl
@@ -224,28 +313,81 @@ if type __start_kubectl &> /dev/null; then
 	complete -o default -F __start_kubectl k
 fi
 
-# Display pod workload information
+# Display Pod workload information
 alias kp='kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase,RESTARTS:.status.containerStatuses[*].restartCount,M_REQUESTS:.spec.containers[*].resources.requests.memory,M_LIMITS:.spec.containers[*].resources.limits.memory,NODE_IP:.status.hostIP,POD_IP:.status.podIP'
 
-# Display pod's images information
-alias kpi='kubectl get pods -o custom-columns=NAME:.metadata.name,CONTAINERS:.spec.containers[*].name,Images:.spec.containers[*].image'
+# Display Pod's images
+alias kpi='kubectl get pods -o custom-columns=POD:.metadata.name,IMAGES:.spec..image'
 
-# Display in-depth ingress objects
+alias kpisum="kubectl get pods --all-namespaces -o jsonpath=\"{.items[*]['spec.containers', 'spec.initContainers'][*].image}\" | tr -s '[[:space:]]' '\n' | sort | uniq -c | sort -nr"
+
+alias kpnames='kubectl get pod -o jsonpath="{..spec['"'"'containers'"'"','"'"'initContainers'"'"'][*].name}"'
+
+# Display in-depth Ingress objects
 alias kingress='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.metadata.annotations.kubernetes\.io/ingress\.class,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path"'
 
 alias kingress-wide='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.metadata.annotations.kubernetes\.io/ingress\.class,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path,SERVICES:.spec.rules[*].http.paths[*].backend.serviceName,PORTS:.spec.rules[*].http.paths[*].backend.servicePort"'
 
-# Show recent pod termination states
-# alias krestarts='kubectl get pod -o=custom-columns=NAME:.metadata.labels.app,RESTARTS:.status.containerStatuses[*].restartCount,REASON:.status.containerStatuses[*].lastState.terminated.reason,EXIT_CODE:status.containerStatuses[*].lastState.terminated.exitCode --sort-by="{.status.containerStatuses[:1].restartCount}"'
-alias krestarts='kubectl get pod -o=custom-columns=NAME:.metadata.name,RESTARTS:.status.containerStatuses[*].restartCount,REASON:.status.containerStatuses[*].lastState.terminated.reason,EXIT_CODE:status.containerStatuses[*].lastState.terminated.exitCode,LAST_RESTART_TIME:.status.containerStatuses[*].lastState.terminated.finishedAt,MEMORY_LIMIT:.spec.containers[*].resources.limits.memory --sort-by="{.status.containerStatuses[:1].restartCount}"'
+# Show recent Pod termination states
+alias krestarts='kubectl get pod -o=custom-columns=NAME:.metadata.name,RESTARTS:..restartCount,REASON:..reason,EXIT_CODE:..lastState.terminated.exitCode,LAST_RESTART_TIME:..lastState.terminated.finishedAt,MEMORY_LIMIT:..resources.limits.memory --sort-by="{..lastState.terminated.finishedAt}"'
 
+# Non-ready Pod list
 alias knotready='kubectl get pod --no-headers --field-selector=status.phase!=Running'
+
+# Wide informative Node list
+alias knode='kubectl get node -owide'
 
 # Order events by creation timestamp
 alias kevents='kubectl get events --sort-by=.metadata.creationTimestamp'
 
-alias knode-internal="kubectl get node -o jsonpath='{ \$.items[*].status.addresses[?(@.type==\"InternalIP\")].address }'"
+# Show events by specific resource name, use with -A or -n
+kobjevents() {
+	local obj="${1}"
+	shift
+	kubectl get event \
+		--field-selector "involvedObject.name=${obj}" \
+		--sort-by=.metadata.creationTimestamp "$@"
+# involvedObject.kind=Pod,
+#  --sort-by='.lastTimestamp'
+}
 
-alias kcontainerstatus='kubectl get pod -o go-template --template='"'"'Pod: {{.metadata.name}}{{"\n"}}---{{"\n"}}Containers:{{"\n"}}{{range .status.containerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}Init containers:{{"\n"}}{{range .status.initContainerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}'"'"
+# Show human-readble init/containers status for specific Pod
+alias kcontainerstatus='kubectl get pod -o go-template --template='"'"'Pod: {{.metadata.name}}{{"\n"}}---{{"\n"}}Containers:{{"\n"}}{{range .status.containerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}{{if .status.initContainerStatuses }}Init containers:{{"\n"}}{{range .status.initContainerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}{{end}}'"'"
 
-# vim: set ft=sh ts=2 sw=2 tw=80 noet :
+# Use https://github.com/cykerway/complete-alias for bash alias completion
+if [ "$(type -t _complete_alias)" = function ]; then
+	complete -F _complete_alias kcontainerstatus
+fi
+
+# Show cpu/memory matrix for pods, use with -A or -n
+kstats() {
+	local COLS="NAME:.metadata.name"
+	COLS="$COLS,CPU_REQ(cores):.spec.containers[*].resources.requests.cpu"
+	COLS="$COLS,MEMORY_REQ(bytes):.spec.containers[*].resources.requests.memory"
+	COLS="$COLS,CPU_LIM(cores):.spec.containers[*].resources.limits.cpu"
+	COLS="$COLS,MEMORY_LIM(bytes):.spec.containers[*].resources.limits.memory"
+
+	local top; top="$(kubectl top pods "$@")"
+	local pods; pods="$(kubectl get pods -o custom-columns="$COLS" "$@")"
+
+	join -a1 -a2 -o 0,1.2,1.3,2.2,2.3,2.4,2.5, -e '<none>' \
+		<(echo "$top") <(echo "$pods") | column -t -s' '
+}
+
+# Live tail with fzf and exec into selected
+ktail() {
+	read -ra tokens < <(
+		kubectl get pods --all-namespaces |
+			fzf --info=inline --layout=reverse --header-lines=1 --border \
+					--prompt "$(kubectl config current-context | sed 's/-context$//')> " \
+					--header $'Press CTRL-O to open log in editor\n\n' \
+					--bind ctrl-/:toggle-preview \
+					--bind 'ctrl-o:execute:${EDITOR:-vim} <(kubectl logs --namespace {1} {2}) > /dev/tty' \
+					--preview-window down,follow \
+					--preview 'kubectl logs -f --tail=100 --namespace {1} {2}' "$@"
+	)
+	[ ${#tokens} -gt 1 ] &&
+		kubectl exec -it --namespace "${tokens[0]}" "${tokens[1]}" -- bash
+}
+
+#  vim: set ft=sh ts=2 sw=2 tw=80 noet :

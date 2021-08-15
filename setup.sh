@@ -25,11 +25,12 @@ function _bootstrap() {
 			sudo chmod 644 "$kubectl_completion"
 		fi
 
-		local root_home="$(eval echo ~root)"
+		local root_home=''
+		root_home="$(eval echo ~root)"
 		echo ':: Copying files to root user...'
 		sudo rsync -rlt \
-			$HOME/.config $HOME/.vim $HOME/.bash_user \
-			$HOME/.*ignore $HOME/.inputrc $HOME/.tmux*conf \
+			"$HOME"/.config "$HOME"/.bash_user "$HOME"/.*ignore \
+			"$HOME"/.inputrc "$HOME"/.tmux.conf \
 			"$root_home"/
 		sudo rsync -rlt --progress $HOME/.local/bin "$root_home"/.local/
 	fi

@@ -132,6 +132,6 @@ function view_sqlite() {
 main
 
 # always disable lf caching
-exit 1
+# exit 1
 
 # vim: set ts=2 sw=2 tw=80 noet :
