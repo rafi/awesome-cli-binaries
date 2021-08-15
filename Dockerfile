@@ -70,16 +70,17 @@ RUN $root/bin/tmux -V
 # app versions
 ENV bandwhich_version 0.20.0
 ENV bat_version 0.18.1
+ENV bottom_version 0.6.3
 ENV chafa_version 1.6.1
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
+ENV dust_version 0.6.2
 ENV dyff_version 1.1.3
 ENV fd_version 8.2.1
 ENV fzf_version 0.27.2
 ENV glow_version 1.4.1
 ENV heksa_version 1.14.0
-ENV hexyl_version 0.8.0
-ENV httpiego_version 0.6.0
+ENV hexyl_version 0.9.0
 ENV hyperfine_version 1.11.0
 ENV jq_version 1.6
 ENV lf_version r24
@@ -88,10 +89,11 @@ ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
 ENV starship_version 0.55.0
-ENV stern_version 1.19.0
+ENV stern_version 1.20.0
 ENV yank_version 1.2.0
+ENV xh_version 0.12.0
 ENV yj_version 5.0.0
-ENV zoxide_version 0.7.2
+ENV zoxide_version 0.7.3
 
 # bandwhich
 ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl
@@ -108,6 +110,14 @@ RUN curl --retry 5 -L "$bat_url" \
         | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/bat' \
     && chmod 770 $root/bin/bat
 RUN $root/bin/bat --version
+
+# bottom
+ENV bottom_name bottom_x86_64-unknown-linux-musl
+ENV bottom_url https://github.com/ClementTsang/bottom/releases/download/${bottom_version}/${bottom_name}.tar.gz
+RUN curl --retry 5 -L "$bottom_url" \
+        | tar -xzoC $root/bin/ btm \
+    && chmod 770 $root/bin/btm
+RUN $root/bin/btm --version
 
 # chafa
 ENV chafa_name chafa-${chafa_version}-1-x86_64-linux-gnu
@@ -132,6 +142,14 @@ RUN curl --retry 5 -L "$duf_url" \
         | tar -xzoC $root/bin/ duf \
     && chmod 770 $root/bin/duf
 RUN $root/bin/duf -version
+
+# dust
+ENV dust_name dust-v${dust_version}-x86_64-unknown-linux-musl
+ENV dust_url https://github.com/bootandy/dust/releases/download/v${dust_version}/${dust_name}.tar.gz
+RUN curl --retry 5 -L "$dust_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/dust' \
+    && chmod 770 $root/bin/dust
+RUN $root/bin/dust --version
 
 # dyff
 ENV dyff_name dyff-linux-amd64
@@ -179,13 +197,6 @@ RUN curl --retry 5 -L "$hexyl_url" \
         | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/hexyl' \
     && chmod 770 $root/bin/hexyl
 RUN $root/bin/hexyl --version
-
-# httpie-go
-ENV httpiego_name httpie-go_linux_amd64
-ENV httpiego_url https://github.com/nojima/httpie-go/releases/download/v$httpiego_version/$httpiego_name
-RUN curl --retry 5 -Lo $root/bin/ht "$httpiego_url" \
-    && chmod 770 $root/bin/ht
-RUN $root/bin/ht --version
 
 # hyperfine
 ENV hyperfine_name hyperfine-v${hyperfine_version}-x86_64-unknown-linux-musl
@@ -268,6 +279,14 @@ RUN curl --retry 5 -L "$yank_url" \
     && cd .. \
     && rm -rf $yank_name
 RUN $root/bin/yank -v
+
+# xh
+ENV xh_name xh-v${xh_version}-x86_64-unknown-linux-musl
+ENV xh_url https://github.com/ducaale/xh/releases/download/v$xh_version/${xh_name}.tar.gz
+RUN curl --retry 5 -L "$xh_url" \
+        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/xh' \
+    && chmod 770 $root/bin/xh
+RUN $root/bin/xh --version
 
 # yj
 ENV yj_name yj-linux
