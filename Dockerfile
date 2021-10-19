@@ -72,6 +72,7 @@ ENV bandwhich_version 0.20.0
 ENV bat_version 0.18.3
 ENV bottom_version 0.6.3
 ENV chafa_version 1.6.1
+ENV crane_version 0.6.0
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
 ENV dust_version 0.7.5
@@ -126,6 +127,14 @@ RUN curl --retry 5 -L "$chafa_url" \
         | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/chafa' \
     && chmod 770 $root/bin/chafa
 RUN $root/bin/chafa --version
+
+# crane
+ENV crane_name go-containerregistry_Linux_x86_64
+ENV crane_url https://github.com/google/go-containerregistry/releases/download/v${crane_version}/${crane_name}.tar.gz
+RUN curl --retry 5 -L "$crane_url" \
+        | tar -xzoC $root/bin/ 'crane' \
+    && chmod 770 $root/bin/crane
+RUN $root/bin/crane version
 
 # dua-cli
 ENV dua_name dua-v${dua_version}-x86_64-unknown-linux-musl
