@@ -1,20 +1,20 @@
 FROM debian:stable-slim AS builder
 
-# Locales
+# Prepare environment
+RUN apt-get update \
+    && apt-get upgrade --yes --show-upgraded \
+    && apt-get install --yes locales \
+    && apt-get install --yes bash curl file wget \
+        automake build-essential pkg-config libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
-RUN apt-get update && \
-    apt-get upgrade --yes --show-upgraded
-
-RUN apt-get install --yes \
-        bash curl file wget \
-        automake build-essential locales pkg-config libssl-dev
-
-RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-
 COPY ./.files/.config/terminfo /etc/terminfo
+
 ENV root /opt
 
 WORKDIR /tmp
