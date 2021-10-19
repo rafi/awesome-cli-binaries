@@ -1,6 +1,6 @@
 # Awesome (Linux x86_64) CLI Binaries
 
-> This image builds a static (latest version) of tmux and downloads many linux
+> This image builds a static (latest version) of tmux and downloads many Linux
 > x86_64 binaries of popular terminal utilities. Quickly install the newest
 > utilities on any Linux server.
 
@@ -8,31 +8,32 @@
 
 - tmux 3.2a (+ncurses 6.2 +libevent 2.1.12)
 - bandwhich 0.20.0
-- bat 0.18.2
+- bat 0.18.3
 - bottom 0.6.3
 - chafa 1.6.1
-- dua 2.10.7
-- duf 0.4.0
-- dust 0.6.2
-- dyff 1.1.0
+- crane 0.6.0
+- dua 2.10.9
+- duf 0.5.0
+- dust 0.7.5
+- dyff 1.1.3
 - fd 8.2.1
-- fzf 0.27.2
+- fzf 0.27.3
 - glow 1.4.1
 - heksa 1.14.0
 - hexyl 0.9.0
 - hyperfine 1.11.0
 - jq 1.6
-- lf r24
-- mkcert 1.4.1
+- lf r25
+- mkcert 1.4.3
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 13.0.0
-- starship 0.56.0
-- stern 1.20.0
+- starship 0.58.0
+- stern 1.20.1
 - yank 1.2.0
-- xh 0.12.0
+- xh 0.13.0
 - yj 5.0.0
-- zoxide 0.7.3
+- zoxide 0.7.7
 
 ## Install
 
