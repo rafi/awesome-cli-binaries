@@ -78,7 +78,7 @@ ENV duf_version 0.5.0
 ENV dust_version 0.7.5
 ENV dyff_version 1.1.3
 ENV fd_version 8.3.0
-ENV fzf_version 0.28.0
+ENV fzf_version 0.29.0
 ENV glow_version 1.4.1
 ENV heksa_version 1.14.0
 ENV hexyl_version 0.9.0
@@ -89,12 +89,12 @@ ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
-ENV starship_version 1.0.0
-ENV stern_version 1.20.1
+ENV starship_version 1.1.1
+ENV stern_version 1.21.0
 ENV yank_version 1.2.0
 ENV xh_version 0.13.0
 ENV yj_version 5.0.0
-ENV zoxide_version 0.7.9
+ENV zoxide_version 0.8.0
 
 # bandwhich
 ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl
@@ -272,7 +272,7 @@ RUN $root/bin/starship -V
 ENV stern_name stern_${stern_version}_linux_amd64
 ENV stern_url https://github.com/stern/stern/releases/download/v$stern_version/$stern_name.tar.gz
 RUN curl --retry 5 -L "$stern_url" \
-        | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/stern' \
+        | tar -xzoC $root/bin/ 'stern' \
     && chmod 770 $root/bin/stern
 RUN $root/bin/stern --version
 

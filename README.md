@@ -17,7 +17,7 @@
 - dust 0.7.5
 - dyff 1.1.3
 - fd 8.3.0
-- fzf 0.28.0
+- fzf 0.29.0
 - glow 1.4.1
 - heksa 1.14.0
 - hexyl 0.9.0
@@ -28,12 +28,12 @@
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 13.0.0
-- starship 1.0.0
-- stern 1.20.1
+- starship 1.1.1
+- stern 1.21.0
 - yank 1.2.0
 - xh 0.13.0
 - yj 5.0.0
-- zoxide 0.7.9
+- zoxide 0.8.0
 
 ## Install
 
