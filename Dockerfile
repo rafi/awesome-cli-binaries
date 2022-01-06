@@ -72,12 +72,12 @@ ENV bandwhich_version 0.20.0
 ENV bat_version 0.18.3
 ENV bottom_version 0.6.3
 ENV chafa_version 1.6.1
-ENV crane_version 0.7.0
+ENV crane_version 0.8.0
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
 ENV dust_version 0.7.5
 ENV dyff_version 1.1.3
-ENV fd_version 8.3.0
+ENV fd_version 8.3.1
 ENV fzf_version 0.29.0
 ENV glow_version 1.4.1
 ENV heksa_version 1.14.0
@@ -311,6 +311,8 @@ RUN curl --retry 5 -L "$zoxide_url" \
         | tar -xzoC $root/bin/ zoxide \
     && chmod 770 $root/bin/zoxide
 RUN $root/bin/zoxide --version
+
+# ---------------------------------------------------------------------------
 
 FROM debian:stable-slim
 

@@ -11,12 +11,12 @@
 - bat 0.18.3
 - bottom 0.6.3
 - chafa 1.6.1
-- crane 0.7.0
+- crane 0.8.0
 - dua 2.10.9
 - duf 0.5.0
 - dust 0.7.5
 - dyff 1.1.3
-- fd 8.3.0
+- fd 8.3.1
 - fzf 0.29.0
 - glow 1.4.1
 - heksa 1.14.0
