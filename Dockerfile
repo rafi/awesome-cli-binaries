@@ -4,7 +4,7 @@ FROM debian:stable-slim AS builder
 RUN apt-get update \
     && apt-get upgrade --yes --show-upgraded \
     && apt-get install --yes locales \
-    && apt-get install --yes bash curl file wget \
+    && apt-get install --yes bash curl file wget unzip \
         automake build-essential pkg-config libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -69,27 +69,30 @@ RUN $root/bin/tmux -V
 
 # app versions
 ENV bandwhich_version 0.20.0
-ENV bat_version 0.18.3
+ENV bat_version 0.19.0
 ENV bottom_version 0.6.3
+ENV btop_version 1.2.3
 ENV chafa_version 1.6.1
 ENV crane_version 0.8.0
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
 ENV dust_version 0.7.5
 ENV dyff_version 1.1.3
-ENV fd_version 8.3.1
+ENV fd_version 8.3.2
 ENV fzf_version 0.29.0
 ENV glow_version 1.4.1
 ENV heksa_version 1.14.0
 ENV hexyl_version 0.9.0
 ENV hyperfine_version 1.11.0
+ENV jless_version 0.7.2
 ENV jq_version 1.6
 ENV lf_version r26
 ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
+ENV neovim_version 0.6.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
-ENV starship_version 1.1.1
+ENV starship_version 1.3.0
 ENV stern_version 1.21.0
 ENV yank_version 1.2.0
 ENV xh_version 0.13.0
@@ -119,6 +122,14 @@ RUN curl --retry 5 -L "$bottom_url" \
         | tar -xzoC $root/bin/ btm \
     && chmod 770 $root/bin/btm
 RUN $root/bin/btm --version
+
+# btop
+ENV btop_name btop-x86_64-linux-musl
+ENV btop_url https://github.com/aristocratos/btop/releases/download/v$btop_version/$btop_name.tbz
+RUN curl --retry 5 -L "$btop_url" \
+        | tar -xjoC $root/bin/ --wildcards --strip-components 1 '*/btop' \
+    && chmod 770 $root/bin/btop
+RUN $root/bin/btop --version
 
 # chafa
 ENV chafa_name chafa-${chafa_version}-1-x86_64-linux-gnu
@@ -214,6 +225,16 @@ RUN curl --retry 5 -L "$hyperfine_url" \
         | tar -xzoC $root/bin/ --wildcards --strip-components 1 '*/hyperfine' \
     && chmod 770 $root/bin/hyperfine
 RUN $root/bin/hyperfine --version
+
+# jless
+ENV jless_name jless-v${jless_version}-x86_64-unknown-linux-gnu
+ENV jless_url https://github.com/PaulJuliusMartinez/jless/releases/download/v${jless_version}/${jless_name}.zip
+RUN curl --retry 5 -LO "$jless_url" && \
+    unzip "${jless_name}.zip" && \
+    rm -fv "${jless_name}.zip" && \
+    mv jless $root/bin/ && \
+    chmod 770 $root/bin/jless
+RUN $root/bin/jless --version
 
 # jq
 ENV jq_name jq-linux64
