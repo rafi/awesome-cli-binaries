@@ -4,7 +4,7 @@ OUT:=.bin
 .PHONY: docker all
 .DEFAULT:
 
-TARGETS:=bandwhich bat bottom btop chafa crane dua duf dust dyff fd fzf glow heksa hexyl hyperfine jless jq lf mkcert ncdu nvim.appimage reg rg starship stern tmux yank xh yj zoxide
+TARGETS:=bandwhich bat bottom btop chafa crane dua duf dust dyff fd fzf glow heksa hexyl hyperfine jless jq lf mkcert ncdu nvim.appimage reg rg starship stern tmux yank xh yj yq zoxide
 
 all: $(TARGETS)
 

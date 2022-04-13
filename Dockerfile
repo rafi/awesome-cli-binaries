@@ -69,34 +69,35 @@ RUN $root/bin/tmux -V
 
 # app versions
 ENV bandwhich_version 0.20.0
-ENV bat_version 0.19.0
+ENV bat_version 0.20.0
 ENV bottom_version 0.6.3
-ENV btop_version 1.2.3
-ENV chafa_version 1.6.1
+ENV btop_version 1.2.6
+ENV chafa_version 1.10.1
 ENV crane_version 0.8.0
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
 ENV dust_version 0.7.5
 ENV dyff_version 1.1.3
 ENV fd_version 8.3.2
-ENV fzf_version 0.29.0
+ENV fzf_version 0.30.0
 ENV glow_version 1.4.1
 ENV heksa_version 1.14.0
 ENV hexyl_version 0.9.0
 ENV hyperfine_version 1.11.0
-ENV jless_version 0.7.2
+ENV jless_version 0.8.0
 ENV jq_version 1.6
-ENV lf_version r26
+ENV lf_version r27
 ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
 ENV neovim_version 0.6.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
-ENV starship_version 1.3.0
+ENV starship_version 1.5.4
 ENV stern_version 1.21.0
 ENV yank_version 1.2.0
 ENV xh_version 0.13.0
-ENV yj_version 5.0.0
+ENV yj_version 5.1.0
+ENV yq_version 4.24.4
 ENV zoxide_version 0.8.0
 
 # bandwhich
@@ -234,7 +235,7 @@ RUN curl --retry 5 -LO "$jless_url" && \
     rm -fv "${jless_name}.zip" && \
     mv jless $root/bin/ && \
     chmod 770 $root/bin/jless
-RUN $root/bin/jless --version
+# RUN $root/bin/jless --version
 
 # jq
 ENV jq_name jq-linux64
@@ -319,11 +320,18 @@ RUN curl --retry 5 -L "$xh_url" \
 RUN $root/bin/xh --version
 
 # yj
-ENV yj_name yj-linux
+ENV yj_name yj-linux-amd64
 ENV yj_url https://github.com/sclevine/yj/releases/download/v$yj_version/$yj_name
 RUN curl --retry 5 -Lo $root/bin/yj "$yj_url" \
     && chmod 770 $root/bin/yj
 RUN $root/bin/yj -v
+
+# yq
+ENV yq_name yq_linux_amd64
+ENV yq_url https://github.com/mikefarah/yq/releases/download/v$yq_version/$yq_name
+RUN curl --retry 5 -Lo $root/bin/yq "$yq_url" \
+    && chmod 770 $root/bin/yq
+RUN $root/bin/yq --version
 
 # zoxide
 ENV zoxide_name zoxide-v${zoxide_version}-x86_64-unknown-linux-musl

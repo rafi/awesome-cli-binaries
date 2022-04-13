@@ -7,34 +7,36 @@
 ## Utility List
 
 - tmux 3.2a (+ncurses 6.2 +libevent 2.1.12)
+- neovim 0.6.1
 - bandwhich 0.20.0
-- bat 0.19.0
+- bat 0.20.0
 - bottom 0.6.3
-- btop 1.2.3
-- chafa 1.6.1
+- btop 1.2.6
+- chafa 1.10.1
 - crane 0.8.0
 - dua 2.10.9
 - duf 0.5.0
 - dust 0.7.5
 - dyff 1.1.3
 - fd 8.3.2
-- fzf 0.29.0
+- fzf 0.30.0
 - glow 1.4.1
 - heksa 1.14.0
 - hexyl 0.9.0
 - hyperfine 1.11.0
-- jless 0.7.2
+- jless 0.8.0
 - jq 1.6
-- lf r26
+- lf r27
 - mkcert 1.4.3
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 13.0.0
-- starship 1.3.0
+- starship 1.5.4
 - stern 1.21.0
 - yank 1.2.0
 - xh 0.13.0
-- yj 5.0.0
+- yj 5.1.0
+- yq 4.24.4
 - zoxide 0.8.0
 
 ## Install
