@@ -12,7 +12,7 @@
 - bat 0.20.0
 - bottom 0.6.3
 - btop 1.2.6
-- chafa 1.10.1
+- chafa 1.10.2
 - crane 0.8.0
 - dua 2.10.9
 - duf 0.5.0
@@ -31,13 +31,13 @@
 - ncdu 1.15.1
 - reg 0.16.1
 - ripgrep 13.0.0
-- starship 1.5.4
+- starship 1.6.3
 - stern 1.21.0
 - yank 1.2.0
 - xh 0.13.0
 - yj 5.1.0
-- yq 4.24.4
-- zoxide 0.8.0
+- yq 4.24.5
+- zoxide 0.8.1
 
 ## Install
 

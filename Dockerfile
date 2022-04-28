@@ -72,7 +72,7 @@ ENV bandwhich_version 0.20.0
 ENV bat_version 0.20.0
 ENV bottom_version 0.6.3
 ENV btop_version 1.2.6
-ENV chafa_version 1.10.1
+ENV chafa_version 1.10.2
 ENV crane_version 0.8.0
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
@@ -92,13 +92,13 @@ ENV ncdu_version 1.15.1
 ENV neovim_version 0.6.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
-ENV starship_version 1.5.4
+ENV starship_version 1.6.3
 ENV stern_version 1.21.0
 ENV yank_version 1.2.0
 ENV xh_version 0.13.0
 ENV yj_version 5.1.0
-ENV yq_version 4.24.4
-ENV zoxide_version 0.8.0
+ENV yq_version 4.24.5
+ENV zoxide_version 0.8.1
 
 # bandwhich
 ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl
