@@ -20,7 +20,7 @@ function main() {
 	# Display title and border
 	local filename="${FILE/$PWD\//}"
 	printf "\e[38;5;243m%*s\e[0m\n" $(( (${#filename} + WIDTH) / 2)) "$filename"
-	printf "\e[38;5;238m%${WIDTH}s\e[0m\n" | tr ' ' '─'
+	printf "\e[38;5;238m%${WIDTH}s\e[0m\n" | tr ' ' '-'
 
 	# Use the right tool for the extension
 	case "${FILE}" in

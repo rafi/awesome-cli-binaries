@@ -32,7 +32,7 @@ function _bootstrap() {
 			"$HOME"/.config "$HOME"/.bash_user "$HOME"/.*ignore \
 			"$HOME"/.inputrc "$HOME"/.tmux.conf \
 			"$root_home"/
-		sudo rsync -rlt --progress $HOME/.local/bin "$root_home"/.local/
+		sudo rsync -rlt --progress "$HOME"/.local/bin "$root_home"/.local/
 	fi
 }
 
