@@ -7,12 +7,12 @@
 ## Utility List
 
 - tmux 3.2a (+ncurses 6.2 +libevent 2.1.12)
-- neovim 0.6.1
+- neovim 0.7.0
 - bandwhich 0.20.0
 - bat 0.20.0
 - bottom 0.6.3
 - btop 1.2.6
-- chafa 1.10.2
+- chafa 1.10.3
 - crane 0.8.0
 - dua 2.10.9
 - duf 0.5.0
@@ -36,7 +36,7 @@
 - yank 1.2.0
 - xh 0.13.0
 - yj 5.1.0
-- yq 4.24.5
+- yq 4.25.1
 - zoxide 0.8.1
 
 ## Install
@@ -72,7 +72,6 @@ Use the `setup.sh` helper script to provision servers.
 
 ## TODO
 
-- [ ] neovim
 - [ ] tmux-mem-cpu-load
 - [ ] tmuxp
 - [ ] colordiff / icdiff

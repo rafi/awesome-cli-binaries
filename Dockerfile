@@ -72,7 +72,7 @@ ENV bandwhich_version 0.20.0
 ENV bat_version 0.20.0
 ENV bottom_version 0.6.3
 ENV btop_version 1.2.6
-ENV chafa_version 1.10.2
+ENV chafa_version 1.10.3
 ENV crane_version 0.8.0
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
@@ -89,7 +89,7 @@ ENV jq_version 1.6
 ENV lf_version r27
 ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
-ENV neovim_version 0.6.1
+ENV neovim_version 0.7.0
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
 ENV starship_version 1.6.3
@@ -97,7 +97,7 @@ ENV stern_version 1.21.0
 ENV yank_version 1.2.0
 ENV xh_version 0.13.0
 ENV yj_version 5.1.0
-ENV yq_version 4.24.5
+ENV yq_version 4.25.1
 ENV zoxide_version 0.8.1
 
 # bandwhich
@@ -267,6 +267,11 @@ RUN curl --retry 5 -L "$ncdu_url" \
     && chmod 770 $root/bin/ncdu
 RUN $root/bin/ncdu --version
 
+# neovim
+ENV neovim_url https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim.appimage
+RUN curl --retry 5 -Lo $root/bin/nvim.appimage "$neovim_url" \
+    && chmod 770 $root/bin/nvim.appimage
+
 # reg
 ENV reg_name reg-linux-amd64
 ENV reg_url https://github.com/genuinetools/reg/releases/download/v$reg_version/$reg_name
@@ -346,7 +351,7 @@ RUN $root/bin/zoxide --version
 FROM debian:stable-slim
 
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="41"
+LABEL io.rafi.revision="42"
 
 ENV root /opt
 
