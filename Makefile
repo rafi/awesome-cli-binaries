@@ -4,7 +4,7 @@ OUT:=.bin
 .PHONY: docker all
 .DEFAULT:
 
-TARGETS:=bandwhich bat bottom btop chafa crane dua duf dust dyff fd fzf glow heksa hexyl hyperfine jless jq lf mkcert ncdu nvim.appimage reg rg starship stern tmux yank xh yj yq zoxide
+TARGETS:=bandwhich bat bottom btop chafa crane dua duf dust dyff fd fzf glow hexyl hyperfine jless jq lf mkcert ncdu nvim.appimage reg rg starship stern tmux yank xh yj yq zoxide
 
 all: $(TARGETS)
 
@@ -19,10 +19,10 @@ static.tar.xz:
 
 docker:
 	mkdir -p $(OUT)
-	docker build -t $(IMAGE) .
+	docker build --platform linux/x86_64 -t $(IMAGE) .
 
 $(TARGETS): docker
-	docker run --rm -a stdout $(IMAGE) /bin/tar -cf - /opt/bin/$@ | $(TAR) xf - --strip-components=2 -C $(OUT)
+	docker run --platform linux/x86_64 --rm -a stdout $(IMAGE) /bin/tar -cf - /opt/bin/$@ | $(TAR) xf - --strip-components=2 -C $(OUT)
 
 clean:
 	-(cd $(OUT) && rm $(TARGETS))

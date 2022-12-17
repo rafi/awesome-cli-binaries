@@ -24,7 +24,7 @@ CMD ["bash"]
 # tmux ncurses libevent
 ENV libevent_version 2.1.12
 ENV ncurses_version 6.2
-ENV tmux_version 3.2a
+ENV tmux_version 3.3a
 
 # libevent
 ENV libevent_name libevent-${libevent_version}-stable
@@ -69,20 +69,19 @@ RUN $root/bin/tmux -V
 
 # app versions
 ENV bandwhich_version 0.20.0
-ENV bat_version 0.20.0
+ENV bat_version 0.22.1
 ENV bottom_version 0.6.3
 ENV btop_version 1.2.6
 ENV chafa_version 1.10.3
-ENV crane_version 0.8.0
+ENV crane_version 0.12.1
 ENV dua_version 2.10.9
 ENV duf_version 0.5.0
 ENV dust_version 0.7.5
 ENV dyff_version 1.1.3
-ENV fd_version 8.3.2
-ENV fzf_version 0.30.0
+ENV fd_version 8.6.0
+ENV fzf_version 0.35.1
 ENV glow_version 1.4.1
-ENV heksa_version 1.14.0
-ENV hexyl_version 0.9.0
+ENV hexyl_version 0.12.0
 ENV hyperfine_version 1.11.0
 ENV jless_version 0.8.0
 ENV jq_version 1.6
@@ -93,12 +92,12 @@ ENV neovim_version 0.7.0
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
 ENV starship_version 1.6.3
-ENV stern_version 1.21.0
+ENV stern_version 1.22.0
 ENV yank_version 1.2.0
 ENV xh_version 0.13.0
 ENV yj_version 5.1.0
-ENV yq_version 4.25.1
-ENV zoxide_version 0.8.1
+ENV yq_version 4.30.5
+ENV zoxide_version 0.8.3
 
 # bandwhich
 ENV bandwhich_name bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl
@@ -202,14 +201,6 @@ RUN curl --retry 5 -L "$glow_url" \
         | tar -xzoC $root/bin/ glow \
     && chmod 770 $root/bin/glow
 RUN $root/bin/glow --version
-
-# heksa
-ENV heksa_name heksa-v${heksa_version}-linux-amd64
-ENV heksa_url https://github.com/raspi/heksa/releases/download/v$heksa_version/$heksa_name.tar.gz
-RUN curl --retry 5 -L "$heksa_url" \
-        | tar -xzoC $root/bin/ --wildcards --strip-components 3 '*/*/*/heksa' \
-    && chmod 770 $root/bin/heksa
-RUN $root/bin/heksa --version
 
 # hexyl
 ENV hexyl_name hexyl-v${hexyl_version}-x86_64-unknown-linux-gnu
@@ -339,7 +330,7 @@ RUN curl --retry 5 -Lo $root/bin/yq "$yq_url" \
 RUN $root/bin/yq --version
 
 # zoxide
-ENV zoxide_name zoxide-v${zoxide_version}-x86_64-unknown-linux-musl
+ENV zoxide_name zoxide-${zoxide_version}-x86_64-unknown-linux-musl
 ENV zoxide_url https://github.com/ajeetdsouza/zoxide/releases/download/v$zoxide_version/$zoxide_name.tar.gz
 RUN curl --retry 5 -L "$zoxide_url" \
         | tar -xzoC $root/bin/ zoxide \
