@@ -88,7 +88,7 @@ ENV jq_version 1.6
 ENV lf_version r27
 ENV mkcert_version 1.4.3
 ENV ncdu_version 1.15.1
-ENV neovim_version 0.7.0
+ENV neovim_version 0.8.1
 ENV reg_version 0.16.1
 ENV ripgrep_version 13.0.0
 ENV starship_version 1.6.3

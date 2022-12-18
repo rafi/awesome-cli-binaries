@@ -7,7 +7,7 @@
 ## Utility List
 
 - tmux 3.3a (+ncurses 6.2 +libevent 2.1.12)
-- neovim 0.7.0
+- neovim 0.8.1
 - bandwhich 0.20.0
 - bat 0.22.1
 - bottom 0.6.3
