@@ -1,6 +1,6 @@
 /.git*
 /tmp
-/.bin
+/bin
 /.files
 !/.files/.config/terminfo
 /*.md

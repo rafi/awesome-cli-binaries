@@ -1,10 +1,10 @@
 IMAGE:=rafib/awesome-cli-binaries
 TAR:=tar
-OUT:=.bin
+OUT:=bin
 .PHONY: docker all
 .DEFAULT:
 
-TARGETS:=bandwhich bat bottom btop chafa crane dua duf dust dyff fd fzf glow hexyl hyperfine jless jq lf mkcert ncdu nvim.appimage reg rg starship stern tmux yank xh yj yq zoxide
+TARGETS:=bin
 
 all: $(TARGETS)
 
@@ -19,10 +19,10 @@ static.tar.xz:
 
 docker:
 	mkdir -p $(OUT)
-	docker build --platform linux/x86_64 -t $(IMAGE) .
+	DOCKER_BUILDKIT=1 docker buildx build --secret id=token,env=HOMEBREW_GITHUB_API_TOKEN --platform linux/x86_64 -t $(IMAGE) .
 
 $(TARGETS): docker
-	docker run --platform linux/x86_64 --rm -a stdout $(IMAGE) /bin/tar -cf - /opt/bin/$@ | $(TAR) xf - --strip-components=2 -C $(OUT)
+	docker run --platform linux/x86_64 --rm -a stdout $(IMAGE) /bin/tar -cf - /usr/local/bin | $(TAR) xf - --strip-components=2
 
 clean:
 	-(cd $(OUT) && rm $(TARGETS))
