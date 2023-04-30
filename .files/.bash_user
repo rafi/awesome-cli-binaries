@@ -25,13 +25,31 @@ if [[ $DISPLAY ]]; then
 	shopt -s checkwinsize  # Update LINES and COLUMNS after each command
 fi
 
+# XDG directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export  XDG_CACHE_HOME="$HOME/.cache"
+export   XDG_DATA_HOME="$HOME/.local/share"
+export  XDG_STATE_HOME="$HOME/.local/state"
+
+[ -d "$XDG_CONFIG_HOME" ] || mkdir -m 0750 "$XDG_CONFIG_HOME"
+[ -d "$XDG_CACHE_HOME" ]  || mkdir -m 0750 "$XDG_CACHE_HOME"
+[ -d "$XDG_DATA_HOME" ]   || mkdir -pm 0750 "$XDG_DATA_HOME"
+[ -d "$XDG_STATE_HOME" ]  || mkdir -m 0750 "$XDG_STATE_HOME"
+
+export HISTFILE="$XDG_CACHE_HOME/bash_history"
 export HISTSIZE=20000
 export HISTFILESIZE=15000000
 export HISTTIMEFORMAT='[%F %T] '
 export HISTIGNORE='pwd:jobs:ll:ls:l:lf:history:c:clear'
 export HISTCONTROL=ignoreboth
 
-# Editor and pager
+export PATH="$HOME/.local/bin:$PATH"
+
+# Append to history and set the window title
+export PROMPT_COMMAND='history -a; printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+
+# Pagers
+# ----
 EDITOR=vim
 if hash nvim 2>/dev/null; then
 	export MANPAGER='nvim +Man!'
@@ -43,20 +61,25 @@ export VISUAL="$EDITOR"
 export PAGER=less
 export LESS="-FiQMXR"
 export LESSCHARSET="UTF-8"
+export LESSHISTFILE="$XDG_CACHE_HOME/less_history"
 
-# XDG directories
-export XDG_CONFIG_HOME="$HOME/.config"
-export  XDG_CACHE_HOME="$HOME/.cache"
-export   XDG_DATA_HOME="$HOME/.local/share"
+# Finders
+# ----
 
-[ -d "$XDG_CONFIG_HOME" ] || mkdir -m 0750 "$XDG_CONFIG_HOME"
-[ -d "$XDG_CACHE_HOME" ]  || mkdir -m 0750 "$XDG_CACHE_HOME"
-[ -d "$XDG_DATA_HOME" ]   || mkdir -pm 0750 "$XDG_DATA_HOME"
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/rc"
 
-export PATH="$HOME/.local/bin:$PATH"
+export FZF_DEFAULT_OPTS="--bind=ctrl-d:page-down,ctrl-u:page-up,ctrl-y:yank,tab:down,btab:up --inline-info --reverse --height 50%"
+export FZF_DEFAULT_COMMAND="rg --hidden --files --glob '!.git' --color=never"
 
-# Append to history and set the window title
-export PROMPT_COMMAND='history -a; printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+# Must be loaded _after_ setting PROMPT_COMMAND
+if command -v zoxide 1>/dev/null 2>&1; then
+	export _ZO_DATA_DIR="$XDG_CACHE_HOME/zoxide"
+	export _ZO_ECHO=1
+	eval "$(zoxide init bash)"
+fi
+
+# Colors and icons
+# ----
 
 export LS_COLORS='no=00:fi=00:rs=0:di=00;34:ln=01;31:pi=01;33:so=00;33:bd=40;31;01:cd=40;37:or=01;30:mi=01;30:su=48;5;160;38;5;230:sg=48;5;136;38;5;230:ca=30;41:ow=38;5;154:ex=01;36:*.bat=01;37:*.btm=01;37:*.cmd=01;37:*.com=01;37:*.exe=01;37:*.iso=00;33:*.7z=01;33:*.deb=01;33:*.DEB=01;33:*.tar=01;33:*.TAR=01;33:*.tgz=01;33:*.TGZ=01;33:*.gz=01;33:*.GZ=01;33:*.bz2=01;33:*.BZ2=01;33:*.tar.xz=01;33:*.tar.gz=01;33:*.xz=01;33:*.XZ=01;33:*.lzma=01;33:*.LZMA=01;33:*.lzo=01;33:*.LZO=01;33:*.lzop=01;33:*.LZOP=01;33:*.rar=01;33:*.RAR=01;33:*.ace=01;33:*.ACE=01;33:*.zip=01;33:*.ZIP=01;33:*.gif=01;34:*.GIF=01;34:*.svg=01;34:*.SVG=01;34:*.png=01;34:*.PNG=01;34:*.jpg=01;34:*.JPG=01;34:*.jpeg=01;34:*.JPEG=01;34:*.bmp=01;34:*.BMP=01;34:*.xbm=01;34:*.XBM=01;34:*.xpm=01;34:*.XPM=01;34:*.tif=01;34:*.TIF=01;34:*.tiff=01;34:*.TIFF=01;34:*.tga=01;34:*.TGA=01;34:*.xcf=01;34:*.XCF=01;34:*.xcf.gz=01;34:*.XCF.GZ=01;34:*.blend=01;34:*.BLEND=01;34:*.pcx=01;34:*.PCX=01;34:*.ppm=01;34:*.PPM=01;34:*.ogg=00;32:*.OGG=00;32:*.ogm=00;32:*.OGM=00;32:*.flac=00;32:*.FLAC=00;32:*.ape=00;32:*.APE=00;32:*.ac3=00;32:*.AC3=00;32:*.dts=00;32:*.DTS=00;32:*.aiff=00;32:*.AIFF=00;32:*.aiffc=00;32:*.AIFFC=00;32:*.aac=00;32:*.AAC=00;32:*.mp3=00;32:*.MP3=00;32:*.fla=00;32:*.FLA=00;32:*.m4a=00;32:*.M4A=00;32:*.mid=00;32:*.MID=00;32:*.wav=00;32:*.WAV=00;32:*.au=00;32:*.nes=00;32:*.smc=00;32:*.fig=00;32:*.sfc=00;32:*.webm=00;32:*.smc.gz=00;32:*.fig.gz=00;32:*.sfc.gz=00;32:*.mkv=01;32:*.MKV=01;32:*.ogv=01;32:*.OGV=01;32:*.mp4=01;32:*.MP4=01;32:*.m4v=01;32:*.M4V=01;32:*.mpg=01;32:*.MPG=01;32:*.mpeg=01;32:*.MPEG=01;32:*.wmv=01;32:*.WMV=01;32:*.avi=01;32:*.AVI=01;32:*.mov=01;32:*.MOV=01;32:*.fli=01;32:*.FLI=01;32:*.flc=01;32:*.FLC=01;32:*.flv=01;32:*.FLV=01;32:*.swf=01;32:*.SWF=01;32:*.doc=01;37:*.docx=01;37:*.dif=01;37:*.word=01;37:*.excel=01;37:*.xls=01;37:*.xlt=01;37:*.pxl=01;37:*.slk=01;37:*.csv=01;37:*.rtf=01;37:*.pdb=01;37:*.psw=01;37:*.ppt=01;37:*.pps=01;37:*.pot=01;37:*.potm=01;37:*.pptx=01;37:*.ppsx=01;37:*.pdf=00;37:*.ps=00;37:*.txt=00;37:*.odt=00;37:*.odg=00;37:*.ods=00;37:*.ots=00;37:*.fodt=00;37:*.ott=00;37:*.uot=00;37:*.ssi=00;37:*.sti=00;37:*.ssx=00;37:*.sxc=00;37:*.sxd=00;37:*.sxw=00;37:*.stw=00;37:*.txt=00;37:*.tex=00;37:*.odp=00;37:*.otp=00;37:*.ackrc=01;35:*.asc=00;37:*.asm=01;35:*.apvlvrc=00;35:*.asoundrc=00;35:*autostart=01;31:*.awk=00;36:*.bash=00;31:*.bashrc=00;35:*.bash_profile=00;35:*.bak=01;31:*.bzr=00;36:*.c=00;35:*.cfg=00;36:*.coffee=00;36:*.conf=00;35:*COPYING=01;37:*.cpp=01;35:*.cs=01;35:*.css=01;35:*.csv=01;35:*.def=00;35:*.diff=01;33:*.dir_colors=00;37:*.dirs=00;37:*.ebuild=00;35:*.enc=00;36:*.eps=00;36:*.etx=00;36:*.ex=00;36:*.example=00;36:*.fehbg=00;36:*.fonts=00;36:*.git=00;37:*.gitconfig=00;37:*.gitignore=00;37:*.glivrc=00;35:*.gtk-bookmarks=00;37:*.gtkrc=00;37:*.gtkrc-2.0=00;37:*.go=00;35:*.h=01;34:*.hgignore=01;34:*.hgrc=01;35:*.hs=01;35:*.htm=01;35:*.html=01;35:*.htoprc=00;35:*.info=01;37:*.ini=00:*.interrobangrc=00;35:*.irbrc=00;35:*.java=01;35:*.jhtm=01;35:*.js=01;35:*.jsm=01;35:*.jsm=01;35:*.json=01;35:*.jsp=01;35:*.larswmrc=01;35:*.lisp=00;35:*.lesshst=00;37:*.log=01;37:*.lua=00;35:*.mailcap=01;31:*Makefile=00;31:*.map=01;32:*.markdown=01;32:*.md=01;37:*.mostrc=01;35:*.mkd=01;32:*.msmtprc=01;35:*.muttrc=01;35:*.nfo=01;37:*.netrc=00;35:*.o=00;34:*.offlineimaprc=01;35:*.opt=00;36:*.pacnew=01;33:*.patch=01;33:*.pentadactylrc=00;35:*.pc=00;36:*.php=00;35:*.pid=00;33:*.pl=00;31:*.pod=01;32:*.py=00;35:*.ratpoisonrc=01;35:*.rb=00;35:*.rc=01;35:*README=01;37:*.rtf=00;37:*.recently-used=00;37:*.rnd=00;33:*.sbclrc=00;35:*.sed=01;35:*.sh=00;31:*.signature=01;33:*.spec=00;37:*.stumpwmrc=01;35:*.t=01;37:*.tcl=01;35:*.tdy=01;35:*.textile=01;35:*.theme=00;37:*viminfo=00;37:*.xml=01;35:*.yml=01;35:*.yaml=01;35:*.zcompdump=00;35:*.zlogin=00;35:*.zwc=01;35:*.zsh=01;31:*.zshrc=00;35:*.ttytterrc=00;35:*.urlview=00:*.vim=01;35:*.vimperatorrc=00;35:*vimrc=00;35:*.xinitrc=00;35:*xinitrc=00;35:*.Xauthority=01;35:*.Xdefaults=01;35:*Xdefaults=01;35:*xdefaults=01;35:*.Xmodmap=01;35:*.xmodmap=01;35:*.Xresources=01;35:*Xresources=01;35:*xresources=01;35:'
 
@@ -82,25 +105,36 @@ di=:fi=:ln=:or=:ex=:*.c=:*.cc=:*.clj=:*.coffee=:*.cpp
 "
 fi
 
+# Desktop and shells
+# ----
+
 # Look for terminfo files under data
 if [ -d "$XDG_CONFIG_HOME/terminfo" ]; then
 	export TERMINFO="$XDG_CONFIG_HOME/terminfo"
-	export TERMINFO_DIRS="$TERMINFO:/usr/share/terminfo"
+	export TERMINFO_DIRS="$TERMINFO"
 fi
 
 # Look for terminfo files under data
 if [ -d "$SSHHOME/.sshrc.d/terminfo" ]; then
 	export TERMINFO="$SSHHOME/.sshrc.d/terminfo"
-	export TERMINFO_DIRS="$TERMINFO:/usr/share/terminfo"
+fi
+
+if [ -d "/usr/share/terminfo" ]; then
+	export TERMINFO_DIRS="$TERMINFO_DIRS:/usr/share/terminfo"
+fi
+if [ -d "/usr/opt/ncurses/share/terminfo" ]; then
+	export TERMINFO_DIRS="$TERMINFO_DIRS:/usr/opt/ncurses/share/terminfo"
 fi
 
 # SSH with common TERM and passing USER who is ssh'ing
 ssh() {
+	# Use safest terminfo on remote server
 	if [ -n "$TMUX" ]; then
 		TERM=screen-256color
 	else
 		TERM=xterm
 	fi
+	# Don't overwrite environment variable if it's not empty
 	export LC_IDENTIFICATION="${LC_IDENTIFICATION:-$USER}"
 	command ssh -o SendEnv=LC_IDENTIFICATION "$@"
 }
@@ -111,11 +145,6 @@ if [ "${LC_IDENTIFICATION:-$USER}" = rafi ] \
 then
 	set -o vi
 fi
-
-export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/rc"
-
-export FZF_DEFAULT_OPTS="--bind=ctrl-d:page-down,ctrl-u:page-up,ctrl-y:yank,tab:down,btab:up --inline-info --reverse --height 50%"
-export FZF_DEFAULT_COMMAND="rg --hidden --files --glob '!.git' --color=never"
 
 # See https://github.com/junegunn/fzf
 if [ -f "$XDG_CONFIG_HOME/key-bindings.bash" ]; then
@@ -144,81 +173,48 @@ elif [ -f /etc/lsb-release ]; then
 	fi
 fi
 
-# Must be loaded _after_ setting PROMPT_COMMAND
-if command -v zoxide 1>/dev/null 2>&1; then
-	export _ZO_DATA_DIR="$XDG_CACHE_HOME/zoxide"
-	export _ZO_ECHO=1
-	eval "$(zoxide init bash)"
-fi
+# bash aliases
+# ---
 
-# carry on aliases
+# Carry over aliases to the root account when using sudo
 alias sudo='sudo '
+
+# Make watch work with aliases
 alias watch='watch '
 
-# list utils
-alias ls="LC_COLLATE=C ls --color=auto --group-directories-first"
-alias l='ls -CFa'
+alias c=clear
+
+# Lists ---------------------------------------------------- l for list -- {{{
+LSCMD='ls'
+# See https://github.com/Peltoche/lsd
+if hash lsd 2>/dev/null; then
+	LSCMD='lsd'
+fi
+# Listing directory contents
+# shellcheck disable=2139,1003
+alias ls='LC_COLLATE=C \'${LSCMD}' --color=auto --group-directories-first'
+unset LSCMD
 alias ll='ls -alF'
 alias llh='ls -alFh'
-alias lld='ls -Gal --color=always | grep ^d --colour=never'
 
-# find
-alias grep='grep --color=auto --exclude-dir=.git'
-alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
-alias tree2='tree -L 2'
-alias tree3='tree -L 3'
-
-if ! hash fd 2>/dev/null; then
-	alias f='find . -iname '
+if hash lsd 2>/dev/null; then
+	alias l='ls -Fa'
+	alias lt='ll --tree --ignore-glob .git'
+	alias lld="lsd -al --color=always | grep '^\e\[[0-9*;]*md' --colour=never"
 else
-	alias f=fd
+	alias l='ls -CFa'
+	alias lld='ls -Gal --color=always | grep ^d --colour=never'
 fi
 
-# git
-if ! hash git 2>/dev/null; then
-	alias g=git
-	alias gcd='cd "$(git rev-parse --show-toplevel)"'
-	alias gd='git diff'
-	alias gds='git diff --cached'
-	alias gfl='git fetch --prune && git lg -15'
-	alias gf='git fetch --prune'
-	alias gfa='git fetch --all --tags --prune'
-	alias gap='git add -p'
-	alias gai='git add -i'
-	alias gs='git status -sb'
-	alias gl='git lg -15'
-	alias gll='git lg'
-	alias gld='git lgd -15'
-	if type _git &> /dev/null; then
-		complete -o default -o nospace -F _git g
-	fi
-fi
+# }}}
+# Editor ---------------------------------------------------- v for vim -- {{{
 
-# docker
-alias dps='docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
-alias dls='docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
-alias dim='docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
-alias dip='docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
-alias dgc='docker rmi $(docker images -qf "dangling=true")'
-alias dvc='docker volume ls -qf dangling=true | xargs docker volume rm'
-alias dtop='docker stats $(docker ps --format="{{.Names}}")'
-
-# misc helpers
-alias c=clear
-alias grep='grep --color=auto --exclude-dir=.git'
-alias dut='du -hsx * | sort -rh | head -10'
-alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
-alias ipinfo='curl -s ipinfo.io | jq .'
-hash colordiff 2>/dev/null && alias diff=colordiff
-
-mk() { mkdir -p "$@" && cd "$1"; }
-
-# vim
-if type nvim &> /dev/null; then
+# Neo/vim shortcuts, use Neovim by default
+# shellcheck disable=2139
+if hash nvim 2>/dev/null; then
 	alias vim=nvim
 	alias suvim='sudo -E nvim'
 else
-	alias nvim=vim
 	alias suvim='sudo -E vim'
 fi
 alias v='vim $(fzf)'
@@ -226,7 +222,24 @@ alias vi=vim
 alias ve='tmux split-window -h "$EDITOR"'
 alias vimdiff='vim -d'
 
-# Jump around
+# }}}
+# Grepping / Parsing --------------------------------------- p for grep -- {{{
+
+# Productive defaults for grep and tree
+alias grep='grep --color=auto --exclude-dir=.git'
+alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
+alias tree2='tree -L 2'
+alias tree3='tree -L 3'
+
+# Head and tail will show as much possible without scrolling
+hash ghead 2>/dev/null && alias cath='ghead -n $((${LINES:-12}-4))'
+hash gtail 2>/dev/null && alias catt='gtail -n $((${LINES:-12}-4)) -s.1'
+
+# Use colordiff by default
+hash colordiff 2>/dev/null && alias diff=colordiff
+
+# }}}
+# Jump around ------------------------------------------- z for jumping -- {{{
 alias cdf='cd "$(dirname "$(fzf)")"'
 alias cdd='cd "$(fd --type d | fzf)"'
 
@@ -239,10 +252,141 @@ alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
 
+# }}}
+# File find ------------------------------------------------ f for find -- {{{
+if ! hash fd 2>/dev/null; then
+	# Slow
+	alias f='find . -iname '
+else
+	# Use https://github.com/sharkdp/fd
+	alias f=fd
+fi
+
+# }}}
+# Git ------------------------------------------------------ g for git --- {{{
+# See more in ./functions.d/git.bash
+alias g=git
+alias gb='git branch'
+alias gc='git checkout'
+alias gcb='git checkout -b'
+alias gcd='cd "$(git rev-parse --show-toplevel)"'
+alias gd='git diff'
+alias gds='git diff --cached'
+alias gfl='git fetch --prune && git lg -15'
+alias gf='git fetch --prune'
+alias gfa='git fetch --all --tags --prune'
+alias gap='git add -p'
+alias gai='git add -i'
+alias gs='git status -sb'
+alias gl='git lg -15'
+alias gll='git lg'
+alias gld='git lgd -15'
+
+## Git branches
+alias gball="git branch --sort=-committerdate --all --color=always --format \
+	'%(refname:short) %(if)%(upstream)%(then)-> %(upstream)%(end)'"
+gbf() { gball | fzf --ansi | awk '{print $1}'; }
+
+# Attach git aliases auto-completion
+if type __git_complete &>/dev/null; then
+	if type __git_main &>/dev/null; then
+		__git_complete g __git_main
+	fi
+fi
+
+# }}}
+# Docker ------------------------------------------------- d for docker -- {{{
+alias d=docker
+alias dk='docker compose'
+alias dps='docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
+alias dls='docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
+alias dim='docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
+alias dip='docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
+alias dgc='docker rmi $(docker images -qf "dangling=true")'
+alias dvc='docker volume ls -qf dangling=true | xargs docker volume rm'
+alias dtop='docker stats $(docker ps --format="{{.Names}}")'
+# shellcheck disable=2154
+alias dnet='docker network ls && echo && docker inspect --format "{{\$e := . }}{{with .NetworkSettings}} {{\$e.Name}}
+{{range \$index, \$net := .Networks}}  - {{\$index}}	{{.IPAddress}}
+{{end}}{{end}}" $(docker ps -q)'
+# shellcheck disable=2154
+alias dtag='docker inspect --format "{{.Name}}
+{{range \$index, \$label := .Config.Labels}}  - {{\$index}}={{\$label}}
+{{end}}" $(docker ps -q)'
+
+# }}}
+# Kubernetes ----------------------------------------- k for kubernetes -- {{{
+# See more in functions.d/kubernetes.bash
+alias k=kubectl
+alias kc=kubectx
+alias ks='kubectl switch'
+alias kg='kubectl get'
+alias kgp='kubectl get pods'
+alias ke='kubectl edit'
+alias kr='kubectl run'
+
+# Attach k alias to kubectl completion function
+if type __start_kubectl &>/dev/null; then
+	complete -o default -F __start_kubectl k
+fi
+
+# }}}
+# Processes -------------------------------------------------------------- {{{
+alias process='ps -ax'
+alias pst='pstree -g 3 -ws'
+
+# }}}
+# Task ----------------------------------------------------- j for just -- {{{
+# See: https://github.com/casey/just
+alias j=just
+if [ -n "$BASH_VERSION" ] && type _just &>/dev/null; then
+	complete -F _just -o bashdefault -o default j
+fi
+
+# }}}
+# Storage ---------------------------------------------------------------- {{{
+alias dut='du -hsx * | sort -rh | head -10'
+alias duz="du -hsx * | sort -rh | fzf"
+alias dum='df -hT -x devtmpfs -x tmpfs'
+
+# }}}
+# Misc ------------------------------------------------------------------- {{{
+
+alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
+alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+alias ipinfo='curl -s ipinfo.io | jq .'
+alias ungzip='gzip -d'
+alias untar='tar xvf'
+
+# }}}
+# OS Specific Network and Filesystem ------------------------------------- {{{
+
 # IP addresses
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 alias iplocal="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 alias ipremote="ip route get 1 | awk '{print \$NF;exit}'"
+
+# }}}
+
+mk() { mkdir -p "$@" && cd "$1"; }
+
+function fif() {
+	INITIAL_QUERY="$*"
+	RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+	export FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'"
+
+	FZF="fzf"
+	HEIGHT="50%"
+	if [ -n "$TMUX" ]; then
+		FZF="fzf-tmux"
+		HEIGHT="100%"
+	fi
+
+	"$FZF" --bind \
+		"ctrl-d:page-down,ctrl-u:page-up,ctrl-y:yank,tab:down,btab:up,change:reload:$RG_PREFIX {q} || true" \
+		--ansi --phony --query "$INITIAL_QUERY" \
+		--height="$HEIGHT" --layout=reverse
+}
 
 function ippublic() {
 	if type dig &> /dev/null; then
@@ -252,17 +396,16 @@ function ippublic() {
 	fi
 }
 
-# Certificates
-ssl-info() {
+function ssl-info() {
 	openssl s_client \
 			-servername "$1" \
 			-connect "$1":443 </dev/null 2>&1 \
 		| openssl x509 -noout -issuer -subject -fingerprint -serial -dates
 }
 
-# Quickly grep a process
 function psg() {
-	ps auxww | grep -i --color=always "$@" | grep -v "grep.*$@"
+	# shellcheck disable=2009
+	ps auxww | grep -i --color=always "$@" | grep -v "grep.*${*}"
 }
 
 # Filter and process with fzf and kill it
@@ -314,65 +457,108 @@ function topmem() {
 # Formatting output: https://kubernetes.io/docs/reference/kubectl/overview/#formatting-output
 # JSONPath support: https://kubernetes.io/docs/reference/kubectl/jsonpath/
 
-# kubernetes
-alias k=kubectl
-
-kubectl_completion=/usr/share/bash-completion/completions/kubectl
-[ -f "$kubectl_completion" ] && . "$kubectl_completion"
-unset kubectl_completion
-
-if type __start_kubectl &> /dev/null; then
-	complete -o default -F __start_kubectl k
-fi
-
 # Display Pod workload information
 alias kp='kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase,RESTARTS:.status.containerStatuses[*].restartCount,M_REQUESTS:.spec.containers[*].resources.requests.memory,M_LIMITS:.spec.containers[*].resources.limits.memory,NODE_IP:.status.hostIP,POD_IP:.status.podIP'
 
 # Display Pod's images
 alias kpi='kubectl get pods -o custom-columns=POD:.metadata.name,IMAGES:.spec..image'
 
-alias kpisum="kubectl get pods --all-namespaces -o jsonpath=\"{.items[*]['spec.containers', 'spec.initContainers'][*].image}\" | tr -s '[[:space:]]' '\n' | sort | uniq -c | sort -nr"
+# Count Pod's total images
+alias kpimgsum="kubectl get pods -A -o jsonpath=\"{.items[*]['spec.containers', 'spec.initContainers'][*].image}\" | tr -s '[[:space:]]' '\n' | sort | uniq -c | sort -nr"
 
-alias kpnames='kubectl get pod -o jsonpath="{..spec['"'"'containers'"'"','"'"'initContainers'"'"'][*].name}"'
+# List Pod's container names
+alias kpcontainernames='kubectl get pod -o jsonpath="{..spec['"'"'containers'"'"','"'"'initContainers'"'"'][*].name}"'
+
+# Show recent Pod termination states
+alias kprestarts='kubectl get pod -o=custom-columns=NAME:.metadata.name,RESTARTS:..restartCount,REASON:..reason,EXIT_CODE:..lastState.terminated.exitCode,LAST_RESTART_TIME:..lastState.terminated.finishedAt --sort-by="{..lastState.terminated.finishedAt}"'
+
+# Show non-running Pod list
+alias kpnotready='kubectl get pod --no-headers --field-selector=status.phase!=Running'
+
+# List unready Pods
+function kphealth() {
+	kubectl get pods -o json "$@" \
+		| jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .status == "False") ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
+}
+
+# Show human-readble init/containers status for specific Pod
+# shellcheck disable=2154
+alias kcontainerstatus='kubectl get pod -o go-template --template='"'"'Pod: {{.metadata.name}}{{"\n"}}---{{"\n"}}Containers:{{"\n"}}{{range .status.containerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}{{if .status.initContainerStatuses }}Init containers:{{"\n"}}{{range .status.initContainerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}{{end}}'"'"
+
+function _k8s_select_pod() {
+	kubectl get pods --all-namespaces \
+		| fzf --header-lines=1 --prompt "$(kubectl config current-context)> " \
+		| awk '{print $1 " " $2}'
+}
+
+# Pod commands with interactive selection.
+alias kpdesc='_k8s_select_pod | xargs kubectl describe pod -n'
+alias kpip='_k8s_select_pod | xargs kubectl get pod -o jsonpath="{.status.podIPs[*].ip}" -n'
+alias kplog='_k8s_select_pod | xargs kubectl logs -f -n'
+
+function kexec() {
+	read -ra tokens < <(_k8s_select_pod)
+	if [ ${#tokens} -gt 1 ]; then
+		# Try bash first, then sh.
+		kubectl exec -it --namespace "${tokens[0]}" "${tokens[1]}" -- bash \
+			|| kubectl exec -it --namespace "${tokens[0]}" "${tokens[1]}" -- sh
+	fi
+}
+
+# Live tail preview with fzf and follow log once selected.
+# shellcheck disable=2016
+function ktail() {
+	read -ra tokens < <(
+		kubectl get pods --all-namespaces |
+			fzf --info=inline --layout=reverse --header-lines=1 \
+					--prompt "$(kubectl config current-context)> " \
+					--header $'Press CTRL-O to open log in editor\n\n' \
+					--bind ctrl-/:toggle-preview \
+					--bind 'ctrl-o:execute:${EDITOR:-nvim} <(kubectl logs --namespace {1} {2}) > /dev/tty' \
+					--preview-window down,follow \
+					--preview 'kubectl logs -f --tail=100 --all-containers --namespace {1} {2}' "$@"
+	)
+	[ ${#tokens} -gt 1 ] &&
+		kubectl logs -f --namespace "${tokens[0]}" "${tokens[1]}"
+}
+
+# NODES
+# ---
+
+# Wide informative Node list
+alias knode='kubectl get node -owide'
+
+alias ktaints='kubectl get nodes -o=custom-columns=NodeName:.metadata.name,TaintKey:.spec.taints[*].key,TaintValue:.spec.taints[*].value,TaintEffect:.spec.taints[*].effect'
+
+# INGRESS
+# ---
 
 # Display in-depth Ingress objects
 alias kingress='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.metadata.annotations.kubernetes\.io/ingress\.class,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path"'
 
+# Display even more robusy Ingress list
 alias kingress-wide='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.metadata.annotations.kubernetes\.io/ingress\.class,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path,SERVICES:.spec.rules[*].http.paths[*].backend.serviceName,PORTS:.spec.rules[*].http.paths[*].backend.servicePort"'
 
-# Show recent Pod termination states
-alias krestarts='kubectl get pod -o=custom-columns=NAME:.metadata.name,RESTARTS:..restartCount,REASON:..reason,EXIT_CODE:..lastState.terminated.exitCode,LAST_RESTART_TIME:..lastState.terminated.finishedAt,MEMORY_LIMIT:..resources.limits.memory --sort-by="{..lastState.terminated.finishedAt}"'
-
-# Non-ready Pod list
-alias knotready='kubectl get pod --no-headers --field-selector=status.phase!=Running'
-
-# Wide informative Node list
-alias knode='kubectl get node -owide'
+# EVENTS
+# ---
 
 # Order events by creation timestamp
 alias kevents='kubectl get events --sort-by=.metadata.creationTimestamp'
 
 # Show events by specific resource name, use with -A or -n
-kobjevents() {
+function kobjevents() {
 	local obj="${1}"
 	shift
 	kubectl get event \
 		--field-selector "involvedObject.name=${obj}" \
 		--sort-by=.metadata.creationTimestamp "$@"
-# involvedObject.kind=Pod,
-#  --sort-by='.lastTimestamp'
 }
 
-# Show human-readble init/containers status for specific Pod
-alias kcontainerstatus='kubectl get pod -o go-template --template='"'"'Pod: {{.metadata.name}}{{"\n"}}---{{"\n"}}Containers:{{"\n"}}{{range .status.containerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}{{if .status.initContainerStatuses }}Init containers:{{"\n"}}{{range .status.initContainerStatuses}}  {{.name}} {{range $key, $state := .state}}  {{$key}}{{if $state.reason}}/{{$state.reason}}{{end}}{{if $state.exitCode}}/{{$state.exitCode}}{{end}}{{end}}{{if lt 0 .restartCount}}  ({{.restartCount}} restarts){{end}}{{"\n"}}{{end}}{{end}}'"'"
-
-# Use https://github.com/cykerway/complete-alias for bash alias completion
-if [ "$(type -t _complete_alias)" = function ]; then
-	complete -F _complete_alias kcontainerstatus
-fi
+# METRICS
+# ---
 
 # Show cpu/memory matrix for pods, use with -A or -n
-kstats() {
+function kstats() {
 	local COLS="NAME:.metadata.name"
 	COLS="$COLS,CPU_REQ(cores):.spec.containers[*].resources.requests.cpu"
 	COLS="$COLS,MEMORY_REQ(bytes):.spec.containers[*].resources.requests.memory"
@@ -384,22 +570,6 @@ kstats() {
 
 	join -a1 -a2 -o 0,1.2,1.3,2.2,2.3,2.4,2.5, -e '<none>' \
 		<(echo "$top") <(echo "$pods") | column -t -s' '
-}
-
-# Live tail with fzf and exec into selected
-ktail() {
-	read -ra tokens < <(
-		kubectl get pods --all-namespaces |
-			fzf --info=inline --layout=reverse --header-lines=1 --border \
-					--prompt "$(kubectl config current-context | sed 's/-context$//')> " \
-					--header $'Press CTRL-O to open log in editor\n\n' \
-					--bind ctrl-/:toggle-preview \
-					--bind 'ctrl-o:execute:${EDITOR:-vim} <(kubectl logs --namespace {1} {2}) > /dev/tty' \
-					--preview-window down,follow \
-					--preview 'kubectl logs -f --tail=100 --namespace {1} {2}' "$@"
-	)
-	[ ${#tokens} -gt 1 ] &&
-		kubectl exec -it --namespace "${tokens[0]}" "${tokens[1]}" -- bash
 }
 
 #  vim: set ft=sh ts=2 sw=2 tw=80 noet :

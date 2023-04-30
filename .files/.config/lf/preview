@@ -31,6 +31,7 @@ function main() {
 		*.7z|*.dmg|*.gz) 7z l -- "${FILE}" && return $?;;
 		*.bzip|*.bzip2|*.bp|*.bz2) als "${FILE}" && return $?;;
 
+		*.jpg|*.JPG|*.png|*.PNG) view_image || view_binary;;
 		*.ans|*.ANS) view_ansi && return $?;;
 		*.json) jq -C . "${FILE}" && return $?;;
 		*.md) glow -s dark -w "${WIDTH}" "${FILE}" && return $?;;
@@ -87,7 +88,8 @@ function view_sourcecode() {
 function view_image() {
 	local input="${1:-$FILE}"
 
-	chafa -s "$WIDTH"x"$HEIGHT" "$input" || \
+	viu -sb -w "$WIDTH" "$input" || \
+		chafa -s "$WIDTH"x"$HEIGHT" "$input" || \
 		timg -E -g"$WIDTH"x"$HEIGHT" "$input" || \
 		catimg -r 2 -H "$HEIGHT" "$input" || \
 		imgcat --depth=256 --width "$WIDTH" "$input"

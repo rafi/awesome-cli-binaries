@@ -46,7 +46,8 @@ map i $LESS='-iWQMXR~' bat --paging=always --theme=TwoDark "$f"
 map I push A<c-a>
 map A rename
 map D trash
-map H cd ..
+map H jump-prev
+map L jump-next
 map . set hidden!
 
 # create directory/file
@@ -151,6 +152,11 @@ cmd z ${{
 	else
 		lf -remote "send $id echo 'Invalid directory ${dest}'"
 	fi
+}}
+
+cmd fzf_z ${{
+	sel="$(zoxide query -l | fzf +s)"
+	[ -d "$sel" ] && lf -remote "send $id cd \"$sel\""
 }}
 
 # dynamically set info displayed based on the number of columns

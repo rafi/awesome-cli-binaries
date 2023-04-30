@@ -42,14 +42,14 @@ set page-completions Off
 set show-all-if-ambiguous On
 
 # Don't re-complete already completed text in the middle of a word
-set skip-completed-text On
+set skip-completed-text on
 
 # Show extra file information when completing, like `ls -F` does
 set visible-stats on
 
 # Color files by types
 # Note that this may cause completion text blink in some terminals, e.g. xterm
-set colored-stats On
+set colored-stats on
 
 # Color the common prefix
 set colored-completion-prefix On
