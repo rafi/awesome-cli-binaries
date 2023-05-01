@@ -1,8 +1,8 @@
-# Awesome (Linux x86_64 + arm64) CLI Binaries
+# Awesome (Linux x86_64) CLI Binaries
 
 > This image builds a static latest version of tmux and downloads Linux x86_64
-> and arm64 binaries of popular terminal utilities. Quickly install the newest
-> utilities on any Linux server.
+> binaries of popular terminal utilities. Quickly install the newest utilities
+> on any Linux server.
 
 ## Use-case
 
@@ -12,21 +12,23 @@ a spiffy bash config.
 
 ## Setup
 
-1. First, prepare the binaries on your workstation:
+1. Install [just](https://github.com/casey/just) on your workstation.
+
+1. Prepare the binaries on your workstation:
 
     ```sh
     git clone git@github.com/rafi/awesome-cli-binaries.git
     cd awesome-cli-binaries
     ```
 
-2. **Optional:** To speed up things, you can pull the image from Docker Hub:
+1. **Optional:** To speed up things, you can pull the image from Docker Hub:
 
     ```sh
     docker pull rafib/awesome-cli-binaries
     ```
 
-3. Run `make` — this can take time! It builds tmux from source and downloads all
-   binaries into `bin/`.
+1. Run `just docker` — this can take time! It builds tmux from source and
+   downloads all binaries into `bin/`.
 
 ## Provision Remote Node
 
