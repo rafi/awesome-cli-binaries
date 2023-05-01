@@ -109,9 +109,9 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p PaulJuliusMartinez/jless -i . \
     && ubi -p stedolan/jq $opts && jq --version \
     && ubi -p gokcehan/lf -i . && lf --version \
+    && ubi -p lsd-rs/lsd $opts && lsd --version \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
     && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.15.1.tar.gz --exe ncdu -i . && ncdu --version \
-    && ubi -p genuinetools/reg -i . && reg version \
     && ubi -p BurntSushi/ripgrep --exe rg $opts && rg --version \
     && ubi -p starship/starship $opts && starship -V \
     && ubi -p stern/stern $opts && stern --version \

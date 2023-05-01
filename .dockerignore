@@ -5,4 +5,4 @@
 !/.files/.config/terminfo
 /*.md
 /Makefile
-/sync.sh
+/setup.sh
