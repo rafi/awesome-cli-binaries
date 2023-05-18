@@ -1,29 +1,40 @@
 IMAGE := 'rafib/awesome-cli-binaries'
-TAR   := 'tar'
 OUT   := 'bin'
 
-# list all recipes
+export BUILD_TOKEN := env_var_or_default('GITHUB_TOKEN', env_var_or_default('HOMEBREW_GITHUB_API_TOKEN', ''))
+
 [private]
 default:
   @just --list --unsorted
 
-build: docker
-dist: docker archive
+[private]
+validate:
+  @if [ "${BUILD_TOKEN:-}" = "" ]; then \
+    echo '[ERROR] You must export GITHUB_TOKEN environment variable to' \
+      'prevent rate-limiting.'; \
+    exit 1; \
+  fi
 
-# build docker image and copy binaries locally
-docker:
-  -mkdir -p "{{ OUT }}"
+build: docker binaries
+dist: build archive
+
+# build docker image
+docker: validate
   DOCKER_BUILDKIT=1 docker buildx build \
     --platform linux/amd64 \
-    --secret id=token,env=HOMEBREW_GITHUB_API_TOKEN \
+    --secret id=token,env=BUILD_TOKEN \
     --cache-to type=local,dest=.cache \
     --cache-from type=local,src=.cache \
     --load \
     -t {{ IMAGE }} .
-  docker run --platform linux/amd64 --rm -a stdout {{ IMAGE }} \
-    /bin/tar -cf - /usr/local/bin | {{ TAR }} xf - --strip-components=2
 
-# archive local binaries and compress
+# copy binaries locally
+binaries:
+  -mkdir -p "{{ OUT }}"
+  docker run --platform linux/amd64 --rm -a stdout {{ IMAGE }} \
+    /bin/tar -cf - /usr/local/bin | tar xf - --strip-components=2
+
+# compress local binaries
 archive:
   (cd "{{ OUT }}" && tar cvf ../static.tar *)
   xz -T0 -v9 static.tar
