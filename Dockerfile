@@ -72,9 +72,9 @@ RUN tmux -V
 FROM alpine:3.17 AS downloader
 
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="50"
+LABEL io.rafi.revision="52"
 
-RUN apk add --no-cache ca-certificates=20220614-r4 curl=8.0.1-r0 bash=5.2.15-r0
+RUN apk add --no-cache ca-certificates curl bash
 
 ENV dl_path /usr/local/bin
 ENV opts="-i . -m musl"
@@ -113,6 +113,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
     && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.15.1.tar.gz --exe ncdu -i . && ncdu --version \
     && ubi -p BurntSushi/ripgrep --exe rg $opts && rg --version \
+    && ubi -p rossmacarthur/sheldon $opts && sheldon --version \
     && ubi -p starship/starship $opts && starship -V \
     && ubi -p stern/stern $opts && stern --version \
     && ubi -p ducaale/xh $opts && xh --version \
