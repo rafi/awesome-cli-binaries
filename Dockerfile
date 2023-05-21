@@ -72,7 +72,7 @@ RUN tmux -V
 FROM alpine:3.17 AS downloader
 
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="52"
+LABEL io.rafi.revision="54"
 
 RUN apk add --no-cache ca-certificates curl bash
 
@@ -101,6 +101,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p muesli/duf $opts && duf -version \
     && ubi -p bootandy/dust $opts && dust --version \
     && ubi -p homeport/dyff $opts && dyff version \
+    && ubi -p solidiquis/erdtree --exe erd $opts && erd --version \
     && ubi -p sharkdp/fd $opts && fd --version \
     && ubi -p junegunn/fzf $opts && fzf --version \
     && ubi -p charmbracelet/glow $opts && glow --version \
