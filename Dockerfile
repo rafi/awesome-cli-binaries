@@ -4,8 +4,7 @@ FROM debian:stable-slim AS builder
 # Prepare environment
 RUN apt-get update \
     && apt-get upgrade --yes --show-upgraded \
-    && apt-get install --yes locales \
-    && apt-get install --yes bash curl file wget unzip \
+    && apt-get install --yes locales bash curl file wget unzip \
         automake build-essential pkg-config libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -71,13 +70,14 @@ RUN tmux -V
 
 FROM alpine:3.17 AS downloader
 
+ARG BUILD_REVISION=56
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
-LABEL io.rafi.revision="54"
+LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN apk add --no-cache ca-certificates curl bash
 
-ENV dl_path /usr/local/bin
-ENV opts="-i . -m musl"
+ARG dl_path=/usr/local/bin
+ARG opts="-i . -m musl"
 WORKDIR $dl_path
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
