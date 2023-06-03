@@ -1,0 +1,18 @@
+# lsd configuration
+# See https://github.com/Peltoche/lsd
+
+color:
+  # 'default' or theme in ~/.config/lsd/themes/<theme>.yaml, or file path.
+  theme: rafi
+
+# Possible values: date, relative, '+<strftime format>'
+date: '+%d-%m-%Y %X'
+
+icons:
+  when: never
+
+indicators: true
+
+sorting:
+  # Possible values: extension, name, time, size, version
+  column: name
