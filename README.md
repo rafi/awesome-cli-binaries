@@ -56,19 +56,21 @@ Use the `setup.sh` helper script to provision servers.
 | [dua]         | Disk Usage Analyzer is a tool to conveniently learn about the usage of disk space of a given directory. | [![asciicast](https://asciinema.org/a/316444.svg)](https://asciinema.org/a/316444) |
 | [duf]         | Disk Usage/Free Utility - a better 'df' alternative. | <img src="https://raw.githubusercontent.com/muesli/duf/master/duf.png" /> |
 | [dust]        | A more intuitive version of du in rust. | <img src="https://raw.githubusercontent.com/bootandy/dust/master/media/snap.png" /> |
-| [dyff]        | /ˈdʏf/ - diff tool for YAML files, and sometimes JSON. | <img src="https://raw.githubusercontent.com/homeport/dyff/main/.docs/dyff-between-kubectl-diff.png" /> |
-| [erdtree]     | Modern multi-threaded filesystem and disk-usage analysis tool. | <img src="https://github.com/solidiquis/erdtree/raw/master/assets/showcase_top.png?raw=true" /> |
+| [dyff]        | Diff tool for YAML files, and sometimes JSON. | <img src="https://raw.githubusercontent.com/homeport/dyff/main/.docs/dyff-between-kubectl-diff.png" /> |
+| [erdtree]     | Modern multi-threaded filesystem and disk-usage analysis tool. | <img src="https://github.com/solidiquis/erdtree/blob/master/assets/top_showcase.png?raw=true" /> |
 | [fd]          | Find entries in your filesystem. It is a simple, fast and user-friendly alternative to `find`. | <img src="https://raw.githubusercontent.com/sharkdp/fd/master/doc/screencast.svg" /> |
+| [fx]          | Terminal JSON viewer | <img src="https://medv.io/assets/fx/fx-preview.gif" /> |
 | [fzf]         | General-purpose command-line fuzzy finder. | <img src="https://raw.githubusercontent.com/junegunn/i/master/fzf-preview.png" /> |
 | [glow]        | Render markdown on the CLI, with pizzazz! | <img src="https://stuff.charm.sh/glow/glow-1.3-trailer-github.gif" /> |
 | [hexyl]       | Simple hex viewer for the terminal. It uses a colored output to distinguish different categories of bytes. | <img src="https://i.imgur.com/MWO9uSL.png" /> |
 | [hyperfine]   | A command-line benchmarking tool. | <img src="https://i.imgur.com/z19OYxE.gif" /> |
 | [jless]       | Command-line JSON viewer. | <img src="https://jless.io/assets/jless-recording.gif" /> |
-| [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://stedolan.github.io/jq/jq.png" width="40%" /> |
+| [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://jqlang.github.io/jq/jq.png" width="50%" /> |
 | [just]        | Handy way to save and run project-specific commands. | <img src="https://raw.githubusercontent.com/casey/just/master/screenshot.png" /> |
 | [lf]          | File manager with a heavy inspiration from ranger. | <img src="http://i.imgur.com/p95xzUj.png" /> |
 | [lsd]         | Rewrite of GNU `ls` with lots of added features like colors, icons, tree-view, more formatting options etc. | <img src="https://raw.githubusercontent.com/Peltoche/lsd/assets/screen_lsd.png" /> |
 | [mkcert]      | A simple zero-config tool to make locally trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
+| [mprocs]      | Runs multiple commands in parallel and shows output of each command separately. | <img src="https://raw.githubusercontent.com/pvolok/mprocs/master/img/screenshot1.png" /> |
 | [ncdu]        | Ncdu is a disk usage analyzer with an ncurses interface. | <img src="https://dev.yorhel.nl/img/ncdudone-2.png" /> |
 | [ripgrep]     | ripgrep is a line-oriented search tool that recursively searches the current directory for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
 | [sheldon]     | A fast, configurable, shell plugin manager. | <img src="https://user-images.githubusercontent.com/17109887/60550665-02573380-9d29-11e9-84e9-5dfa89b11895.png" /> |
@@ -78,6 +80,13 @@ Use the `setup.sh` helper script to provision servers.
 | [yj]          | Convert between YAML, TOML, JSON, and HCL. Preserves map order. | <img src="https://raw.githubusercontent.com/sclevine/yj/main/logo.png" width="30%" /> |
 | [yq]          | Portable command-line YAML, JSON, XML, CSV, TOML and properties processor. | <img src="https://miro.medium.com/v2/resize:fit:640/1*gsqh7A_ivvZM5ht66hx3Xw.png" /> |
 | [zoxide]      | zoxide is a **smarter cd command**, inspired by z and autojump. | <img src="https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/tutorial.webp" /> |
+
+## More
+
+Awesome lists:
+
+- [github.com/alebcay/awesome-shell](https://github.com/alebcay/awesome-shell)
+- [github.com/agarrharr/awesome-cli-apps](https://github.com/agarrharr/awesome-cli-apps)
 
 ## License
 
@@ -95,6 +104,7 @@ See each program's license.
 [dyff]: https://github.com/homeport/dyff
 [erdtree]: https://github.com/solidiquis/erdtree
 [fd]: https://github.com/sharkdp/fd
+[fx]: https://github.com/antonmedv/fx
 [fzf]: https://github.com/junegunn/fzf
 [glow]: https://github.com/charmbracelet/glow
 [hexyl]: https://github.com/sharkdp/hexyl
@@ -105,6 +115,7 @@ See each program's license.
 [lf]: https://github.com/gokcehan/lf
 [lsd]: https://github.com/lsd-rs/lsd
 [mkcert]: https://github.com/FiloSottile/mkcert
+[mprocs]: https://github.com/pvolok/mprocs
 [ncdu]: https://dev.yorhel.nl/ncdu
 [neovim]: https://github.com/neovim/neovim
 [ripgrep]: https://github.com/BurntSushi/ripgrep

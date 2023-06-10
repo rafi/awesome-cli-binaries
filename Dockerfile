@@ -103,6 +103,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p homeport/dyff $opts && dyff version \
     && ubi -p solidiquis/erdtree --exe erd $opts && erd --version \
     && ubi -p sharkdp/fd $opts && fd --version \
+    && ubi -p antonmedv/fx $opts && fx --version \
     && ubi -p junegunn/fzf $opts && fzf --version \
     && ubi -p charmbracelet/glow $opts && glow --version \
     && ubi -p sharkdp/hexyl $opts && hexyl --version \
@@ -112,6 +113,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p gokcehan/lf -i . && lf --version \
     && ubi -p lsd-rs/lsd $opts && lsd --version \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
+    && ubi -p pvolok/mprocs $opts && mprocs --version \
     && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.15.1.tar.gz --exe ncdu -i . && ncdu --version \
     && ubi -p BurntSushi/ripgrep --exe rg $opts && rg --version \
     && ubi -p rossmacarthur/sheldon $opts && sheldon --version \
