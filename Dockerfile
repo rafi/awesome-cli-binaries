@@ -1,4 +1,4 @@
-# syntax = docker/dockerfile:1.2
+# syntax = docker/dockerfile:1
 FROM debian:stable-slim AS builder
 
 # Prepare environment
@@ -70,7 +70,7 @@ RUN tmux -V
 
 FROM alpine:3.17 AS downloader
 
-ARG BUILD_REVISION=56
+ARG BUILD_REVISION=57
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -84,7 +84,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY --from=builder /opt/tmux/bin/tmux .
 
 RUN ubi_name=ubi-Linux-x86_64-musl \
-    && ubi_version="$(curl https://api.github.com/repos/houseabsolute/ubi/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
+    && ubi_version="$(curl -s https://api.github.com/repos/houseabsolute/ubi/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
     && ubi_url="https://github.com/houseabsolute/ubi/releases/download/$ubi_version/$ubi_name.tar.gz" \
     && curl --retry 5 -L "$ubi_url" | tar -xzoC "$dl_path" ubi \
     && chmod 770 "$dl_path"/ubi \
@@ -95,7 +95,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p imsnif/bandwhich $opts && bandwhich --version \
     && ubi -p sharkdp/bat $opts && bat --version \
     && ubi -p ClementTsang/bottom --exe btm $opts && btm --version \
-    && ubi -u https://hpjansson.org/chafa/releases/static/chafa-1.12.4-1-x86_64-linux-gnu.tar.gz --exe chafa -i . \
+    && ubi -u https://hpjansson.org/chafa/releases/static/chafa-1.12.5-1-x86_64-linux-gnu.tar.gz --exe chafa -i . \
     && ubi -p google/go-containerregistry --exe crane $opts && crane version \
     && ubi -p Byron/dua-cli --exe dua $opts && dua --version \
     && ubi -p muesli/duf $opts && duf -version \
@@ -114,7 +114,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p lsd-rs/lsd $opts && lsd --version \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
     && ubi -p pvolok/mprocs $opts && mprocs --version \
-    && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.15.1.tar.gz --exe ncdu -i . && ncdu --version \
+    && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.16.tar.gz --exe ncdu -i . && ncdu --version \
     && ubi -p BurntSushi/ripgrep --exe rg $opts && rg --version \
     && ubi -p rossmacarthur/sheldon $opts && sheldon --version \
     && ubi -p starship/starship $opts && starship -V \
@@ -125,7 +125,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p ajeetdsouza/zoxide $opts && zoxide --version
 
 # Neovim appimage
-RUN curl -LO https://github.com/neovim/neovim/releases/download/v0.9.0/nvim.appimage \
+RUN curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
     && chmod ug+x nvim.appimage
 
 # --------------------------------------------------------------------------
