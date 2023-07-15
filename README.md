@@ -64,7 +64,6 @@ Use the `setup.sh` helper script to provision servers.
 | [glow]        | Render markdown on the CLI, with pizzazz! | <img src="https://stuff.charm.sh/glow/glow-1.3-trailer-github.gif" /> |
 | [hexyl]       | Simple hex viewer for the terminal. It uses a colored output to distinguish different categories of bytes. | <img src="https://i.imgur.com/MWO9uSL.png" /> |
 | [hyperfine]   | A command-line benchmarking tool. | <img src="https://i.imgur.com/z19OYxE.gif" /> |
-| [jless]       | Command-line JSON viewer. | <img src="https://jless.io/assets/jless-recording.gif" /> |
 | [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://jqlang.github.io/jq/jq.png" width="50%" /> |
 | [just]        | Handy way to save and run project-specific commands. | <img src="https://raw.githubusercontent.com/casey/just/master/screenshot.png" /> |
 | [lf]          | File manager with a heavy inspiration from ranger. | <img src="http://i.imgur.com/p95xzUj.png" /> |
@@ -109,7 +108,6 @@ See each program's license.
 [glow]: https://github.com/charmbracelet/glow
 [hexyl]: https://github.com/sharkdp/hexyl
 [hyperfine]: https://github.com/sharkdp/hyperfine
-[jless]: https://github.com/PaulJuliusMartinez/jless
 [jq]: https://github.com/stedolan/jq
 [just]: https://github.com/casey/just
 [lf]: https://github.com/gokcehan/lf

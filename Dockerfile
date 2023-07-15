@@ -108,7 +108,6 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p charmbracelet/glow $opts && glow --version \
     && ubi -p sharkdp/hexyl $opts && hexyl --version \
     && ubi -p sharkdp/hyperfine $opts && hyperfine --version \
-    && ubi -p PaulJuliusMartinez/jless -i . \
     && ubi -p stedolan/jq $opts && jq --version \
     && ubi -p gokcehan/lf -i . && lf --version \
     && ubi -p lsd-rs/lsd $opts && lsd --version \
