@@ -75,6 +75,7 @@ Use the `setup.sh` helper script to provision servers.
 | [sheldon]     | A fast, configurable, shell plugin manager. | <img src="https://user-images.githubusercontent.com/17109887/60550665-02573380-9d29-11e9-84e9-5dfa89b11895.png" /> |
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
 | [stern]       | Stern allows you to `tail` multiple pods on Kubernetes and multiple containers within the pod. Each result is color coded for quicker debugging. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
+| [ubi]         | The Universal Binary Installer | |
 | [xh]          | Friendly and fast tool for sending HTTP requests. It reimplements as much as possible of HTTPie's excellent design. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
 | [yj]          | Convert between YAML, TOML, JSON, and HCL. Preserves map order. | <img src="https://raw.githubusercontent.com/sclevine/yj/main/logo.png" width="30%" /> |
 | [yq]          | Portable command-line YAML, JSON, XML, CSV, TOML and properties processor. | <img src="https://miro.medium.com/v2/resize:fit:640/1*gsqh7A_ivvZM5ht66hx3Xw.png" /> |
@@ -121,6 +122,7 @@ See each program's license.
 [starship]: https://github.com/starship/starship
 [stern]: https://github.com/stern/stern
 [tmux]: https://github.com/tmux/tmux
+[ubi]: https://github.com/houseabsolute/ubi
 [xh]: https://github.com/ducaale/xh
 [yj]: https://github.com/sclevine/yj
 [yq]: https://github.com/mikefarah/yq

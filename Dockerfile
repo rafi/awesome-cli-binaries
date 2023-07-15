@@ -109,6 +109,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p sharkdp/hexyl $opts && hexyl --version \
     && ubi -p sharkdp/hyperfine $opts && hyperfine --version \
     && ubi -p stedolan/jq $opts && jq --version \
+    && ubi -p casey/just $opts && just --version \
     && ubi -p gokcehan/lf -i . && lf --version \
     && ubi -p lsd-rs/lsd $opts && lsd --version \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
