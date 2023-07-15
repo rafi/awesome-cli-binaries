@@ -95,6 +95,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p imsnif/bandwhich $opts && bandwhich --version \
     && ubi -p sharkdp/bat $opts && bat --version \
     && ubi -p ClementTsang/bottom --exe btm $opts && btm --version \
+    && ubi -p aristocratos/btop $opts && btop --version \
     && ubi -u https://hpjansson.org/chafa/releases/static/chafa-1.12.5-1-x86_64-linux-gnu.tar.gz --exe chafa -i . \
     && ubi -p google/go-containerregistry --exe crane $opts && crane version \
     && ubi -p Byron/dua-cli --exe dua $opts && dua --version \
