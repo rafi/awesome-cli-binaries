@@ -39,6 +39,16 @@ Use the `setup.sh` helper script to provision servers.
 ./setup.sh <ssh-server-address>
 ```
 
+## Sync Binaries
+
+If you just want to update the binaries on remote, run:
+
+```sh
+just me@myserver.com [more...]
+```
+
+This will rsync local binaries at `./bin` to remote `~/.local/bin`.
+
 ## Binaries
 
 - [tmux] statically linked (+ncurses +libevent)

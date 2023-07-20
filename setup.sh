@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eu
-_VERSION='0.9.0'
+_VERSION='0.9.1'
 
 function _sync_usage() {
 	echo "usage: ${0##*/} [-t|--tty] <server> [server]..."
@@ -49,12 +49,6 @@ function _sync_main() {
 	local FORCE_TTY=0
 	local host='' hosts=()
 
-	# Validate
-	if [ -z "${1+set}" ]; then
-		_sync_usage
-		exit 2
-	fi
-
 	while [[ $# -gt 0 ]]; do
 		case "${1}" in
 			-t|--tty)       FORCE_TTY=1; shift ;;
@@ -66,19 +60,25 @@ function _sync_main() {
 	done
 	set -- "${hosts[@]}"
 
+	# Validate
+	if [ -z "${1+set}" ]; then
+		_sync_usage
+		exit 1
+	fi
+
 	for host
 	do
 		echo ":: [${host}] copy dotfiles to remote"
 		if ! rsync -rltz ./.files/ "$host":./ || \
 			! rsync -rltzP ./bin/ "$host":./.local/bin/
 		then
-			echo "[ERROR] failed rsync dotfiles to '${host}'" && exit 3
+			echo "[ERROR] failed rsync dotfiles to '${host}'" && exit 2
 		fi
 
 		echo ":: [${host}] bootstrap remote"
 		if ! _run_remotely "${host}" _bootstrap
 		then
-			echo "[ERROR] failed bootstrap on '${host}'" && exit 5
+			echo "[ERROR] failed bootstrap on '${host}'" && exit 3
 		fi
 
 		echo ':: completed successfully'

@@ -8,8 +8,8 @@ RUN apt-get update \
         automake build-essential pkg-config libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./.files/.config/terminfo /etc/terminfo
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+COPY ./.files/.config/terminfo /etc/terminfo
 
 ENV build_path /opt/tmux
 ENV PATH $build_path/bin:$PATH
@@ -21,8 +21,8 @@ CMD ["bash"]
 
 # tmux ncurses libevent
 ENV libevent_version 2.1.12
-ENV ncurses_version 6.4
-ENV tmux_version 3.3a
+ENV ncurses_version 6.2
+ENV tmux_version 3.2a
 
 # libevent
 ENV libevent_name libevent-${libevent_version}-stable
@@ -30,8 +30,8 @@ ENV libevent_url https://github.com/libevent/libevent/releases/download/release-
 RUN curl --retry 5 -LO "$libevent_url" && \
     tar xvzf $libevent_name.tar.gz && \
     cd $libevent_name && \
-    ./configure --prefix=$build_path && \
-    make && \
+    ./configure --prefix=$build_path --disable-shared && \
+    make -j && \
     make install && \
     cd .. && \
     rm -fr $libevent_name.tar.gz $libevent_name
@@ -47,7 +47,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" \
     --enable-pc-files \
     --with-pkg-config-libdir=$build_path/lib/pkgconfig && \
-    make && \
+    make -j 4 && \
     make install && \
     cd .. && \
     rm -fr ${ncurses_name}.tar.gz $ncurses_name
@@ -59,12 +59,12 @@ RUN curl --retry 5 -LO "$tmux_url" && \
     tar xvzof $tmux_name.tar.gz && \
     cd $tmux_name && \
     PKG_CONFIG_PATH=$build_path/lib/pkgconfig ./configure --enable-static --prefix=$build_path && \
-    make && \
+    make -j && \
     make install && \
     cd .. && \
     rm -fr $tmux_name.tar.gz $tmux_name
 
-RUN tmux -V
+RUN $build_path/bin/tmux -V
 
 # --------------------------------------------------------------------------
 

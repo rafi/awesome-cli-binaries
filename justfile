@@ -30,9 +30,8 @@ docker: validate
 
 # copy binaries locally
 binaries:
-  -mkdir -p "{{ OUT }}"
-  docker run --platform linux/amd64 --rm -a stdout {{ IMAGE }} \
-    /bin/tar -cf - /usr/local/bin | tar xf - --strip-components=2
+  docker run --rm --platform linux/amd64 -v $PWD:/artifacts \
+    {{ IMAGE }} cp -r /usr/local/bin /artifacts
 
 # compress local binaries
 archive:
@@ -50,7 +49,7 @@ sync +hosts:
 
 # erase local binaries
 clean:
-  -rm -rf $(OUT)
+  -rm -rf ./"{{ OUT }}"
 
 # erase local binaries and compressed archive
 distclean: clean
