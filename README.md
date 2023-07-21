@@ -1,18 +1,18 @@
-# Awesome (Linux x86_64) CLI Binaries
+# Awesome (Linux amd64) CLI Binaries
 
-> This image builds a static latest version of tmux and downloads Linux x86_64
+> This image builds a static version of tmux and downloads latest Linux amd64
 > binaries of popular terminal utilities. Quickly install the newest utilities
 > on any Linux server.
 
 ## Use-case
 
-Working on different remote servers? Annoyed your tools aren't there? With
-this repo, you can quickly upload them to a Linux remote server, including
-a spiffy bash config.
+Working on many remote servers? Can't install your favorite tools for some
+reason? With this repo, you can quickly upload them to a remote Linux server,
+together with comfortable pre-made configurations.
 
 ## Setup
 
-1. Install [just](https://github.com/casey/just) on your workstation.
+1. Install [just] on your workstation. (macOS: `brew install just`)
 
 1. Prepare the binaries on your workstation:
 
@@ -28,7 +28,11 @@ a spiffy bash config.
     ```
 
 1. Run `just docker` — this can take time! It builds tmux from source and
-   downloads all binaries into `bin/`.
+   downloads all binaries. (Make sure you have `GITHUB_TOKEN` or
+   `HOMEBREW_GITHUB_API_TOKEN` environment variable, set with your token, to
+   avoid GitHub's rate-limiting.)
+
+1. Finally, run `just binaries` to copy all binaries from image into `bin/`.
 
 ## Provision Remote Node
 
@@ -36,7 +40,7 @@ Use the `setup.sh` helper script to provision servers.
 
 ```sh
 ./setup.sh -h
-./setup.sh <ssh-server-address>
+./setup.sh me@myserver.com [more...]
 ```
 
 ## Sync Binaries
@@ -51,11 +55,11 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 
 ## Binaries
 
-- [tmux] statically linked (+ncurses +libevent)
-- [neovim] (appimage)
+- [tmux] v3.2a statically linked (+ncurses +libevent)
+- [neovim] latest stable (appimage)
 - and:
 
-| Program       | Description   |             |
+| Program       | Description   | Screenshot  |
 |:------------- |:------------- | -----------:|
 | [bandwhich]   | Utility for displaying current network utilization by process, connection and remote IP/hostname. | <img src="https://raw.githubusercontent.com/imsnif/bandwhich/main/demo.gif" /> |
 | [bat]         | A cat(1) clone with syntax highlighting and Git integration. | <img src="https://imgur.com/rGsdnDe.png" /> |
