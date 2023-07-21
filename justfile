@@ -41,10 +41,10 @@ archive:
 # sync local binaries to remote hosts
 sync +hosts:
   #!/usr/bin/env bash -eu
-  for host in {{ hosts }}; do
+  for HOST in {{ hosts }}; do
     rsync -rltzP --exclude '.git*' \
       --rsync-path='mkdir -p ~/.local/bin && rsync' \
-      ./bin/* "$host":./.local/bin/
+      ./"{{ OUT }}"/* "${HOST}":./.local/bin/
   done
 
 # erase local binaries

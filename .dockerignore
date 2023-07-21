@@ -1,7 +1,8 @@
 /*.md
-/.cache
-/.files
+/.cache/
+/.files/
 !/.files/.config/terminfo
 /.git*
+/bin/
 /justfile
 /setup.sh
