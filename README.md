@@ -81,6 +81,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://jqlang.github.io/jq/jq.png" width="50%" /> |
 | [just]        | Handy way to save and run project-specific commands. | <img src="https://raw.githubusercontent.com/casey/just/master/screenshot.png" /> |
 | [lf]          | File manager with a heavy inspiration from ranger. | <img src="http://i.imgur.com/p95xzUj.png" /> |
+| [lnav]        | Log file navigator| <img src="https://raw.githubusercontent.com/tstack/lnav/master/docs/assets/images/lnav-syslog.png" /> |
 | [lsd]         | Rewrite of GNU `ls` with lots of added features like colors, icons, tree-view, more formatting options etc. | <img src="https://raw.githubusercontent.com/Peltoche/lsd/assets/screen_lsd.png" /> |
 | [mkcert]      | A simple zero-config tool to make locally trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
 | [mprocs]      | Runs multiple commands in parallel and shows output of each command separately. | <img src="https://raw.githubusercontent.com/pvolok/mprocs/master/img/screenshot1.png" /> |
@@ -126,6 +127,7 @@ See each program's license.
 [jq]: https://github.com/stedolan/jq
 [just]: https://github.com/casey/just
 [lf]: https://github.com/gokcehan/lf
+[lnav]: https://github.com/tstack/lnav
 [lsd]: https://github.com/lsd-rs/lsd
 [mkcert]: https://github.com/FiloSottile/mkcert
 [mprocs]: https://github.com/pvolok/mprocs

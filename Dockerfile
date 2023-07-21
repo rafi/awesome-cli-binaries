@@ -119,6 +119,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p stedolan/jq $opts && jq --version \
     && ubi -p casey/just $opts && just --version \
     && ubi -p gokcehan/lf -i . && lf --version \
+    && ubi -p tstack/lnav $opts && lnav --version \
     && ubi -p lsd-rs/lsd $opts && lsd --version \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
     && ubi -p pvolok/mprocs $opts && mprocs --version \
