@@ -23,8 +23,8 @@ docker: validate
   DOCKER_BUILDKIT=1 docker buildx build \
     --platform linux/amd64 \
     --secret id=token,env=BUILD_TOKEN \
-    --cache-to type=local,dest=.cache \
-    --cache-from type=local,src=.cache \
+    --cache-from type=local,src=$XDG_CACHE_HOME/buildkit/server-conf \
+    --cache-to type=local,dest=$XDG_CACHE_HOME/buildkit/server-conf,mode=max \
     --load \
     -t {{ IMAGE }} .
 
@@ -57,5 +57,5 @@ distclean: clean
 
 # erase image and cache
 dockerclean:
-  rm -rf .cache
+  -rm -rf $XDG_CACHE_HOME/buildkit/server-conf/*
   docker rmi -f {{ IMAGE }}

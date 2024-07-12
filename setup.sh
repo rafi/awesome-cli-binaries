@@ -1,58 +1,55 @@
 #!/usr/bin/env bash
 set -eu
-_VERSION='0.9.1'
+_VERSION='0.9.5'
 
-function _sync_usage() {
-	echo "usage: ${0##*/} [-t|--tty] <server> [server]..."
+# Show usage.
+function _usage() {
+	echo "usage: ${0##*/} [-t|--tty] [-p|--port num] <server>..."
 }
 
+# Bootstrap a remote host.
 function _bootstrap() {
-	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/share/lf
+	mkdir -p ~/.config ~/.cache ~/.local/opt ~/.local/share/lf
 
-	# Add import of bash user config
+	# Persist custom ~/.bash_user import in ~/.bashrc
 	if ! grep -q '\.bash_user' ~/.bashrc; then
-		echo -e "[ -f \$HOME/.bash_user ] && . \$HOME/.bash_user" >> ~/.bashrc
+		echo -e "\n[ -f \$HOME/.bash_user ] && . \$HOME/.bash_user" >> ~/.bashrc
 	fi
 
-	# Install appimages (nvim)
-	mkdir -p ~/.local/apps
-	pushd "$HOME"/.local/apps 1>/dev/null
-	for app_path in "$HOME"/.local/bin/*.appimage; do
-		app_image="${app_path##*/}"
-		app_name="${app_image%%.*}"
-		if [ -n "$app_name" ] && [ -n "$app_image" ]; then
-			rm -rf ./"$app_name"
-			mkdir ./"$app_name"
-			pushd ./"$app_name" 1>/dev/null
-			cp -f "$app_path" ./
-			./"${app_image}" --appimage-extract 1>/dev/null
-			ln -vfs "${PWD}"/squashfs-root/AppRun "$HOME"/.local/bin/"${app_name}"
-			rm -rf ./"${app_image}"
-			popd 1>/dev/null
+	# Extract archives in ~/.local/opt and persist PATH in ~/.shell_env
+	local apps_path="$HOME/.local/opt"
+	for archive in "$HOME"/.local/bin/*tar.gz; do
+		name="${archive##*/}"
+		name="${name%%.*}"
+		if [ -d "${apps_path}/${name}" ]; then
+			rm -rf "${apps_path:?}/${name}"
+		fi
+		tar -C "$apps_path" -xzf "$archive"
+		if [ -d "${apps_path}/${name}" ]; then
+			echo -e "\nexport PATH=\"\$PATH:${apps_path}/${name}/bin\"" >> ~/.shell_env
 		fi
 	done
-	popd 1>/dev/null
 }
 
+# Run a function remotely.
 function _run_remotely() {
-	local _sudo="${3:-}"
-	local _ssh=ssh
-	[ "$FORCE_TTY" = "1" ] && _ssh="${_ssh} -tt"
-	${_ssh} "${1}" "$_sudo bash -s" -- << EOF
+	${SSH_CMD} "${1}" "${3:-} bash -s" -- << EOF
 		$(typeset -f "${2}")
 		${2}
 		exit
 EOF
 }
 
-function _sync_main() {
-	local FORCE_TTY=0
+# Main entry point.
+function _main() {
+	local SSH_CMD=ssh
 	local host='' hosts=()
 
 	while [[ $# -gt 0 ]]; do
 		case "${1}" in
-			-t|--tty)       FORCE_TTY=1; shift ;;
-			-h|--help)      _sync_usage; exit ;;
+			-t|--tty)       SSH_CMD="${SSH_CMD} -tt"; shift ;;
+			-p|--port)      shift; SSH_CMD="${SSH_CMD} -p ${1}"; shift ;;
+			-h|--help)      _usage; exit ;;
 			-v|--version)   echo "${0##*/} v${_VERSION}"; exit ;;
 			-*) echo "Warning, unrecognized option ${1}" >&2; shift ;;
 			*) hosts+=("$1"); shift ;;
@@ -62,15 +59,15 @@ function _sync_main() {
 
 	# Validate
 	if [ -z "${1+set}" ]; then
-		_sync_usage
+		_usage
 		exit 1
 	fi
 
 	for host
 	do
 		echo ":: [${host}] copy dotfiles to remote"
-		if ! rsync -rltz ./.files/ "$host":./ || \
-			! rsync -rltzP ./bin/ "$host":./.local/bin/
+		if ! rsync -rltz -e "${SSH_CMD}" ./.files/ "$host":./ || \
+			! rsync -rltzP -e "${SSH_CMD}" ./bin/ "$host":./.local/bin/
 		then
 			echo "[ERROR] failed rsync dotfiles to '${host}'" && exit 2
 		fi
@@ -85,4 +82,4 @@ function _sync_main() {
 	done
 }
 
-_sync_main "$@"
+_main "$@"

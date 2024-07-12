@@ -55,8 +55,8 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 
 ## Binaries
 
-- [tmux] v3.2a statically linked (+ncurses +libevent)
-- [neovim] latest stable (appimage)
+- [tmux] v3.4 statically linked (+ncurses +libevent)
+- [neovim] latest stable
 - and:
 
 | Program       | Description   | Screenshot  |
@@ -84,7 +84,6 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [lnav]        | Log file navigator| <img src="https://raw.githubusercontent.com/tstack/lnav/master/docs/assets/images/lnav-syslog.png" /> |
 | [lsd]         | Rewrite of GNU `ls` with lots of added features like colors, icons, tree-view, more formatting options etc. | <img src="https://raw.githubusercontent.com/Peltoche/lsd/assets/screen_lsd.png" /> |
 | [mkcert]      | A simple zero-config tool to make locally trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
-| [mprocs]      | Runs multiple commands in parallel and shows output of each command separately. | <img src="https://raw.githubusercontent.com/pvolok/mprocs/master/img/screenshot1.png" /> |
 | [ncdu]        | Ncdu is a disk usage analyzer with an ncurses interface. | <img src="https://dev.yorhel.nl/img/ncdudone-2.png" /> |
 | [ripgrep]     | ripgrep is a line-oriented search tool that recursively searches the current directory for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
 | [sheldon]     | A fast, configurable, shell plugin manager. | <img src="https://user-images.githubusercontent.com/17109887/60550665-02573380-9d29-11e9-84e9-5dfa89b11895.png" /> |
@@ -92,6 +91,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [stern]       | Stern allows you to `tail` multiple pods on Kubernetes and multiple containers within the pod. Each result is color coded for quicker debugging. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
 | [ubi]         | The Universal Binary Installer | |
 | [xh]          | Friendly and fast tool for sending HTTP requests. It reimplements as much as possible of HTTPie's excellent design. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
+| [yazi]        | Blazing fast terminal file manager written in Rust, based on async I/O | <img src="https://github.com/sxyazi/yazi/assets/17523360/92ff23fa-0cd5-4f04-b387-894c12265cc7" width="30%" /> |
 | [yj]          | Convert between YAML, TOML, JSON, and HCL. Preserves map order. | <img src="https://raw.githubusercontent.com/sclevine/yj/main/logo.png" width="30%" /> |
 | [yq]          | Portable command-line YAML, JSON, XML, CSV, TOML and properties processor. | <img src="https://miro.medium.com/v2/resize:fit:640/1*gsqh7A_ivvZM5ht66hx3Xw.png" /> |
 | [zoxide]      | zoxide is a **smarter cd command**, inspired by z and autojump. | <img src="https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/tutorial.webp" /> |
@@ -130,7 +130,6 @@ See each program's license.
 [lnav]: https://github.com/tstack/lnav
 [lsd]: https://github.com/lsd-rs/lsd
 [mkcert]: https://github.com/FiloSottile/mkcert
-[mprocs]: https://github.com/pvolok/mprocs
 [ncdu]: https://dev.yorhel.nl/ncdu
 [neovim]: https://github.com/neovim/neovim
 [ripgrep]: https://github.com/BurntSushi/ripgrep
@@ -140,6 +139,7 @@ See each program's license.
 [tmux]: https://github.com/tmux/tmux
 [ubi]: https://github.com/houseabsolute/ubi
 [xh]: https://github.com/ducaale/xh
+[yazi]: https://github.com/sxyazi/yazi
 [yj]: https://github.com/sclevine/yj
 [yq]: https://github.com/mikefarah/yq
 [zoxide]: https://github.com/ajeetdsouza/zoxide

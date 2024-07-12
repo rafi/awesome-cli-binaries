@@ -147,8 +147,8 @@ then
 fi
 
 # See https://github.com/junegunn/fzf
-if [ -f "$HOME/.local/bin/key-bindings.bash" ]; then
-	. "$HOME/.local/bin/key-bindings.bash"
+if [ -f "$HOME/.local/bin/fzf.bash" ]; then
+	. "$HOME/.local/bin/fzf.bash"
 fi
 
 # Setup fast colorful prompt display
