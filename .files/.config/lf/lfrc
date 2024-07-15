@@ -93,6 +93,17 @@ map go cd /opt
 map g/ cd /
 map g~ cd ~
 
+cmd git_branch ${{
+	git branch | fzf | xargs git checkout
+	pwd_shell=$(pwd | sed 's/\\/\\\\/g;s/"/\\"/g')
+	lf -remote "send $id updir"
+	lf -remote "send $id cd \"$pwd_shell\""
+}}
+map gb :git_branch
+map gp ${{clear; git pull --rebase || true; echo "press ENTER"; read ENTER}}
+map gs ${{clear; git status}}
+map gl ${{clear; git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit}}
+
 # waiting for https://github.com/gokcehan/lf/issues/111
 # cmap <c-right> cmd-word
 # cmap <c-left> cmd-word-back
@@ -135,7 +146,7 @@ cmd z ${{
 	prefix=''
 	[[ "$OSTYPE" == "darwin"* ]] && prefix='/usr/local'
 	if hash zoxide 2>/dev/null; then
-		dest="$(zoxide query "$@")"
+		dest="$(zoxide query --exclude "$PWD" "$@" | sed 's/\\/\\\\/g;s/"/\\"/g')"
 	# See: https://github.com/skywind3000/z.lua
 	elif [ -f "$prefix/etc/profile.d/z.lua" ]; then
 		export _ZL_NO_PROMPT_COMMAND=1
@@ -158,6 +169,19 @@ cmd fzf_z ${{
 	sel="$(zoxide query -l | fzf +s)"
 	[ -d "$sel" ] && lf -remote "send $id cd \"$sel\""
 }}
+cmd fzf_jump ${{
+	res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location')"
+	if [ -n "$res" ]; then
+		if [ -d "$res" ]; then
+			cmd="cd"
+		else
+			cmd="select"
+		fi
+		res="$(printf '%s' "$res" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+		lf -remote "send $id $cmd \"$res\""
+	fi
+}}
+map <c-f> :fzf_jump
 
 # dynamically set info displayed based on the number of columns
 cmd resize %{{
