@@ -4,6 +4,7 @@
 .cocoapods/
 .docusaurus/
 .git
+.go/
 .gradle/
 .idea
 .node-gyp/
@@ -15,8 +16,11 @@
 .Genymobile
 .proselint
 .fingerprint/
+.svelte-kit/
+.vercel/
 compile-cache/
 watch_later/
+package-lock.json
 macports-ports/
 *.sass-cache
 *.cache

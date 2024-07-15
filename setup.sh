@@ -67,7 +67,7 @@ function _main() {
 	do
 		echo ":: [${host}] copy dotfiles to remote"
 		if ! rsync -rltz -e "${SSH_CMD}" ./.files/ "$host":./ || \
-			! rsync -rltzP -e "${SSH_CMD}" ./bin/ "$host":./.local/bin/
+			! rsync -rltzP -e "${SSH_CMD}" ./bin "$host":./.local/
 		then
 			echo "[ERROR] failed rsync dotfiles to '${host}'" && exit 2
 		fi
