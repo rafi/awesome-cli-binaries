@@ -1,0 +1,36 @@
+# See https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/yazi.toml
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+[manager]
+ratio          = [ 1, 4, 3 ]
+sort_dir_first = true
+linemode       = "size"  # none, size, permissions, mtime
+show_hidden    = true
+show_symlink   = true
+scrolloff      = 3
+
+# Run `yazi --clear-cache` when changing preview settings.
+[preview]
+tab_size        = 2
+max_width       = 600
+max_height      = 900
+image_quality   = 60 # 50-90
+# nearest (fast), triangle, catmull-rom, lanczos3 (slow)
+image_filter    = "triangle"
+
+[opener]
+edit = [
+	{ run = 'nvim "$@"', block = true, for = "unix" },
+]
+archive = [
+	{ run = 'unar "$1"', desc = "Extract here", for = "unix" },
+]
+
+[plugin]
+prepend_previewers = [
+	{ mime = "audio/*", run = "exifaudio" },
+	{ name = "*.md", run = "glow" },
+]
+append_previewers = [
+	{ name = "*", run = "hexyl" },
+]
