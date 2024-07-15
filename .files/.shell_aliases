@@ -1,0 +1,357 @@
+#!/usr/bin/env bash
+
+# bash/aliases
+# https://github.com/rafi/.config
+
+# Useful general shortcuts
+alias sudo='sudo '    # Carry over aliases to the root account when using sudo
+alias watch='watch '  # Make watch work with aliases
+alias c=clear
+alias cal='task cal 2>/dev/null || ncal -wC3 || \cal'
+alias start='{ test -f .tmuxp.* && tmuxp load -y .; } ||
+	{ tmuxp ls | fzf | xargs tmuxp load -y; }'
+
+
+# Lists ---------------------------------------------------- l for list -- {{{
+LSCMD='ls'
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	# Use GNU tools on OSX instead of BSD
+	hash gdircolors 2>/dev/null && alias dircolors='gdircolors'
+	hash gfind 2>/dev/null && alias find='gfind'
+	hash gsort 2>/dev/null && alias sort='gsort'
+	hash gstat 2>/dev/null && alias stat='gstat'
+	hash gls 2>/dev/null && LSCMD='gls'
+fi
+
+# See https://github.com/Peltoche/lsd
+if hash lsd 2>/dev/null; then
+	LSCMD='lsd'
+# See https://github.com/ogham/exa
+elif hash exa 2>/dev/null; then
+	export EXA_ICON_SPACING=2
+	LSCMD='exa'
+fi
+
+# Listing directory contents
+# shellcheck disable=2139
+alias ls="LC_COLLATE=C ${LSCMD} --color=auto --group-directories-first"
+unset LSCMD
+alias ll='ls -alF'
+alias llh='ls -alFh'
+
+if hash lsd 2>/dev/null || hash exa 2>/dev/null; then
+	alias l='ls -Fa'
+	alias lt='ll --tree --ignore-glob .git'
+	alias lld="ls -al --color=always | grep '^\e\[[0-9*;]*md' --colour=never"
+else
+	alias l='ls -CFa'
+	alias lld='ls -Gal --color=always | grep ^d --colour=never'
+fi
+
+# }}}
+# Editor ---------------------------------------------------- v for vim -- {{{
+
+# Neo/vim shortcuts, use Neovim by default
+# shellcheck disable=2139
+if hash nvim 2>/dev/null; then
+	alias vim=nvim
+	alias suvim='sudo -E nvim'
+else
+	alias suvim='sudo -E vim'
+fi
+alias v='vim $(fzf)'
+alias vi=vim
+alias ve='tmux split-window -h "$EDITOR"'
+alias vimdiff='vim -d'
+
+# }}}
+# Grepping / Parsing ----------------------------------------------------- {{{
+
+# Productive defaults for grep and tree
+alias grep='grep --color=auto --exclude-dir=.git'
+alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
+alias tree2='tree -L 2'
+alias tree3='tree -L 3'
+
+# Head and tail will show as much possible without scrolling
+hash ghead 2>/dev/null && alias cath='ghead -n $((${LINES:-12}-4))'
+hash gtail 2>/dev/null && alias catt='gtail -n $((${LINES:-12}-4)) -s.1'
+
+# Use colordiff by default
+hash colordiff 2>/dev/null && alias diff=colordiff
+
+# }}}
+# Jump around ------------------------------------------- z for jumping -- {{{
+alias cdf='cd "$(dirname "$(fzf)")"'
+alias cdd='cd "$(fd --type d | fzf)"'
+alias cwd='pwd | tr -d "\r\n" | pbcopy'
+
+# Jump to previous directory with --
+alias -- -="cd -"
+
+# Easier directory navigation
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+
+# }}}
+# File find ------------------------------------------------ f for find -- {{{
+if hash fd 2>/dev/null; then
+	# Use https://github.com/sharkdp/fd
+	alias f=fd
+	if [ "$BASH" ] && type _fd &>/dev/null; then
+		complete -o bashdefault -o default -F _fd f
+	fi
+else
+	# Slower
+	alias f='find . -iname '
+fi
+
+# }}}
+# Git ------------------------------------------------------- g for git -- {{{
+# See more in ./functions.d/git.bash
+alias g=git
+alias ga='git add'
+alias gb='git branch'
+alias gc='git checkout'
+alias gcb='git checkout -b'
+alias gcd='cd "$(git rev-parse --show-toplevel)"'
+alias gd='git diff'
+alias gds='git diff --cached'
+alias gdt='git difftool'
+alias gfl='git fetch --prune && git lg -15'
+alias gf='git fetch --prune'
+alias gfa='git fetch --all --tags --prune'
+alias gap='git add -p'
+alias gai='git add -i'
+alias gs='git status -sb'
+alias gl='git lg -15'
+alias gll='git lg'
+alias gld='git lgd -15'
+
+# Completely remove all unreachable objects from the repository.
+alias ggcnow='git -c gc.reflogExpireUnreachable=now gc --prune=now'
+
+# Attach git aliases auto-completion
+if [ "$BASH" ] && type __git_complete &>/dev/null; then # {{{
+	__git_complete g __git_main
+	__git_complete gb _git_branch
+	__git_complete gc _git_checkout
+	__git_complete gcb _git_checkout
+	__git_complete gd _git_diff
+	__git_complete gds _git_diff
+	__git_complete gf _git_fetch
+	__git_complete gfa _git_fetch
+	__git_complete gl _git_log
+	__git_complete gll _git_log
+	__git_complete gld _git_log
+fi # }}}
+
+# }}}
+# Docker ------------------------------------------------- d for docker -- {{{
+alias d=docker
+alias dk='docker compose'
+alias dps='docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
+alias dls='docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
+alias dim='docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
+alias dih='docker history --no-trunc --format "{{ .CreatedBy }}"'
+alias dip='docker inspect --format "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
+alias dgc='docker image prune -f'
+alias dvc='docker volume ls -qf dangling=true | xargs docker volume rm'
+alias dtop='docker stats $(docker ps --format="{{.Names}}")'
+# shellcheck disable=2154
+alias dnet='docker network ls && echo && docker inspect --format "{{\$e := . }}{{with .NetworkSettings}} {{\$e.Name}}
+{{range \$index, \$net := .Networks}}  - {{\$index}}	{{.IPAddress}}
+{{end}}{{end}}" $(docker ps -q)'
+# shellcheck disable=2154
+alias dtag='docker inspect --format "{{.Name}}
+{{range \$index, \$label := .Config.Labels}}  - {{\$index}}={{\$label}}
+{{end}}" $(docker ps -q)'
+
+if [ "$BASH" ] && type _docker &>/dev/null; then # {{{
+	complete -F _docker d
+	complete -F _docker_compose dk
+	complete -F _docker_images dim
+	complete -F _docker_images dih
+	complete -F _docker_inspect dip
+	complete -F _docker_rmi dgc
+	complete -F _docker_stats dtop
+fi # }}}
+
+# }}}
+# Kubernetes ----------------------------------------- k for kubernetes -- {{{
+# See more in functions.d/kubernetes.bash
+alias k=kubectl
+alias kc=kubectx
+alias ks='kubectl switch'
+alias kg='kubectl get'
+alias kgp='kubectl get pods'
+alias ke='kubectl edit'
+
+if [ "$BASH" ]; then # {{{
+	# Attach k alias to kubectl completion function
+	if type __start_kubectl &>/dev/null; then
+		complete -o default -F __start_kubectl k
+	fi
+	# Use https://github.com/cykerway/complete-alias for bash alias completion
+	if type _complete_alias &>/dev/null; then
+		complete -F _complete_alias kc
+		complete -F _complete_alias kg
+		complete -F _complete_alias ke
+	fi
+fi # }}}
+
+# }}}
+# Processes -------------------------------------------------------------- {{{
+alias process='ps -ax'
+alias pst='pstree -g 3 -ws'
+
+# }}}
+# Task ----------------------------------------------------- j for just -- {{{
+# See: https://github.com/casey/just
+alias j=just
+alias jc='just --choose'
+if [ -n "$BASH" ] && type _just &>/dev/null; then # {{{
+	complete -F _just -o bashdefault -o default j
+	complete -F _just -o bashdefault -o default jc
+fi # }}}
+
+# }}}
+# Machines --------------------------------------------- m for machines -- {{{
+# See: https://github.com/lima-vm/lima
+alias m=limactl
+
+if [ -n "$BASH" ] && type __start_limactl &>/dev/null; then
+	complete -o default -F __start_limactl m
+fi
+
+# }}}
+# XDG conformity --------------------------------------------------------- {{{
+# See: https://wiki.archlinux.org/index.php/XDG_Base_Directory
+alias mysql='mysql --defaults-extra-file="$XDG_CONFIG_HOME/mysql/config"'
+alias mutt='ESCDELAY=0 neomutt || mutt -F "$XDG_CONFIG_HOME"/mutt/config'
+alias weechat='weechat --dir "$XDG_CONFIG_HOME/weechat/"'
+alias gdrive='gdrive -c "$XDG_CONFIG_HOME/gdrive"'
+alias cpan='cpan -j "$XDG_CONFIG_HOME/cpan/config.pm"'
+alias gcal='gcalcli --configFolder "$XDG_CONFIG_HOME/gcalcli"'
+alias redshift='redshift -c "$XDG_CONFIG_HOME/redshift/config"'
+alias rtorrent='rtorrent -n -o import="$XDG_CONFIG_HOME/rtorrent/config.rc"'
+alias vercel='vercel --global-config="$XDG_CONFIG_HOME/vercel"'
+alias mbsync='mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc"'
+alias alert="terminal-notifier -title 'command complete' -message \"\$(HISTTIMEFORMAT='' history|tail -n1|sed -E 's/^ *[0-9]+ *//;s/[;&|] *alert$//')\""
+
+# }}}
+# Storage ---------------------------------------------------------------- {{{
+alias dut='du -hsx * | sort -rh | head -10'
+alias duz="du -hsx * | sort -rh | fzf"
+alias dum='df -hT -x devtmpfs -x tmpfs'
+
+# }}}
+# Misc ------------------------------------------------------------------- {{{
+
+alias ,freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
+alias ,urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+alias ,sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias ungzip='gzip -d'
+alias untar='tar xvf'
+
+# https://github.com/alt-romes/programmer-calculator
+if hash pcalc 2>/dev/null; then
+	alias ,calc=pcalc
+else
+	alias ,calc='bc -l'
+fi
+
+# Hardware --------------------------------------------------------------- {{{
+
+# shellcheck disable=2142
+alias ,lspci="lspci -nn | fzf -0 | awk '{print \$1}' | xargs lspci -v -s"
+
+# }}}
+# OS Specific Network and Filesystem ------------------------------------- {{{
+
+# IP addresses
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+alias iplocal="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+alias ipremote="\dig +short myip.opendns.com @resolver1.opendns.com || \curl https://checkip.amazonaws.com"
+
+if [ "$(uname -s)" = "Darwin" ]; then
+	alias netinfo='networksetup -getinfo "$(networksetup -listallnetworkservices | sed 1d | fzf)"'
+
+	# Show active network interfaces
+	alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+
+	alias hwmodel='sysctl -n hw.model'
+	alias osversion='sw_vers -productVersion'
+
+	# Flush Directory Service cache
+	alias flush='dscacheutil -flushcache && killall -HUP mDNSResponder'
+
+	# Lock the screen (Away From Keyboard)
+	alias afk='open -a ScreenSaverEngine'
+
+	# Recursively delete `.DS_Store` files
+	alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+
+	# Empty the Trash on all mounted volumes and the main HDD.
+	# Also, clear Apple’s System Logs to improve shell startup speed.
+	# Finally, clear download history from quarantine. https://mths.be/bum
+	alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; \
+		sudo rm -rfv ~/.Trash; \
+		sudo rm -rfv /private/var/log/asl/*.asl; \
+		sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+
+else
+	# shellcheck disable=2142
+	alias netinfo="ip -br -c addr show | fzf --ansi | awk '{print \$1}' | xargs ip -c -h -d -s addr show"
+	# alias netinfo="lspci | grep -Ei --color 'network|ethernet|wireless|wi-fi' | fzf | awk '{print \$1}' | xargs -I{} find /sys/bus/pci/devices -name '*{}*' | xargs -I{} ls -1 {}/net | xargs ip -c -h -d -s addr show"
+
+	alias hwmodel="sudo dmidecode -s system-product-name"
+	alias osversion="cat /etc/os-release | grep PRETTY_NAME | cut -d'=' -f2 | tr -d '\"'"
+
+	# Show active network interfaces NEEDS TESTING
+	alias ifactive="ip -c link show | grep UP"
+
+	# Flush Directory Service cache NEEDS TESTING
+	alias flush='sudo systemd-resolve --flush-caches'
+
+	# Lock the screen (Away From Keyboard)
+	if hash i3lock 2>/dev/null; then
+		alias afk='i3lock -c 000000'
+	elif hash xscreensaver-command 2>/dev/null; then
+		alias afk='xscreensaver-command -lock'
+	elif hash xdg-screensaver 2>/dev/null; then
+		alias afk='xdg-screensaver lock'
+	elif hash gnome-screensaver-command 2>/dev/null; then
+		alias afk='gnome-screensaver-command --lock'
+	fi
+
+	# open, pbcopy and pbpaste on Linux
+	if [ -z "$(command -v pbcopy)" ]; then
+		if [ -n "$(command -v xclip)" ]; then
+			alias pbcopy="xclip -selection clipboard"
+			alias pbpaste="xclip -selection clipboard -o"
+		elif [ -n "$(command -v xsel)" ]; then
+			alias pbcopy="xsel --clipboard --input"
+			alias pbpaste="xsel --clipboard --output"
+		fi
+	fi
+
+	# Check for various OS openers. Quit as soon as we find one that works.
+	for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
+		if command -v $opener >/dev/null 2>&1; then
+			if [[ "$opener" == "cmd.exe" ]]; then
+				# shellcheck disable=SC2139
+				alias open="$opener /c start"
+			else
+				# shellcheck disable=SC2139
+				alias open="$opener"
+			fi
+			break;
+		fi
+	done
+fi
+# }}}
+
+# vim: set ft=sh fdm=marker ts=2 sw=2 tw=80 noet :
