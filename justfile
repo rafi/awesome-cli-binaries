@@ -20,11 +20,11 @@ dist: build archive
 
 # build docker image
 docker: validate
-  DOCKER_BUILDKIT=1 docker buildx build \
+  docker buildx build \
     --platform linux/amd64 \
     --secret id=token,env=BUILD_TOKEN \
-    --cache-from type=local,src=$XDG_CACHE_HOME/buildkit/server-conf \
-    --cache-to type=local,dest=$XDG_CACHE_HOME/buildkit/server-conf,mode=max \
+    --cache-from type=local,src=./.cache \
+    --cache-to type=local,dest=./.cache \
     --load \
     -t {{ IMAGE }} .
 

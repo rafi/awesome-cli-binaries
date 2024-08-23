@@ -22,15 +22,15 @@ alias kprestarts='kubectl get pod -o=custom-columns=NAME:.metadata.name,RESTARTS
 # Show non-running Pod list
 alias kpnotready='kubectl get pod --no-headers --field-selector=status.phase!=Running'
 
+# Show human-readble init/containers status for each Pod
+# shellcheck disable=2154
+alias kpc="kubectl get pod -o go-template --template='{{range .items}}{{printf \"\033[48;5;236m:: \033[38;5;4m%-48s \033[38;5;242m%s as %s\033[K\033[0m\n\" .metadata.name .status.phase .status.qosClass}}{{if .status.initContainerStatuses }}{{range .status.initContainerStatuses}}{{printf \"\033[38;5;243m\t|->\033[0m \033[38;5;3m%-31s\\033[0m (init)\" .name}} {{range \$key, \$state := .state}} {{\"\033[38;5;243m\"}}{{if ne \$state.reason \"Completed\"}}{{\"\033[38;5;1m\"}}{{end}}{{\$key}}{{if \$state.reason}}/{{\$state.reason}}{{end}}{{if \$state.exitCode}}/{{\$state.exitCode}}{{end}}{{end}}{{if gt .restartCount 0}} {{\"\033[38;5;174m\"}}({{.restartCount}} restarts){{end}}{{\"\033[0m\n\"}}{{end}}{{end}}{{range .status.containerStatuses}}{{printf \"\033[38;5;243m\t|->\033[0m \033[38;5;2m%-38s\033[0m\" .name}} {{range \$key, \$state := .state}} {{\"\033[38;5;243m\"}}{{if ne \$key \"running\"}}{{\"\033[38;5;1m\"}}{{end}}{{\$key}}{{if \$state.reason}}/{{\$state.reason}}{{end}}{{if \$state.exitCode}}/{{\$state.exitCode}}{{end}}{{end}}{{if gt .restartCount 0}} {{\"\033[38;5;174m\"}}({{.restartCount}} restarts){{end}}{{\"\033[0m\n\"}}{{end}}{{end}}'"
+
 # List unready Pods
 function kphealth() {
 	kubectl get pods -o json "$@" \
 		| jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .status == "False") ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
 }
-
-# Show human-readble init/containers status for each Pod
-# shellcheck disable=2154
-alias kpc="kubectl get pod -o go-template --template='{{range .items}}{{printf \"\033[48;5;236m:: \033[38;5;4m%-48s \033[38;5;242m%s as %s\033[K\033[0m\n\" .metadata.name .status.phase .status.qosClass}}{{if .status.initContainerStatuses }}{{range .status.initContainerStatuses}}{{printf \"\033[38;5;243m\t|->\033[0m \033[38;5;3m%-31s\\033[0m (init)\" .name}} {{range \$key, \$state := .state}} {{\"\033[38;5;243m\"}}{{if ne \$state.reason \"Completed\"}}{{\"\033[38;5;1m\"}}{{end}}{{\$key}}{{if \$state.reason}}/{{\$state.reason}}{{end}}{{if \$state.exitCode}}/{{\$state.exitCode}}{{end}}{{end}}{{if gt .restartCount 0}} {{\"\033[38;5;174m\"}}({{.restartCount}} restarts){{end}}{{\"\033[0m\n\"}}{{end}}{{end}}{{range .status.containerStatuses}}{{printf \"\033[38;5;243m\t|->\033[0m \033[38;5;2m%-38s\033[0m\" .name}} {{range \$key, \$state := .state}} {{\"\033[38;5;243m\"}}{{if ne \$key \"running\"}}{{\"\033[38;5;1m\"}}{{end}}{{\$key}}{{if \$state.reason}}/{{\$state.reason}}{{end}}{{if \$state.exitCode}}/{{\$state.exitCode}}{{end}}{{end}}{{if gt .restartCount 0}} {{\"\033[38;5;174m\"}}({{.restartCount}} restarts){{end}}{{\"\033[0m\n\"}}{{end}}{{end}}'"
 
 # Use https://github.com/cykerway/complete-alias for bash alias completion
 if type _complete_alias &>/dev/null; then
@@ -41,7 +41,7 @@ if type _complete_alias &>/dev/null; then
 	complete -F _complete_alias kpnotready
 fi
 
-function _rafi_k8s_parse_args() {
+function _rafi_k8s_filter_args() {
 	declare -a args; args=()
 	local found_kind found_ns
 
@@ -61,11 +61,18 @@ function _rafi_k8s_parse_args() {
 }
 
 # shellcheck disable=SC2046
-kwatch() { kubectl get -w $(_rafi_k8s_parse_args "$@") | cut -c-$(tput cols); }
+kwatch() { kubectl get -w $(_rafi_k8s_filter_args "$@") | cut -c-$(tput cols); }
 # shellcheck disable=SC2046
-kget() { kubectl get $(_rafi_k8s_parse_args "$@") | cut -c-$(tput cols); }
+kget() { kubectl get $(_rafi_k8s_filter_args "$@") | cut -c-$(tput cols); }
 # shellcheck disable=SC2046
-kdesc() { kubectl describe $(_rafi_k8s_parse_args "$@"); }
+kdesc() { kubectl describe $(_rafi_k8s_filter_args "$@"); }
+
+# Select resource with labels, sorted by ascending age.
+function kgsort() {
+	kubectl get "$(_rafi_k8s_filter_args "$@")" \
+		--show-labels --sort-by .metadata.creationTimestamp --no-headers |
+		fzf --tac
+}
 
 if [[ $(type -t compopt) = 'builtin' ]]; then
 	__rafi_complete_k8s_get() {
@@ -80,16 +87,9 @@ if [[ $(type -t compopt) = 'builtin' ]]; then
 	complete -o default -F __rafi_complete_k8s_get kget
 fi
 
-# Select resource with labels, sorted by ascending age.
-function kgsort() {
-	kubectl get "$(_rafi_k8s_parse_args "$@")" \
-		--show-labels --sort-by .metadata.creationTimestamp --no-headers |
-		fzf --tac
-}
-
 # Use fzf to select resource and namespace pair.
 # shellcheck disable=SC2120
-function _rafi_k8s_select_pod() {
+function _rafi_k8s_select_resource() {
 	local kind="${1:-pods}"
 	shift
 	kubectl get "$kind" --all-namespaces "$@" \
@@ -98,32 +98,9 @@ function _rafi_k8s_select_pod() {
 }
 
 # Pod commands with interactive selection.
-alias kpdesc='_rafi_k8s_select_pod | xargs kubectl describe pod -n'
-alias kpdelete='_rafi_k8s_select_pod | xargs kubectl delete pod -n'
-alias kplog='_rafi_k8s_select_pod | xargs kubectl logs -f -n'
-alias kpman='_rafi_k8s_select_pod | xargs kubectl get pod -o json -n | fx'
-alias kpip='_rafi_k8s_select_pod | xargs kubectl get pod -o jsonpath="{.status.podIPs[*]}" -n | jq'
-alias ksdockerconfig="_rafi_k8s_select_pod secrets --field-selector type=kubernetes.io/dockerconfigjson | xargs kubectl get secret -o go-template='{{index .data \".dockerconfigjson\" | base64decode }}' -n | jq"
-
-function ksecretdecode() {
-	local args secret_key
-	read -ra args < <(_rafi_k8s_select_pod secret)
-	if [ ${#args} -lt 1 ]; then
-		return
-	fi
-	# shellcheck disable=SC2016
-	secret_key="$( \
-		kubectl get secrets -n "${args[@]}" \
-			-o go-template='{{ range $k, $v := .data }}{{ printf "%s\n" $k }}{{end}}' \
-		| fzf \
-	)"
-	if [ -n "$secret_key" ]; then
-		kubectl get secrets -n "${args[@]}" -o go-template="{{ index .data \"$secret_key\" | base64decode }}"
-	fi
-}
 
 function kexec() {
-	read -ra tokens < <(_rafi_k8s_select_pod)
+	read -ra tokens < <(_rafi_k8s_select_resource)
 	if [ ${#tokens} -gt 1 ]; then
 		# Try bash first, then sh.
 		kubectl exec -it --namespace "${tokens[@]}" -- bash \
@@ -147,9 +124,43 @@ function ktail() {
 	[ ${#tokens} -gt 1 ] && kubectl logs -f --namespace "${tokens[0]}" "${tokens[1]}"
 }
 
+alias kpdesc='_rafi_k8s_select_resource | xargs kubectl describe pod -n'
+alias kpdelete='_rafi_k8s_select_resource | xargs kubectl delete pod -n'
+alias kplog='_rafi_k8s_select_resource | xargs kubectl logs -f -n'
+alias kpman='_rafi_k8s_select_resource | xargs kubectl get pod -o json -n | fx'
+alias kpip='_rafi_k8s_select_resource | xargs kubectl get pod -o jsonpath="{.status.podIPs[*]}" -n | jq'
+
+# SECRETS
+# ---
+
+alias ksdockerconfig="_rafi_k8s_select_resource secrets --field-selector type=kubernetes.io/dockerconfigjson | xargs kubectl get secret -o go-template='{{index .data \".dockerconfigjson\" | base64decode }}' -n | jq"
+
+function ksdecode() {
+	local args secret_key
+	read -ra args < <(_rafi_k8s_select_resource secret)
+	if [ ${#args} -lt 1 ]; then
+		return
+	fi
+	# shellcheck disable=SC2016
+	secret_key="$( \
+		kubectl get secrets -n "${args[@]}" \
+			-o go-template='{{ range $k, $v := .data }}{{ printf "%s\n" $k }}{{end}}' \
+		| fzf \
+	)"
+	if [ -n "$secret_key" ]; then
+		kubectl get secrets -n "${args[@]}" -o go-template="{{ index .data \"$secret_key\" | base64decode }}"
+	fi
+}
+
+function kube-ca-fingerprint() {
+	kubectl get secret "$1" -ojsonpath='{.data.ca\.crt}' \
+		| base64 -d \
+		| openssl x509 -fingerprint -in /dev/stdin -noout
+}
+
 # DEPLOYMENTS
 # ---
-alias krestart='_rafi_k8s_select_pod deployments | xargs kubectl rollout restart deployment -n'
+alias krestart='_rafi_k8s_select_resource deployments | xargs kubectl rollout restart deployment -n'
 
 # ROLES
 # ---
@@ -187,7 +198,7 @@ fi
 alias kingress='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.spec.ingressClassName,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path"'
 
 # Display even more robusy Ingress list
-alias kingress-wide='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.spec.ingressClassName,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path,SERVICES:.spec.rules[*].http.paths[*].backend.serviceName,PORTS:.spec.rules[*].http.paths[*].backend.servicePort"'
+alias kingress-wide='kubectl get ingress -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name,CLASS:.spec.ingressClassName,HOSTS:.spec.rules[*].host,PATHS:.spec.rules[*].http.paths[*].path,SERVICES:.spec.rules[*].http.paths[*].backend.service.name,PORTS:.spec.rules[*].http.paths[*].backend.service.port.*"'
 
 # EVENTS
 # ---
@@ -209,6 +220,7 @@ function kobjevents() {
 # ---
 
 # Show cpu/memory matrix for pods, use with -A or -n <namespace>
+# FIXME: Columns
 function kstats() {
 	local COLS="NAME:.metadata.name"
 	COLS="$COLS,CPU_REQ(cores):.spec.containers[*].resources.requests.cpu"
@@ -221,91 +233,6 @@ function kstats() {
 
 	join -a1 -a2 -o 0,1.2,1.3,2.2,2.3,2.4,2.5, -e '<none>' \
 		<(echo "$top") <(echo "$pods") | column -t -s' '
-}
-
-# CUSTOM
-# ---
-
-function kube-ca-fingerprint() {
-	kubectl get secret "$1" -ojsonpath='{.data.ca\.crt}' \
-		| base64 -d \
-		| openssl x509 -fingerprint -in /dev/stdin -noout
-}
-
-function natgwssh() {
-	local namespace vm_ip context
-	context="$(kubectl config current-context)> "
-
-	# Choose an NATGW pod from all namespaces.
-	read -r namespace vm_ip <<< \
-		"$(kubectl get po -A -o wide -l app=nat-gateway \
-				| fzf --header-lines=1 --prompt "${context}" \
-				| awk '{print $1 " " $7}')"
-
-	# Choose ssh-auth secret, unless there's only one in namespace.
-	secret_name="$(kubectl get secret -n "$namespace" -l app=nat-gateway \
-				--field-selector type=kubernetes.io/ssh-auth \
-		| fzf --select-1 --header-lines=1 --prompt "${context}" \
-		| awk '{print $1}')"
-
-	# Export secret and SSH into VM.
-	key_dir="$HOME/.ssh/qwilt/natgw"
-	key_path="${key_dir}/${secret_name}"
-	mkdir -p "${key_dir}"
-
-	kubectl get secret \
-		-o go-template='{{ index .data "ssh-privatekey" | base64decode }}' \
-		-n "${namespace}" "${secret_name}" \
-		> "${key_path}"
-
-	chmod 600 "${key_path}"
-	ssh -i "${key_path}" "ubuntu@${vm_ip}"
-}
-
-function kalias() {
-	local header='Select kubeconfig to alias:'
-	local alias="${1:-}"
-	local kubeconfig="${2:-}"
-	KUBECONFIG="${KUBECONFIG:=$HOME/.kube/config}"
-	KUBECONFIG_EXTRA_DIR="$HOME/.kube/configs"
-
-	function __kalias_kubeconfigs() {
-		local cur cfgs yellow normal
-		yellow=$(tput setaf 3 || true)
-		normal=$(tput sgr0 || true)
-		cur="$(basename "$(readlink -f "$KUBECONFIG")" | sed 's,%,/,g;s/.yaml//g')"
-		cfgs="$(\find -s "$KUBECONFIG_EXTRA_DIR" -type f -execdir echo '{}' ';' \
-			| sed 's,%,/,g;s/.yaml//g')"
-
-		for cfg in $cfgs; do
-			if [[ "$cfg" == "$cur" ]]; then
-				echo "$yellow$cfg$normal"
-			else
-				echo "$cfg"
-			fi
-		done
-	}
-
-	if [ -z "$kubeconfig" ]; then
-		kubeconfig="$(__kalias_kubeconfigs \
-			| fzf --exit-0 --ansi --info=right --height=50% --no-preview \
-					--header "$header" --header-first --margin=1,3,0,3 --scrollbar=▏▕)"
-	fi
-	if [[ ! "${kubeconfig}" =~ ^/ ]]; then
-		# Translate / to %
-		kubeconfig="${KUBECONFIG_EXTRA_DIR}/${kubeconfig//\//%}"
-		if [[ ! "${kubeconfig##*.}" =~ ^ya?ml$ ]]; then
-			# Append default .yaml extension.
-			kubeconfig="${kubeconfig}.yaml"
-		fi
-	fi
-	if [ -z "$alias" ] || [ -z "$kubeconfig" ]; then
-		echo 'Usage error: provide an alias to create.'
-	else
-		# shellcheck disable=SC2139
-		alias "$alias"="kubectl --kubeconfig=${kubeconfig}"
-		complete -o default -F __start_kubectl "$alias"
-	fi
 }
 
 #  vim: set ft=sh ts=2 sw=2 tw=80 noet :

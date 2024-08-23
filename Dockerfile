@@ -80,9 +80,9 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # --------------------------------------------------------------------------
 
-FROM alpine:3.17 AS downloader
+FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=70
+ARG BUILD_REVISION=80
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -99,8 +99,7 @@ RUN ubi_name=ubi-Linux-x86_64-musl \
     && ubi_url="https://github.com/houseabsolute/ubi/releases/download/$ubi_version/$ubi_name.tar.gz" \
     && wget -qO- "$ubi_url" | tar -xzo ubi \
     && chmod 770 ubi \
-    && ubi --version \
-    && ubi -p upx/upx $opts && upx --version
+    && ubi --version
 
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && export GITHUB_TOKEN \
@@ -108,7 +107,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p sharkdp/bat $opts && bat --version \
     && ubi -p ClementTsang/bottom --exe btm $opts && btm --version \
     && ubi -p aristocratos/btop $opts && btop --version \
-    && ubi -u https://hpjansson.org/chafa/releases/static/chafa-1.12.5-1-x86_64-linux-gnu.tar.gz --exe chafa -i . \
+    && ubi -u https://hpjansson.org/chafa/releases/static/chafa-1.14.2-1-x86_64-linux-gnu.tar.gz --exe chafa -i . \
     && ubi -p google/go-containerregistry --exe crane $opts && crane version \
     && ubi -p Byron/dua-cli --exe dua $opts && dua --version \
     && ubi -p muesli/duf $opts && duf -version \
@@ -134,7 +133,6 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p FiloSottile/mkcert $opts && mkcert --version \
     && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.16.tar.gz --exe ncdu -i . && ncdu --version \
     && ubi -p BurntSushi/ripgrep --exe rg $opts && rg --version \
-    && ubi -p rossmacarthur/sheldon $opts && sheldon --version \
     && ubi -p starship/starship $opts && starship -V && rm -rf ~/.cache \
     && ubi -p stern/stern $opts && stern --version \
     && ubi -p ducaale/xh $opts && xh --version \
@@ -143,7 +141,9 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && ubi -p mikefarah/yq -i . -m amd64 && yq --version \
     && ubi -p ajeetdsouza/zoxide $opts && zoxide --version
 
-# Neovim
-RUN wget -q https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+# neovim/neovim - official releases
+# neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
+RUN wget -q \
+    https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
 
 # --------------------------------------------------------------------------

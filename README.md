@@ -86,10 +86,8 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [mkcert]      | A simple zero-config tool to make locally trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
 | [ncdu]        | Ncdu is a disk usage analyzer with an ncurses interface. | <img src="https://dev.yorhel.nl/img/ncdudone-2.png" /> |
 | [ripgrep]     | ripgrep is a line-oriented search tool that recursively searches the current directory for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
-| [sheldon]     | A fast, configurable, shell plugin manager. | <img src="https://user-images.githubusercontent.com/17109887/60550665-02573380-9d29-11e9-84e9-5dfa89b11895.png" /> |
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
 | [stern]       | Stern allows you to `tail` multiple pods on Kubernetes and multiple containers within the pod. Each result is color coded for quicker debugging. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
-| [ubi]         | The Universal Binary Installer | |
 | [xh]          | Friendly and fast tool for sending HTTP requests. It reimplements as much as possible of HTTPie's excellent design. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
 | [yazi]        | Blazing fast terminal file manager written in Rust, based on async I/O | <img src="https://github.com/sxyazi/yazi/assets/17523360/92ff23fa-0cd5-4f04-b387-894c12265cc7" width="30%" /> |
 | [yj]          | Convert between YAML, TOML, JSON, and HCL. Preserves map order. | <img src="https://raw.githubusercontent.com/sclevine/yj/main/logo.png" width="30%" /> |
@@ -133,11 +131,9 @@ See each program's license.
 [ncdu]: https://dev.yorhel.nl/ncdu
 [neovim]: https://github.com/neovim/neovim
 [ripgrep]: https://github.com/BurntSushi/ripgrep
-[sheldon]: https://github.com/rossmacarthur/sheldon
 [starship]: https://github.com/starship/starship
 [stern]: https://github.com/stern/stern
 [tmux]: https://github.com/tmux/tmux
-[ubi]: https://github.com/houseabsolute/ubi
 [xh]: https://github.com/ducaale/xh
 [yazi]: https://github.com/sxyazi/yazi
 [yj]: https://github.com/sclevine/yj
