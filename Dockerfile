@@ -25,12 +25,8 @@ WORKDIR /tmp
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 COPY ./.files/.config/terminfo /etc/terminfo
 
-# tmux, ncurses and libevent versions
-ENV libevent_version=2.1.12
-ENV ncurses_version=6.3
-ENV tmux_version=3.4
-
 # libevent
+ENV libevent_version=2.1.12
 ENV libevent_name=libevent-${libevent_version}-stable
 ENV libevent_url=https://github.com/libevent/libevent/releases/download/release-${libevent_version}-stable/${libevent_name}.tar.gz
 RUN curl --retry 5 -LO "$libevent_url" && \
@@ -45,6 +41,7 @@ RUN curl --retry 5 -LO "$libevent_url" && \
     rm -fr "$libevent_name.tar.gz" "$libevent_name"
 
 # ncurses
+ENV ncurses_version=6.5
 ENV ncurses_name=ncurses-${ncurses_version}
 ENV ncurses_url=https://ftp.gnu.org/pub/gnu/ncurses/${ncurses_name}.tar.gz
 RUN curl --retry 5 -LO "$ncurses_url" && \
@@ -62,6 +59,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     rm -fr "${ncurses_name}.tar.gz" "$ncurses_name"
 
 # tmux
+ENV tmux_version=3.4
 ENV tmux_name=tmux-${tmux_version}
 ENV tmux_url=https://github.com/tmux/tmux/releases/download/$tmux_version/$tmux_name.tar.gz
 RUN curl --retry 5 -LO "$tmux_url" && \
