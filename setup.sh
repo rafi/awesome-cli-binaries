@@ -12,8 +12,8 @@ function _bootstrap() {
 	mkdir -p ~/.config ~/.cache ~/.local/opt ~/.local/share/lf
 
 	# Persist custom ~/.bash_user import in ~/.bashrc
-	if ! grep -q '\.bash_user' ~/.bashrc; then
-		echo -e "\n[ -f \$HOME/.bash_user ] && . \$HOME/.bash_user" >> ~/.bashrc
+	if ! grep -q 'config\/bash\/bashrc' ~/.bashrc; then
+		echo -e "\n[ -f \$HOME/.config/bash/bashrc ] && . \$HOME/.config/bash/bashrc" >> ~/.bashrc
 	fi
 
 	# Extract archives in ~/.local/opt and persist PATH in ~/.shell_env

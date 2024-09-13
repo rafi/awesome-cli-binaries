@@ -5,7 +5,8 @@
 # ▜▄▄█▄▄█▄▄█▄▄█▄▄███▄▄▛
 # github.com/rafi/.config
 
-source "$HOME/.shell_env"
+# shellcheck disable=1091
+source "$HOME/.config/bash/exports"
 
 # Abort if not running interactively
 [[ $- == *i* ]] || return 0
@@ -40,7 +41,7 @@ then
 fi
 
 # Source all extra functions
-for func in "$XDG_CONFIG_HOME/bash/functions.d/"*.bash; do
+for func in "$XDG_CONFIG_HOME/bash/functions/"*.bash; do
 	# shellcheck disable=1090
 	. "$func"
 done
@@ -64,7 +65,7 @@ if command -v starship 1>/dev/null 2>&1; then
 fi
 
 # Load bash aliases
-source "$HOME/.shell_aliases"
+source "$HOME/.config/bash/aliases"
 
 # Archlinux loads bash completions from /etc automatically
 # https://wiki.archlinux.org/index.php/Bash#Configuration_files
