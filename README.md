@@ -61,7 +61,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 
 | Program       | Description   | Screenshot  |
 |:------------- |:------------- | -----------:|
-| [bandwhich]   | Utility for displaying current network utilization by process, connection and remote IP/hostname. | <img src="https://raw.githubusercontent.com/imsnif/bandwhich/main/demo.gif" /> |
+| [bandwhich]   | Utility for displaying current network utilization by process, connection and remote IP/hostname. | <img src="https://github.com/imsnif/bandwhich/raw/main/res/demo.gif" /> |
 | [bat]         | A cat(1) clone with syntax highlighting and Git integration. | <img src="https://imgur.com/rGsdnDe.png" /> |
 | [bottom]      | A customizable cross-platform graphical process/system monitor for the terminal. | <img src="https://raw.githubusercontent.com/ClementTsang/bottom/master/assets/demo.gif" /> |
 | [btop]        | Resource monitor that shows usage and stats for processor, memory, disks, network and processes. | <img src="https://raw.githubusercontent.com/aristocratos/btop/main/Img/normal.png" /> |
@@ -72,6 +72,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [dust]        | A more intuitive version of du in rust. | <img src="https://raw.githubusercontent.com/bootandy/dust/master/media/snap.png" /> |
 | [dyff]        | Diff tool for YAML files, and sometimes JSON. | <img src="https://raw.githubusercontent.com/homeport/dyff/main/.docs/dyff-between-kubectl-diff.png" /> |
 | [erdtree]     | Modern multi-threaded filesystem and disk-usage analysis tool. | <img src="https://github.com/solidiquis/erdtree/blob/master/assets/top_showcase.png?raw=true" /> |
+| [eza]       | A modern alternative to ls | <img src="https://github.com/eza-community/eza/raw/main/docs/images/screenshots.png" /> |
 | [fd]          | Find entries in your filesystem. It is a simple, fast and user-friendly alternative to `find`. | <img src="https://raw.githubusercontent.com/sharkdp/fd/master/doc/screencast.svg" /> |
 | [fx]          | Terminal JSON viewer | <img src="https://medv.io/assets/fx/fx-preview.gif" /> |
 | [fzf]         | General-purpose command-line fuzzy finder. | <img src="https://raw.githubusercontent.com/junegunn/i/master/fzf-preview.png" /> |
@@ -115,6 +116,7 @@ See each program's license.
 [dust]: https://github.com/bootandy/dust
 [dyff]: https://github.com/homeport/dyff
 [erdtree]: https://github.com/solidiquis/erdtree
+[eza]: https://github.com/eza-community/eza
 [fd]: https://github.com/sharkdp/fd
 [fx]: https://github.com/antonmedv/fx
 [fzf]: https://github.com/junegunn/fzf

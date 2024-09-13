@@ -114,6 +114,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && export GITHUB_TOKEN \
     && dra download -ai solidiquis/erdtree && erd --version \
+    && dra download -ai eza-community/eza && eza --version \
     && dra download -ai sharkdp/fd && fd --version \
     && dra download -aio fx antonmedv/fx && fx --version \
     && dra download -ai junegunn/fzf && fzf --version && ( fzf --bash > fzf.bash ) \
@@ -122,7 +123,7 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && dra download -ai sharkdp/hyperfine && hyperfine --version \
     && dra download -aio jq stedolan/jq && jq --version \
     && dra download -ai casey/just && just --version \
-    && dra download -ai tstack/lnav && upx lnav && lnav --version && rm -rf ~/.config \
+    && dra download -ai tstack/lnav && upx lnav && lnav --version && rm -rf ~/.lnav ~/.config \
     && dra download -ai lsd-rs/lsd && lsd --version
 
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
