@@ -1,4 +1,4 @@
-# Fish variables
+# Fish environment variables  <><
 # github.com/rafi/.config
 
 # XDG dirs
@@ -7,6 +7,10 @@ set -qU XDG_DATA_HOME; or set -Ux XDG_DATA_HOME $HOME/.local/share
 set -qU XDG_STATE_HOME; or set -Ux XDG_STATE_HOME $HOME/.local/state
 set -qU XDG_CACHE_HOME; or set -Ux XDG_CACHE_HOME $HOME/.cache
 # set -qU XDG_RUNTIME_DIR; or set -Ux XDG_RUNTIME_DIR /var/run
+
+set -gx LANG en_US.UTF-8
+set -gx LC_ALL en_US.UTF-8
+set -gx LC_CTYPE en_US.UTF-8
 
 # OS detection
 set -g OS_DARWIN false
@@ -38,7 +42,7 @@ set -gx XINITRC "$XDG_CONFIG_HOME/xorg/xinitrc"
 set -gx XAUTHORITY "$XDG_CACHE_HOME/Xauthority"
 
 # Pagers
-set -gx MANPAGER "nvim +Man!"
+set -gx MANPAGER "nvim +'set cmdheight=2' +Man!"
 
 # Less
 if not set -q LESSVERSION

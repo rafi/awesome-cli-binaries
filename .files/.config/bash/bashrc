@@ -35,7 +35,7 @@ fi
 # Enable readline vi-mode for myself only
 # See ./functions.d/ssh.bash for implementation
 if [ "${LC_IDENTIFICATION:-$USER}" = rafi ] \
-	|| [[ "${LC_IDENTIFICATION:-$USER}" == rafael* ]]
+	|| [[ "${LC_IDENTIFICATION:-$USER}" == rafaelb* ]]
 then
 	set -o vi
 fi
@@ -43,7 +43,7 @@ fi
 # Source all extra functions
 for func in "$XDG_CONFIG_HOME/bash/functions/"*.bash; do
 	# shellcheck disable=1090
-	. "$func"
+	source "$func"
 done
 unset func
 
@@ -56,7 +56,7 @@ fi
 
 # See https://github.com/junegunn/fzf
 if [ -f "$HOME/.local/bin/fzf.bash" ]; then
-	. "$HOME/.local/bin/fzf.bash"
+	source "$HOME/.local/bin/fzf.bash"
 fi
 
 # Setup fast colorful prompt display

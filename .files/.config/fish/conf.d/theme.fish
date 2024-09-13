@@ -1,10 +1,10 @@
 # rafi palette
 # ---
 
-set -l foreground CFCFCF   # #f8f8f2
+set -l foreground CFCFCF
 set -l selection 30302c
-set -l comment 686868      # #6272a4
-set -l description B58858  # #6272a4
+set -l comment 686868
+set -l description B58858
 set -l completion f8f8f2
 
 set -l red D370A3

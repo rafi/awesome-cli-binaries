@@ -12,12 +12,13 @@ alias start '{ test -f .jig* && jig start .; } ||
 	{ jig ls | fzf | xargs jig start; }'
 
 alias update 'brew update && brew outdated'
-alias upgrade 'brew upgrade'
+alias upgrade 'ya pack -u && brew upgrade'
 alias outdated 'brew outdated'
 
 abbr dig q
 abbr ping gping
 abbr watch hwatch
+abbr wiki 'cd ~/code/rafi/rafi.io/content'
 
 abbr ncdu 'ncdu --color dark'
 abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat --plain --language=help"
@@ -32,15 +33,16 @@ end
 
 # Lists ---------------------------------------------------- l for list -- {{{
 
-abbr lf yazi
-
 set -l lscmd ls
 command -q gls; and set lscmd gls
-command -q eza; and set lscmd eza
 command -q lsd; and set lscmd lsd
+command -q eza; and set lscmd "EZA_MIN_LUMINANCE=70 eza --color-scale=all --color-scale-mode=gradient"
 alias ls "$lscmd --color=always --group-directories-first"
-alias l  "$lscmd --all --classify"
-alias ll "$lscmd --all --long --classify"
+alias l  "$lscmd --all --classify --color=always --group-directories-first"
+alias ll "$lscmd --all --long --classify --color=always --group-directories-first"
+set -u lscmd
+
+abbr lf yazi
 
 # }}}
 # Editor ---------------------------------------------------- v for vim -- {{{
@@ -77,14 +79,10 @@ alias tree 'tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.py
 abbr tree2 'tree -L 2'
 abbr tree3 'tree -L 3'
 
-# Head and tail will show as much possible without scrolling
-# command -q ghead; and alias ,head 'ghead -n $((${LINES:-12}-4))'
-# command -q gtail; and alias ,tail 'gtail -n $((${LINES:-12}-4)) -s.1'
-
 # }}}
-# Jump around ------------------------------------------------------------ {{{
-alias cdf 'cd "$(dirname "$(fzf)")"'
-alias cdd 'cd "$(fd --type d | fzf)"'
+# Path ------------------------------------------------------------------- {{{
+
+# Paste current directory to clipboard
 alias cwd 'pwd | tr -d "\r\n" | pbcopy'
 
 # Jump to previous directory with --
@@ -104,7 +102,7 @@ if command -q fd
 	abbr fda 'fd -HI'
 else
 	# Slower
-	abbr f 'find . -iname'
+	abbr f 'find . -not -name .git -not -name node_modules'
 end
 
 # }}}
@@ -152,14 +150,15 @@ abbr gld git lgd -15
 
 # Completely remove all unreachable objects from the repository.
 alias ggcnow='git -c gc.reflogExpireUnreachable=now gc --prune=now'
+
 # }}}
 # Docker ------------------------------------------------- d for docker -- {{{
 abbr d docker
 abbr dk docker compose
 alias dps 'docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
 alias dls 'docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
-alias dim 'docker images --format "table {{.Repository}}:{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
-# alias dim 'docker images --format "table {{.Repository}}:{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}" | sed -re "s/^(.+):([^ ]*)\ (.+)$/\1:(tput setaf 2)\2(tput sgr0)\3/g"'
+# alias dim 'docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}" | cut -c-$(tput cols)'
+alias dim 'docker images --format "table {{.Repository}}:{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}" | sed -re "s/^(.+):([^ ]*)\ (.+)\$/\1:$(tput setaf 2)\2$(tput sgr0)\3/g"'
 alias dih 'docker history --no-trunc --format "{{ .CreatedBy }}"'
 alias dip 'docker inspect --format "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
 alias dgc 'docker image prune -f'
@@ -178,12 +177,15 @@ alias dtag 'docker inspect --format "{{.Name}}
 abbr k kubectl
 abbr kc  kubectx
 abbr ks  kubectl switch
+abbr kd  kubectl describe
 abbr kg  kubectl get
-abbr kgp kubectl get pods
+abbr kgy kubectl get -o yaml
 abbr ke  kubectl edit
+abbr kdp kubectl describe pod
+abbr kgp kubectl get pod
+abbr kgpy kubectl get pod -o yaml
+abbr krr kubectl rollout restart deploy
 
-# switcher init fish | source
-# abbr ks switch
 # }}}
 # Processes -------------------------------------------------------------- {{{
 abbr process ps -ax
@@ -239,6 +241,7 @@ abbr ,statuspages "curl https://status.plaintext.sh/t"
 abbr ,ttycast "ttyd -p 8888 bash -c 'tmux new-session -d -s cast \; split-window -d \; attach -t cast'"
 abbr ,ttycast-this "tmux split-window \'ttyd -p 8888 bash -c \'tmux a\'\'"
 abbr ,lspci "lspci -nn | fzf -0 | awk '{print \$1}' | xargs lspci -v -s"
+abbr ,m --set-cursor 'math "%"'
 
 if command -q pcalc
 	abbr ,calc pcalc

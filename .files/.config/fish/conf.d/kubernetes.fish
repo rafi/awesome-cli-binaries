@@ -114,11 +114,11 @@ end
 # Functions that push commands to the command-line.
 
 function kpdesc --wraps='kubectl describe pod'
-	commandline -- "kubectl describe -n $(_rafi_k8s_select_resource pod)"
+	commandline -- "kubectl describe pod -n $(_rafi_k8s_select_resource pod)"
 end
 
 function kpdelete --wraps='kubectl delete pod'
-	commandline -- "kubectl delete -n $(_rafi_k8s_select_resource pod)"
+	commandline -- "kubectl delete pod -n $(_rafi_k8s_select_resource pod)"
 end
 
 function kplog --wraps='kubectl log'

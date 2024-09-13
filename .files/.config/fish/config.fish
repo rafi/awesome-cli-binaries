@@ -1,12 +1,13 @@
 # config.fish      _▄▄
-# _▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█●_█
-# █  - ◄█▘ ◦ ▝█  -▄█  █ ---------.
-# ▜▄▄█▄▄█▄▄█▄▄█▄▄███▄▄▛        * |
-# github.com/rafi/.config      # |
-#                              # |
+# _▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█●_█                        O  o
+# █  - ◄█▘ ◦ ▝█  -▄█  █ ---------.        _\_   o
+# ▜▄▄█▄▄█▄▄█▄▄█▄▄███▄▄▛        * |     \\/  o\ .
+# github.com/rafi/.config      # |     //\___=
+#                              # |        ''
 # EXIT HERE IF NOT INTERACTIVE # |
 status is-interactive || exit  # |
 # `------------------------------'
+
 
 # Visual {{{
 set fish_greeting
@@ -39,21 +40,6 @@ fish_add_path "$KREW_ROOT/bin"
 fish_add_path "$PIPX_BIN_DIR"
 fish_add_path "$RYE_HOME/shims"
 fish_add_path ~/.local/bin
-
-# }}}
-# Fisher setup {{{
-# https://github.com/jorgebucaran/fisher
-# Load fisher plugins from custom path.
-set fisher_path $__fish_config_dir/plugins
-set fish_complete_path $fish_complete_path[1] $fisher_path/completions $fish_complete_path[2..]
-set fish_function_path $fish_function_path[1] $fisher_path/functions $fish_function_path[2..]
-if not functions -q fisher
-	echo 'Downloading fisher...' >&2
-	curl -sL git.io/fisher | source; and fisher install jorgebucaran/fisher
-end
-for file in $fisher_path/conf.d/*.fish
-	source $file
-end
 
 # }}}
 # Key-bindings {{{

@@ -59,7 +59,6 @@ if hash nvim 2>/dev/null; then
 else
 	alias suvim='sudo -E vim'
 fi
-alias v='vim $(fzf)'
 alias vi=vim
 alias ve='tmux split-window -h "$EDITOR"'
 alias vimdiff='vim -d'
@@ -154,7 +153,8 @@ alias d=docker
 alias dk='docker compose'
 alias dps='docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
 alias dls='docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
-alias dim='docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
+# alias dim='docker images --format "table {{.Repository}}:{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}"'
+alias dim='docker images --format "table {{.Repository}}:{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}" | sed -re "s/^(.+):([^ ]*)\ (.+)$/\1:$(tput setaf 2)\2$(tput sgr0)\3/g"'
 alias dih='docker history --no-trunc --format "{{ .CreatedBy }}"'
 alias dip='docker inspect --format "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
 alias dgc='docker image prune -f'
@@ -250,11 +250,17 @@ alias dum='df -hT -x devtmpfs -x tmpfs'
 # }}}
 # Misc ------------------------------------------------------------------- {{{
 
+alias ,fontcache='fc-cache -f -v'
+alias ,fontfind='fc-list : family style'
 alias ,freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
-alias ,urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 alias ,sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias ,spell='aspell -c -l en_US'
+alias ,subdl='subliminal download -l en -d "$XDG_CACHE_HOME/subtitles"'
+alias ,tt=ttdl
 alias ungzip='gzip -d'
 alias untar='tar xvf'
+alias ,urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+alias ,weather='curl -s v2.wttr.in/Tel_Aviv'
 
 # https://github.com/alt-romes/programmer-calculator
 if hash pcalc 2>/dev/null; then
