@@ -56,7 +56,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 ## Binaries
 
 - [tmux] v3.4 statically linked (+ncurses +libevent)
-- [neovim] latest stable
+- [neovim] build with support for glibc 2.17
 - and:
 
 | Program       | Description   | Screenshot  |

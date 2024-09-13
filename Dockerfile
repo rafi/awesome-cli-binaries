@@ -80,68 +80,76 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=80
+ARG BUILD_REVISION=83
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN apk add --no-cache bash && rm -rf /etc/apk /lib/apk
 
-ARG opts="-i . -m musl"
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
 
 COPY --from=builder /opt/tmux/bin/tmux .
 
-RUN ubi_name=ubi-Linux-x86_64-musl \
-    && ubi_version="$(wget -qO- https://api.github.com/repos/houseabsolute/ubi/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
-    && ubi_url="https://github.com/houseabsolute/ubi/releases/download/$ubi_version/$ubi_name.tar.gz" \
-    && wget -qO- "$ubi_url" | tar -xzo ubi \
-    && chmod 770 ubi \
-    && ubi --version
+RUN dra_name=x86_64-unknown-linux-musl \
+    && dra_version="$(wget -qO- https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
+    && dra_url="https://github.com/devmatteini/dra/releases/download/$dra_version/dra-$dra_version-$dra_name.tar.gz" \
+    && wget -qO- "$dra_url" | tar -xzo --strip-components 1 "dra-$dra_version-$dra_name/dra" \
+    && chmod 770 dra \
+    && dra --version
 
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && export GITHUB_TOKEN \
-    && ubi -p imsnif/bandwhich $opts && bandwhich --version \
-    && ubi -p sharkdp/bat $opts && bat --version \
-    && ubi -p ClementTsang/bottom --exe btm $opts && btm --version \
-    && ubi -p aristocratos/btop $opts && btop --version \
-    && ubi -u https://hpjansson.org/chafa/releases/static/chafa-1.14.2-1-x86_64-linux-gnu.tar.gz --exe chafa -i . \
-    && ubi -p google/go-containerregistry --exe crane $opts && crane version \
-    && ubi -p Byron/dua-cli --exe dua $opts && dua --version \
-    && ubi -p muesli/duf $opts && duf -version \
-    && ubi -p homeport/dyff $opts && dyff version
+    && dra download -ai upx/upx && upx --version \
+    && dra download -ai imsnif/bandwhich && bandwhich --version \
+    && dra download -ai sharkdp/bat && bat --version \
+    && dra download -ai ClementTsang/bottom && btm --version \
+    && dra download -ai aristocratos/btop && btop --version \
+    && dra download -aI crane google/go-containerregistry && crane version \
+    && dra download -ai Byron/dua-cli && dua --version \
+    && dra download -ai muesli/duf && duf -version \
+    && dra download -ai bootandy/dust && dust --version \
+    && dra download -ai homeport/dyff && dyff version
 
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && export GITHUB_TOKEN \
-    && ubi -p solidiquis/erdtree --exe erd $opts && erd --version \
-    && ubi -p sharkdp/fd $opts && fd --version \
-    && ubi -p antonmedv/fx $opts && fx --version \
-    && ubi -p junegunn/fzf $opts && fzf --version && ( fzf --bash > fzf.bash ) \
-    && ubi -p charmbracelet/glow $opts && glow --version \
-    && ubi -p sharkdp/hexyl $opts && hexyl --version \
-    && ubi -p sharkdp/hyperfine $opts && hyperfine --version \
-    && ubi -p stedolan/jq -i . -m linux64 && jq --version \
-    && ubi -p casey/just $opts && just --version \
-    && ubi -p gokcehan/lf -i . && lf --version \
-    && ubi -p tstack/lnav $opts && lnav --version && rm -rf ~/.lnav \
-    && ubi -p lsd-rs/lsd $opts && lsd --version
+    && dra download -ai solidiquis/erdtree && erd --version \
+    && dra download -ai sharkdp/fd && fd --version \
+    && dra download -aio fx antonmedv/fx && fx --version \
+    && dra download -ai junegunn/fzf && fzf --version && ( fzf --bash > fzf.bash ) \
+    && dra download -ai charmbracelet/glow && glow --version && rm -rf ~/.cache ~/.config \
+    && dra download -ai sharkdp/hexyl && hexyl --version \
+    && dra download -ai sharkdp/hyperfine && hyperfine --version \
+    && dra download -aio jq stedolan/jq && jq --version \
+    && dra download -ai casey/just && just --version \
+    && dra download -ai tstack/lnav && upx lnav && lnav --version && rm -rf ~/.config \
+    && dra download -ai lsd-rs/lsd && lsd --version
 
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && export GITHUB_TOKEN \
-    && ubi -p FiloSottile/mkcert $opts && mkcert --version \
-    && ubi -u https://dev.yorhel.nl/download/ncdu-linux-x86_64-1.16.tar.gz --exe ncdu -i . && ncdu --version \
-    && ubi -p BurntSushi/ripgrep --exe rg $opts && rg --version \
-    && ubi -p starship/starship $opts && starship -V && rm -rf ~/.cache \
-    && ubi -p stern/stern $opts && stern --version \
-    && ubi -p ducaale/xh $opts && xh --version \
-    && ubi -p sxyazi/yazi $opts && yazi --version && rm -rf ~/.local /tmp/yazi \
-    && ubi -p sclevine/yj $opts && yj -v \
-    && ubi -p mikefarah/yq -i . -m amd64 && yq --version \
-    && ubi -p ajeetdsouza/zoxide $opts && zoxide --version
+    && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
+    && dra download -ai BurntSushi/ripgrep && rg --version \
+    && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
+    && dra download -ai stern/stern && upx stern && stern --version \
+    && dra download -ai ducaale/xh && xh --version \
+    && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
+    && dra download -aio yj sclevine/yj && yj -v \
+    && dra download -aI yq_linux_amd64 -o yq mikefarah/yq && yq --version \
+    && dra download -ai ajeetdsouza/zoxide && zoxide --version
+
+ARG chafa_version=1.14.4
+ARG ncdu_version=1.16
+RUN wget -qO- https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
+RUN wget -qO- https://dev.yorhel.nl/download/ncdu-linux-x86_64-${ncdu_version}.tar.gz | tar -xzo && ncdu --version
 
 # neovim/neovim - official releases
 # neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
 RUN wget -q \
     https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
+
+    # https://github.com/neovim/neovim-releases/releases/download/stable/nvim.appimage \
+    # https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz \
+    # https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
+    # chmod ug+x nvim.appimage
 
 # --------------------------------------------------------------------------

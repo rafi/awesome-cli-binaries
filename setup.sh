@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eu
-_VERSION='0.9.5'
+_VERSION='0.10.0'
 
 # Show usage.
 function _usage() {
@@ -9,14 +9,14 @@ function _usage() {
 
 # Bootstrap a remote host.
 function _bootstrap() {
-	mkdir -p ~/.config ~/.cache ~/.local/opt ~/.local/share/lf
+	mkdir -p ~/.config ~/.cache ~/.local/opt
 
 	# Persist custom ~/.bash_user import in ~/.bashrc
 	if ! grep -q 'config\/bash\/bashrc' ~/.bashrc; then
 		echo -e "\n[ -f \$HOME/.config/bash/bashrc ] && . \$HOME/.config/bash/bashrc" >> ~/.bashrc
 	fi
 
-	# Extract archives in ~/.local/opt and persist PATH in ~/.shell_env
+	# Extract archives in ~/.local/opt and persist PATH
 	local apps_path="$HOME/.local/opt"
 	for archive in "$HOME"/.local/bin/*tar.gz; do
 		name="${archive##*/}"
@@ -26,7 +26,7 @@ function _bootstrap() {
 		fi
 		tar -C "$apps_path" -xzf "$archive"
 		if [ -d "${apps_path}/${name}" ]; then
-			echo -e "\nexport PATH=\"\$PATH:${apps_path}/${name}/bin\"" >> ~/.shell_env
+			echo -e "\nexport PATH=\"\$PATH:${apps_path}/${name}/bin\"" >> ~/.config/bash/exports
 		fi
 	done
 }
