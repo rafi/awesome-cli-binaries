@@ -15,7 +15,7 @@ alias update 'brew update && brew outdated'
 alias upgrade 'ya pack -u && brew upgrade'
 alias outdated 'brew outdated'
 
-abbr dig q
+abbr dig doggo
 abbr ping gping
 abbr watch hwatch
 abbr wiki 'cd ~/code/rafi/rafi.io/content'

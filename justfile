@@ -15,7 +15,7 @@ validate:
     exit 1; \
   fi
 
-build: docker binaries
+build: docker binaries fish
 dist: build archive
 
 # build docker image
@@ -30,13 +30,27 @@ docker: validate
 
 # copy binaries locally
 binaries:
-  docker run --rm --platform linux/amd64 -v $PWD:/artifacts \
-    {{ IMAGE }} cp -r /usr/local/bin /artifacts
+  docker run --rm --platform linux/amd64 -v "$PWD":/artifacts {{ IMAGE }} \
+    cp -r /usr/local/bin /artifacts
 
 # compress local binaries
 archive:
   (cd "{{ OUT }}" && tar cvf ../static.tar *)
   xz -T0 -v9 static.tar
+
+fish:
+  #!/usr/bin/env bash -eu
+  docker buildx build \
+    --platform linux/amd64 \
+    --cache-from type=local,src=./.cache \
+    --cache-to type=local,dest=./.cache \
+    --load \
+    -t fish -f fish.Dockerfile .
+
+  for BIN in fish fish_indent fish_key_reader; do
+    docker run --rm --platform linux/amd64 -v "$PWD":/artifacts fish \
+      cp -r /root/.cargo/bin/"$BIN" /artifacts/bin
+  done
 
 # sync local binaries to remote hosts
 sync +hosts:
@@ -44,7 +58,7 @@ sync +hosts:
   for HOST in {{ hosts }}; do
     rsync -rltzP --exclude '.git*' \
       --rsync-path='mkdir -p ~/.local/bin && rsync' \
-      ./"{{ OUT }}"/* "${HOST}":./.local/bin/
+      ./"{{ OUT }}"/* "$HOST":./.local/bin/
   done
 
 # erase local binaries

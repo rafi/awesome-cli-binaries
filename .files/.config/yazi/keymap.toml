@@ -20,7 +20,6 @@
 prepend_keymap = [
 	{ on = [ "l" ], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
 	{ on = ["i"], run = "LESS='-iWQMXR~' bat --paging=always --theme=TwoDark {}" },
-	{ on = [ "<Esc>" ], run = "close", desc = "Cancel input" },
 
 	{ on = [ "<C-s>" ], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
 
@@ -40,6 +39,9 @@ prepend_keymap = [
 	# Plugins
 	{ on = [ "<Tab>" ], run = "plugin --sync max-preview", desc = "Maximize preview" },
 	{ on = [ "<C-g>" ], run = "plugin --sync hide-preview", desc = "Hide preview" },
+]
+append_keymap = [
+	{ on = [ "<Esc>" ], run = "close", desc = "Cancel input" },
 ]
 
 [help]

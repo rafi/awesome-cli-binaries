@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eu
-_VERSION='0.10.0'
+_VERSION='0.11.0'
 
 # Show usage.
 function _usage() {
@@ -26,9 +26,14 @@ function _bootstrap() {
 		fi
 		tar -C "$apps_path" -xzf "$archive"
 		if [ -d "${apps_path}/${name}" ]; then
-			echo -e "\nexport PATH=\"\$PATH:${apps_path}/${name}/bin\"" >> ~/.config/bash/exports
+			echo -e "\nexport PATH=\"${apps_path}/${name}/bin:\$PATH\"" >> ~/.config/bash/exports
 		fi
 	done
+
+	# Install fish
+	if [ -f ~/.local/bin/fish ] && [ ! -d ~/.local/share/fish/install ]; then
+		~/.local/bin/fish --install=noconfirm || echo >&2 'fish already installed?'
+	fi
 }
 
 # Run a function remotely.

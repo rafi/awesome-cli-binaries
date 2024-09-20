@@ -12,7 +12,7 @@ source "$HOME/.config/bash/exports"
 [[ $- == *i* ]] || return 0
 
 # If fish is installed, use it instead. exec will terminate immediately here.
-hash fish 2>/dev/null && exec fish -il
+# hash fish 2>/dev/null && exec fish -il
 
 # Remove mappings. See all: stty -a
 stty stop undef          # Remove the ^Q mapping

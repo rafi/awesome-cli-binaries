@@ -80,7 +80,7 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=83
+ARG BUILD_REVISION=84
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
