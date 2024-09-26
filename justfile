@@ -23,8 +23,6 @@ docker: validate
   docker buildx build \
     --platform linux/amd64 \
     --secret id=token,env=BUILD_TOKEN \
-    --cache-from type=local,src=./.cache \
-    --cache-to type=local,dest=./.cache \
     --load \
     -t {{ IMAGE }} .
 
@@ -42,8 +40,6 @@ fish:
   #!/usr/bin/env bash -eu
   docker buildx build \
     --platform linux/amd64 \
-    --cache-from type=local,src=./.cache \
-    --cache-to type=local,dest=./.cache \
     --load \
     -t fish -f fish.Dockerfile .
 

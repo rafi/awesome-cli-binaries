@@ -31,13 +31,13 @@ ENV libevent_name=libevent-${libevent_version}-stable
 ENV libevent_url=https://github.com/libevent/libevent/releases/download/release-${libevent_version}-stable/${libevent_name}.tar.gz
 RUN curl --retry 5 -LO "$libevent_url" && \
     tar xvzf "$libevent_name.tar.gz" && \
-    pushd "$libevent_name" && \
+    cd "$libevent_name" && \
     autoupdate && \
     sh autogen.sh && \
     ./configure --prefix="$BUILD_DIR" --enable-shared && \
     make -j4 && \
     make install && \
-    popd && \
+    cd .. && \
     rm -fr "$libevent_name.tar.gz" "$libevent_name"
 
 # ncurses
@@ -46,7 +46,7 @@ ENV ncurses_name=ncurses-${ncurses_version}
 ENV ncurses_url=https://ftp.gnu.org/pub/gnu/ncurses/${ncurses_name}.tar.gz
 RUN curl --retry 5 -LO "$ncurses_url" && \
     tar xvzof "${ncurses_name}.tar.gz" && \
-    pushd "$ncurses_name" && \
+    cd "$ncurses_name" && \
     ./configure --prefix="$BUILD_DIR" \
         --enable-pc-files \
         --with-termlib \
@@ -55,7 +55,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
         --with-pkg-config-libdir="$BUILD_DIR/lib/pkgconfig" && \
     make -j4 && \
     make install && \
-    popd && \
+    cd .. && \
     rm -fr "${ncurses_name}.tar.gz" "$ncurses_name"
 
 # tmux
@@ -64,14 +64,14 @@ ENV tmux_name=tmux-${tmux_version}
 ENV tmux_url=https://github.com/tmux/tmux/releases/download/$tmux_version/$tmux_name.tar.gz
 RUN curl --retry 5 -LO "$tmux_url" && \
     tar xvzof "$tmux_name.tar.gz" && \
-    pushd "$tmux_name" && \
+    cd "$tmux_name" && \
     export LDFLAGS="-L$BUILD_DIR/lib" && \
     export CPPFLAGS="-I$BUILD_DIR/include -I$BUILD_DIR/include/ncurses -I$BUILD_DIR/include/event2" && \
     export PKG_CONFIG_PATH="$BUILD_DIR/lib/pkgconfig" && \
     ./configure --prefix="$BUILD_DIR" --enable-static && \
     make -j4 && \
     make install && \
-    popd && \
+    cd .. && \
     rm -fr "$tmux_name.tar.gz" "$tmux_name"
 
 RUN "$BUILD_DIR/bin/tmux" -V
@@ -80,7 +80,7 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=84
+ARG BUILD_REVISION=85
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -122,12 +122,12 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && dra download -ai sharkdp/hexyl && hexyl --version \
     && dra download -ai sharkdp/hyperfine && hyperfine --version \
     && dra download -aio jq stedolan/jq && jq --version \
-    && dra download -ai casey/just && just --version \
-    && dra download -ai tstack/lnav && upx lnav && lnav --version && rm -rf ~/.lnav ~/.config \
-    && dra download -ai lsd-rs/lsd && lsd --version
+    && dra download -ai casey/just && just --version
 
 RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && export GITHUB_TOKEN \
+    && dra download -ai tstack/lnav && upx lnav && lnav --version && rm -rf ~/.lnav ~/.config \
+    && dra download -ai lsd-rs/lsd && lsd --version \
     && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
     && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
@@ -147,10 +147,5 @@ RUN wget -qO- https://dev.yorhel.nl/download/ncdu-linux-x86_64-${ncdu_version}.t
 # neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
 RUN wget -q \
     https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
-
-    # https://github.com/neovim/neovim-releases/releases/download/stable/nvim.appimage \
-    # https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz \
-    # https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
-    # chmod ug+x nvim.appimage
 
 # --------------------------------------------------------------------------

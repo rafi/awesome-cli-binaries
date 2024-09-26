@@ -34,6 +34,26 @@ function _bootstrap() {
 	if [ -f ~/.local/bin/fish ] && [ ! -d ~/.local/share/fish/install ]; then
 		~/.local/bin/fish --install=noconfirm || echo >&2 'fish already installed?'
 	fi
+
+	# Install appimages
+	if test -f "$HOME"/.local/bin/*.appimage; then
+		for file_path in "$HOME"/.local/bin/*.appimage; do
+			app_image="${file_path##*/}"
+			name="${app_image%%.*}"
+			if [ -z "$name" ] || [ -z "$app_image" ]; then
+				echo >&2 "ERROR Failed to parse appimage name from '${file_path}'"
+				continue
+			fi
+			test -d "${apps_path}/${name}" && rm -rf "${apps_path:?}/${name}"
+			mkdir "$apps_path/$name"
+			pushd "$apps_path/$name" 1>/dev/null
+			cp -f "$file_path" ./
+			./"${app_image}" --appimage-extract 1>/dev/null
+			ln -vfs "${PWD}"/squashfs-root/AppRun "$HOME"/.local/bin/"${name}"
+			rm -rf ./"${app_image}"
+			popd 1>/dev/null
+		done
+	fi
 }
 
 # Run a function remotely.
