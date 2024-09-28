@@ -20,7 +20,6 @@ abbr ping gping
 abbr watch hwatch
 abbr wiki 'cd ~/code/rafi/rafi.io/content'
 
-abbr ncdu 'ncdu --color dark'
 abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat --plain --language=help"
 
 if [ $OS_DARWIN ]

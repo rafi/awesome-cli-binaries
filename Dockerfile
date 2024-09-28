@@ -98,35 +98,33 @@ RUN dra_name=x86_64-unknown-linux-musl \
     && chmod 770 dra \
     && dra --version
 
-RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
-    && export GITHUB_TOKEN \
+RUN --mount=type=secret,id=token \
+    GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai upx/upx && upx --version \
     && dra download -ai imsnif/bandwhich && bandwhich --version \
     && dra download -ai sharkdp/bat && bat --version \
-    && dra download -ai ClementTsang/bottom && btm --version \
     && dra download -ai aristocratos/btop && btop --version \
-    && dra download -aI crane google/go-containerregistry && crane version \
+    && dra download -aI crane google/go-containerregistry && upx crane && crane version \
     && dra download -ai Byron/dua-cli && dua --version \
     && dra download -ai muesli/duf && duf -version \
     && dra download -ai bootandy/dust && dust --version \
     && dra download -ai homeport/dyff && dyff version
 
-RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
-    && export GITHUB_TOKEN \
+RUN --mount=type=secret,id=token \
+    GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai solidiquis/erdtree && erd --version \
     && dra download -ai eza-community/eza && eza --version \
     && dra download -ai sharkdp/fd && fd --version \
-    && dra download -aio fx antonmedv/fx && fx --version \
+    && dra download -aio fx antonmedv/fx && upx fx && fx --version \
     && dra download -ai junegunn/fzf && fzf --version && ( fzf --bash > fzf.bash ) \
-    && dra download -ai charmbracelet/glow && glow --version && rm -rf ~/.cache ~/.config \
+    && dra download -ai charmbracelet/glow && upx glow && glow --version && rm -rf ~/.cache ~/.config \
     && dra download -ai sharkdp/hexyl && hexyl --version \
     && dra download -ai sharkdp/hyperfine && hyperfine --version \
     && dra download -aio jq stedolan/jq && jq --version \
     && dra download -ai casey/just && just --version
 
-RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
-    && export GITHUB_TOKEN \
-    && dra download -ai tstack/lnav && upx lnav && lnav --version && rm -rf ~/.lnav ~/.config \
+RUN --mount=type=secret,id=token \
+    GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai lsd-rs/lsd && lsd --version \
     && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
@@ -134,17 +132,18 @@ RUN --mount=type=secret,id=token GITHUB_TOKEN="$(cat /run/secrets/token)" \
     && dra download -ai stern/stern && upx stern && stern --version \
     && dra download -ai ducaale/xh && xh --version \
     && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
-    && dra download -aio yj sclevine/yj && yj -v \
     && dra download -aI yq_linux_amd64 -o yq mikefarah/yq && yq --version \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
-ARG chafa_version=1.14.4
-ARG ncdu_version=1.16
-RUN wget -qO- https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
-RUN wget -qO- https://dev.yorhel.nl/download/ncdu-linux-x86_64-${ncdu_version}.tar.gz | tar -xzo && ncdu --version
+# Non-GitHub binaries
+# ---
 
-# neovim/neovim - official releases
-# neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
+ARG chafa_version=1.14.4
+RUN wget -qO- https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
+
+# Neovim repos:
+# - neovim/neovim - official releases
+# - neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
 RUN wget -q \
     https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
 

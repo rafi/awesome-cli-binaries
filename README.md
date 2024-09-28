@@ -64,7 +64,6 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 |:------------- |:------------- | -----------:|
 | [bandwhich]   | Utility for displaying current network utilization. | <img src="https://github.com/imsnif/bandwhich/raw/main/res/demo.gif" /> |
 | [bat]         | A cat(1) clone with syntax highlighting and Git integration. | <img src="https://imgur.com/rGsdnDe.png" /> |
-| [bottom]      | Customizable cross-platform graphical process/system monitor for the terminal. | <img src="https://raw.githubusercontent.com/ClementTsang/bottom/master/assets/demo.gif" /> |
 | [btop]        | Resource monitor that shows usage and stats. | <img src="https://raw.githubusercontent.com/aristocratos/btop/main/Img/normal.png" /> |
 | [chafa]       | View very reasonable approximations of pictures and animations in the terminal. | <img src="https://hpjansson.org/chafa/gallery/maru-geneve-240-rgb.png" width="60%" /> |
 | [crane]       | Crane is a tool for interacting with remote images and registries. | <img src="https://raw.githubusercontent.com/google/go-containerregistry/main/images/crane.png" width="40%" /> |
@@ -82,16 +81,13 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [hyperfine]   | A command-line benchmarking tool. | <img src="https://i.imgur.com/z19OYxE.gif" /> |
 | [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://jqlang.github.io/jq/jq.png" width="50%" /> |
 | [just]        | Handy way to save and run project-specific commands. | <img src="https://raw.githubusercontent.com/casey/just/master/screenshot.png" /> |
-| [lnav]        | Log file navigator| <img src="https://raw.githubusercontent.com/tstack/lnav/master/docs/assets/images/lnav-syslog.png" /> |
 | [lsd]         | Rewrite of GNU `ls` with lots of added features. | <img src="https://raw.githubusercontent.com/Peltoche/lsd/assets/screen_lsd.png" /> |
 | [mkcert]      | Make local trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
-| [ncdu]        | Ncdu is a disk usage analyzer with an ncurses interface. | <img src="https://dev.yorhel.nl/img/ncdudone-2.png" /> |
 | [ripgrep]     | Line-oriented search tool that recursively searches for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
 | [stern]       | Tail multiple pods and containers on Kubernetes. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
 | [xh]          | Friendly and fast tool for sending HTTP requests. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
 | [yazi]        | Blazing fast terminal file manager written in Rust, based on async I/O | <video src="https://yazi-rs.github.io/videos/input_select.mp4" controls="controls" muted="muted" style="max-height:320px; min-height: 200px"></video> |
-| [yj]          | Convert between YAML, TOML, JSON, and HCL. Preserves map order. | <img src="https://raw.githubusercontent.com/sclevine/yj/main/logo.png" width="30%" /> |
 | [yq]          | Portable command-line YAML, JSON, XML, CSV, TOML and properties processor. | <img src="https://miro.medium.com/v2/resize:fit:640/1*gsqh7A_ivvZM5ht66hx3Xw.png" /> |
 | [zoxide]      | zoxide is a **smarter cd command**, inspired by z and autojump. | <img src="https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/tutorial.webp" /> |
 
@@ -108,7 +104,6 @@ See each program's license.
 
 [bandwhich]: https://github.com/imsnif/bandwhich
 [bat]: https://github.com/sharkdp/bat
-[bottom]: https://github.com/ClementTsang/bottom
 [btop]: https://github.com/aristocratos/btop
 [chafa]: https://hpjansson.org/chafa
 [crane]: https://github.com/google/go-containerregistry
@@ -127,10 +122,8 @@ See each program's license.
 [hyperfine]: https://github.com/sharkdp/hyperfine
 [jq]: https://github.com/stedolan/jq
 [just]: https://github.com/casey/just
-[lnav]: https://github.com/tstack/lnav
 [lsd]: https://github.com/lsd-rs/lsd
 [mkcert]: https://github.com/FiloSottile/mkcert
-[ncdu]: https://dev.yorhel.nl/ncdu
 [neovim]: https://github.com/neovim/neovim
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [starship]: https://github.com/starship/starship
@@ -138,6 +131,5 @@ See each program's license.
 [tmux]: https://github.com/tmux/tmux
 [xh]: https://github.com/ducaale/xh
 [yazi]: https://github.com/sxyazi/yazi
-[yj]: https://github.com/sclevine/yj
 [yq]: https://github.com/mikefarah/yq
 [zoxide]: https://github.com/ajeetdsouza/zoxide
