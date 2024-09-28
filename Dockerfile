@@ -80,7 +80,7 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=85
+ARG BUILD_REVISION=86
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -105,6 +105,8 @@ RUN --mount=type=secret,id=token \
     && dra download -ai sharkdp/bat && bat --version \
     && dra download -ai aristocratos/btop && btop --version \
     && dra download -aI crane google/go-containerregistry && upx crane && crane version \
+    && dra download -ai dandavison/delta && delta --version \
+    && dra download -s diff-so-fancy so-fancy/diff-so-fancy && chmod ug+x diff-so-fancy \
     && dra download -ai Byron/dua-cli && dua --version \
     && dra download -ai muesli/duf && duf -version \
     && dra download -ai bootandy/dust && dust --version \

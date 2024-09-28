@@ -21,5 +21,9 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 WORKDIR /root
 
+ARG BUILD_REVISION=86
+LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
+LABEL io.rafi.revision="$BUILD_REVISION"
+
 RUN . .cargo/env \
     && cargo install --git https://github.com/faho/fish-shell --branch fish-installer

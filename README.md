@@ -67,6 +67,8 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [btop]        | Resource monitor that shows usage and stats. | <img src="https://raw.githubusercontent.com/aristocratos/btop/main/Img/normal.png" /> |
 | [chafa]       | View very reasonable approximations of pictures and animations in the terminal. | <img src="https://hpjansson.org/chafa/gallery/maru-geneve-240-rgb.png" width="60%" /> |
 | [crane]       | Crane is a tool for interacting with remote images and registries. | <img src="https://raw.githubusercontent.com/google/go-containerregistry/main/images/crane.png" width="40%" /> |
+| [delta]       | Good-lookin' diffs | <img src="https://user-images.githubusercontent.com/52205/86275526-76792100-bba1-11ea-9e78-6be9baa80b29.png" /> |
+| [diff-so-fancy] | Syntax-highlighting pager for git, diff, grep, and blame output. | <img src="https://github.com/so-fancy/diff-so-fancy/blob/master/diff-so-fancy.png?raw=true" /> |
 | [dua]         | Conveniently learn about the usage of disk space of a given directory. | [![asciicast](https://asciinema.org/a/316444.svg)](https://asciinema.org/a/316444) |
 | [duf]         | Disk Usage/Free Utility - a better 'df' alternative. | <img src="https://raw.githubusercontent.com/muesli/duf/master/duf.png" /> |
 | [dust]        | A more intuitive version of du in rust. | <img src="https://raw.githubusercontent.com/bootandy/dust/master/media/snap.png" /> |
@@ -107,6 +109,8 @@ See each program's license.
 [btop]: https://github.com/aristocratos/btop
 [chafa]: https://hpjansson.org/chafa
 [crane]: https://github.com/google/go-containerregistry
+[delta]: https://github.com/dandavison/delta
+[diff-so-fancy]: https://github.com/so-fancy/diff-so-fancy
 [dua]: https://github.com/Byron/dua-cli
 [duf]: https://github.com/muesli/duf
 [dust]: https://github.com/bootandy/dust
