@@ -80,7 +80,7 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=86
+ARG BUILD_REVISION=87
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -118,7 +118,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai eza-community/eza && eza --version \
     && dra download -ai sharkdp/fd && fd --version \
     && dra download -aio fx antonmedv/fx && upx fx && fx --version \
-    && dra download -ai junegunn/fzf && fzf --version && ( fzf --bash > fzf.bash ) \
+    && dra download -ai junegunn/fzf && fzf --version && (fzf --bash > fzf.bash && fzf --zsh > fzf.zsh && fzf --fish > fzf.fish) \
     && dra download -ai charmbracelet/glow && upx glow && glow --version && rm -rf ~/.cache ~/.config \
     && dra download -ai sharkdp/hexyl && hexyl --version \
     && dra download -ai sharkdp/hyperfine && hyperfine --version \
