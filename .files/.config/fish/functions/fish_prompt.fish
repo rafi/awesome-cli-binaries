@@ -35,6 +35,10 @@ function fish_prompt --description 'Write out the prompt'
 	end
 	echo -n -s (set_color $color_cwd) (prompt_pwd) $normal " "$prompt_status
 
+	if test -n "$CMD_DURATION"; and [ "$CMD_DURATION" -gt 0 ]
+		echo -n -s (format_time $CMD_DURATION 0.5 false ' ')
+	end
+
 	# Show number of jobs
 	set --local njobs (count (jobs -p))
 	if test "$njobs" -gt 0

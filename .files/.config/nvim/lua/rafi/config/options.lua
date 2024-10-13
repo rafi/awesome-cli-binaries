@@ -69,6 +69,7 @@ opt.title = true
 opt.titlestring = '%<%F%=%l/%L - nvim'
 opt.mouse = 'nv'               -- Enable mouse in normal and visual modes only
 opt.virtualedit = 'block'      -- Position cursor anywhere in visual block
+opt.clipboard = 'unnamedplus'  -- Sync with system clipboard
 opt.confirm = true             -- Confirm unsaved changes before exiting buffer
 opt.conceallevel = 2           -- Hide * markup for bold and italic, but not markers with substitutions
 opt.signcolumn = 'yes'         -- Always show signcolumn
@@ -81,9 +82,19 @@ if not vim.g.vscode then
 	opt.ttimeoutlen = 10  -- Time out on key codes
 end
 
--- only set clipboard if not in ssh, to make sure the OSC 52
--- integration works automatically. Requires Neovim >= 0.10.0
-opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus' -- Sync with system clipboard
+if vim.env.SSH_TTY then
+	vim.g.clipboard = {
+		name = 'OSC 52',
+		copy = {
+			['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+			['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+		},
+		paste = {
+			['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+			['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+		},
+	}
+end
 
 -- opt.completeopt = 'menu,menuone,noinsert'
 opt.completeopt = 'menu,menuone,noselect'

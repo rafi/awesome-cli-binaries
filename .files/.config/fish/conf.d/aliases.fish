@@ -14,16 +14,12 @@ alias start '{ test -f .jig* && jig start .; } ||
 alias update 'brew update && brew outdated'
 alias upgrade 'ya pack -u && brew upgrade'
 alias outdated 'brew outdated'
-
-abbr dig doggo
-abbr ping gping
-abbr watch hwatch
-abbr wiki 'cd ~/code/rafi/rafi.io/content'
+alias wiki 'cd ~/code/rafi/*/content/wiki'
 
 abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat --plain --language=help"
 
 if [ $OS_DARWIN ]
-	command -q gdircolors; and abbr dircolors gdircolors	
+	command -q gdircolors; and abbr dircolors gdircolors
 	command -q gfind; and abbr find gfind
 	command -q gsort; and abbr sort gsort
 	command -q gstat; and abbr stat gstat
@@ -33,9 +29,15 @@ end
 # Lists ---------------------------------------------------- l for list -- {{{
 
 set -l lscmd ls
-command -q gls; and set lscmd gls
-command -q lsd; and set lscmd lsd
-command -q eza; and set lscmd "EZA_MIN_LUMINANCE=70 eza --color-scale=all --color-scale-mode=gradient"
+if command -q eza
+	set lscmd "EZA_MIN_LUMINANCE=75 eza --color-scale=all --color-scale-mode=gradient"
+	alias lt "$lscmd --icons=always --color=always --header --git --long --all --group-directories-first"
+else if command -q lsd
+	set lscmd lsd
+	alias lt "$lscmd --icon=always --color=always --header --git --long --all --group-directories-first"
+else if command -q gls
+	set lscmd gls
+end
 alias ls "$lscmd --color=always --group-directories-first"
 alias l  "$lscmd --all --classify --color=always --group-directories-first"
 alias ll "$lscmd --all --long --classify --color=always --group-directories-first"
@@ -81,8 +83,12 @@ abbr tree3 'tree -L 3'
 # }}}
 # Path ------------------------------------------------------------------- {{{
 
+# Jump to MRU directories
+abbr -a cdprev prevd
+abbr -a cdnext nextd
+
 # Paste current directory to clipboard
-alias cwd 'pwd | tr -d "\r\n" | pbcopy'
+alias cwd 'pwd | tr -d "\r\n" | fish_clipboard_copy'
 
 # Jump to previous directory with --
 abbr - 'cd -'
@@ -147,9 +153,6 @@ abbr gl  git lg -15
 abbr gll git lg
 abbr gld git lgd -15
 
-# Completely remove all unreachable objects from the repository.
-alias ggcnow='git -c gc.reflogExpireUnreachable=now gc --prune=now'
-
 # }}}
 # Docker ------------------------------------------------- d for docker -- {{{
 abbr d docker
@@ -175,7 +178,7 @@ alias dtag 'docker inspect --format "{{.Name}}
 # See more in functions.d/kubernetes.bash
 abbr k kubectl
 abbr kc  kubectx
-abbr ks  kubectl switch
+abbr ki  kubectl config-import
 abbr kd  kubectl describe
 abbr kg  kubectl get
 abbr kgy kubectl get -o yaml
@@ -294,14 +297,9 @@ else
 	or test command -q xdg-screensaver; and alias afk 'xdg-screensaver lock'
 	or test command -q gnome-screensaver-command; and alias afk 'gnome-screensaver-command --lock'
 
-	if test command -q pbcopy
-		if test command -q xclip
-			alias pbcopy "xclip -selection clipboard"
-			alias pbpaste "xclip -selection clipboard -o"
-		else if test command -q xsel
-			alias pbcopy "xsel --clipboard --input"
-			alias pbpaste "xsel --clipboard --output"
-		end
+	if ! test command -q pbcopy
+		alias pbcopy fish_clipboard_copy
+		alias pbpaste fish_clipboard_paste
 	end
 
 	# TODO
