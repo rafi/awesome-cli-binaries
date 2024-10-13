@@ -1,12 +1,12 @@
 # syntax = docker/dockerfile:1
-FROM debian:stable-slim AS builder
+FROM debian:stable-slim AS tmux-builder
 
 # Prepare environment
 RUN apt-get update \
     && apt-get upgrade --yes --show-upgraded \
     && apt-get install --yes \
         locales automake build-essential pkg-config libssl-dev libtool \
-        bison byacc imagemagick ca-certificates curl file \
+        libutf8proc-dev bison byacc imagemagick ca-certificates curl file \
     && apt-get purge --yes manpages manpages-dev \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/apt/lists/*
@@ -49,6 +49,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     cd "$ncurses_name" && \
     ./configure --prefix="$BUILD_DIR" \
         --enable-pc-files \
+        --with-shared \
         --with-termlib \
         --with-default-terminfo-dir=/usr/share/terminfo \
         --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" \
@@ -59,7 +60,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     rm -fr "${ncurses_name}.tar.gz" "$ncurses_name"
 
 # tmux
-ENV tmux_version=3.5
+ENV tmux_version=3.5a
 ENV tmux_name=tmux-${tmux_version}
 ENV tmux_url=https://github.com/tmux/tmux/releases/download/$tmux_version/$tmux_name.tar.gz
 RUN curl --retry 5 -LO "$tmux_url" && \
@@ -68,7 +69,7 @@ RUN curl --retry 5 -LO "$tmux_url" && \
     export LDFLAGS="-L$BUILD_DIR/lib" && \
     export CPPFLAGS="-I$BUILD_DIR/include -I$BUILD_DIR/include/ncurses -I$BUILD_DIR/include/event2" && \
     export PKG_CONFIG_PATH="$BUILD_DIR/lib/pkgconfig" && \
-    ./configure --prefix="$BUILD_DIR" --enable-static && \
+    ./configure --enable-utf8proc --prefix="$BUILD_DIR" --enable-static && \
     make -j4 && \
     make install && \
     cd .. && \
@@ -78,9 +79,38 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # --------------------------------------------------------------------------
 
+# Build fish-shell from source from faho fork:
+#
+# Use Debian 10 for older glib versions.
+FROM debian:buster AS fish-builder
+
+ENV LANGUAGE=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+# Prepare environment
+RUN apt-get update \
+    && apt-get upgrade --yes --show-upgraded \
+    && apt-get install --yes \
+        locales automake build-essential pkg-config libssl-dev libtool \
+        bison byacc imagemagick ca-certificates curl file \
+    && apt-get purge --yes manpages manpages-dev \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/apt/lists/*
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+WORKDIR /root
+
+RUN . .cargo/env \
+    && cargo install --git https://github.com/faho/fish-shell --branch fish-installer
+
+# --------------------------------------------------------------------------
+
 FROM alpine:3.20 AS downloader
 
-ARG BUILD_REVISION=87
+ARG BUILD_REVISION=88
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -89,8 +119,15 @@ RUN apk add --no-cache bash && rm -rf /etc/apk /lib/apk
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
 
-COPY --from=builder /opt/tmux/bin/tmux .
+# tmux
+COPY --from=tmux-builder /opt/tmux/bin/tmux .
 
+# fish-shell
+COPY --from=fish-builder /root/.cargo/bin/fish .
+COPY --from=fish-builder /root/.cargo/bin/fish_indent .
+COPY --from=fish-builder /root/.cargo/bin/fish_key_reader .
+
+# dra (Download Release Assets from GitHub)
 RUN dra_name=x86_64-unknown-linux-musl \
     && dra_version="$(wget -qO- https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
     && dra_url="https://github.com/devmatteini/dra/releases/download/$dra_version/dra-$dra_version-$dra_name.tar.gz" \
@@ -146,7 +183,9 @@ RUN wget -qO- https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}
 # Neovim repos:
 # - neovim/neovim - official releases
 # - neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
-RUN wget -q \
-    https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
+RUN wget -q https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
+
+# dotfiles
+COPY .files/.config /root/.config
 
 # --------------------------------------------------------------------------

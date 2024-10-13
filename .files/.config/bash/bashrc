@@ -12,7 +12,15 @@ source "$HOME/.config/bash/exports"
 [[ $- == *i* ]] || return 0
 
 # If fish is installed, use it instead. exec will terminate immediately here.
-# hash fish 2>/dev/null && exec fish -il
+if hash fish 2>/dev/null && [[ \
+	$(ps --no-header --pid=$PPID --format=comm) != "fish" \
+	&& -z ${BASH_EXECUTION_STRING} && ${SHLVL} == 1 \
+]]
+then
+	SHELL="$(which fish)"
+	shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=''
+	exec fish "$LOGIN_OPTION"
+fi
 
 # Remove mappings. See all: stty -a
 stty stop undef          # Remove the ^Q mapping

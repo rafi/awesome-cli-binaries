@@ -3,8 +3,7 @@ OUT   := 'bin'
 
 export BUILD_TOKEN := env_var_or_default('GITHUB_TOKEN', env_var_or_default('HOMEBREW_GITHUB_API_TOKEN', ''))
 
-[private]
-default:
+_default:
   @just --list --unsorted
 
 [private]
@@ -15,7 +14,7 @@ validate:
     exit 1; \
   fi
 
-build: docker binaries fish
+build: docker binaries
 dist: build archive
 
 # build docker image
@@ -36,25 +35,12 @@ archive:
   (cd "{{ OUT }}" && tar cvf ../static.tar *)
   xz -T0 -v9 static.tar
 
-fish:
-  #!/usr/bin/env bash -eu
-  docker buildx build \
-    --platform linux/amd64 \
-    --load \
-    -t fish -f fish.Dockerfile .
-
-  for BIN in fish fish_indent fish_key_reader; do
-    docker run --rm --platform linux/amd64 -v "$PWD":/artifacts fish \
-      cp -r /root/.cargo/bin/"$BIN" /artifacts/bin
-  done
-
 # sync local binaries to remote hosts
 sync +hosts:
-  #!/usr/bin/env bash -eu
-  for HOST in {{ hosts }}; do
+  for HOST in {{ hosts }}; do \
     rsync -rltzP --exclude '.git*' \
       --rsync-path='mkdir -p ~/.local/bin && rsync' \
-      ./"{{ OUT }}"/* "$HOST":./.local/bin/
+      ./"{{ OUT }}"/* "$HOST":./.local/bin/; \
   done
 
 # erase local binaries
@@ -67,5 +53,4 @@ distclean: clean
 
 # erase image and cache
 dockerclean:
-  -rm -rf $XDG_CACHE_HOME/buildkit/server-conf/*
   docker rmi -f {{ IMAGE }}

@@ -52,5 +52,21 @@ function _init_machine() {
 	fi
 }
 
+# Downloads binaries by extracting from container image via crane.
+function _download_binaries() {
+	local tmpdir; tmpdir="$(mktemp -d -t 'rafi.XXXXXXX')"
+	cd "$tmpdir" || exit
+
+	wget -qO- https://github.com/google/go-containerregistry/releases/latest/download/go-containerregistry_Linux_x86_64.tar.gz \
+		| tar xzf - crane && chmod 770 crane
+
+	./crane export rafib/awesome-cli-binaries - | tar xvf - usr/local/bin root/.config
+	mkdir -p ~/.local/bin
+	mv -f usr/local/bin/* ~/.local/bin/
+	cp -rf root/.config/* ~/.config/
+	cd ~ || exit
+	rm -rf "$tmpdir"
+}
+
 # Run script, unless it's sourced.
-(return 0 2>/dev/null) || _init_machine
+(return 0 2>/dev/null) || { _download_binaries && _init_machine; }

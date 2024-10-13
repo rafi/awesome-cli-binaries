@@ -66,6 +66,12 @@ bind \cN down-or-search
 bind -M insert \cN down-or-search
 
 # }}}
+# fzf https://github.com/junegunn/fzf {{{
+if test -f "$HOME"/.local/bin/fzf.fish
+	source "$HOME"/.local/bin/fzf.fish
+end
+
+# }}}
 # zoxide https://github.com/ajeetdsouza/zoxide {{{
 if command -q zoxide
 	# PERF: ~3ms
@@ -85,9 +91,6 @@ if test -f "$XDG_CONFIG_HOME/.env"
 	envsource "$XDG_CONFIG_HOME/.env"
 end
 # }}}
-
-# File list colors. (nice ones: rose-pine, nord, snazzy, one-dark, jellybeans)
-# set -gx LS_COLORS (vivid generate snazzy)
 
 # Attach or create tmux session on login. If in SSH, only list sessions.
 tmux_attach_unless_ssh
