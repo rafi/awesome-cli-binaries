@@ -2,6 +2,7 @@
 FROM debian:stable-slim AS tmux-builder
 
 # Prepare environment
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get upgrade --yes --show-upgraded \
     && apt-get install --yes \
@@ -79,8 +80,8 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # --------------------------------------------------------------------------
 
-# Build fish-shell from source from faho fork:
-#
+# Build fish-shell from source from faho fork with `fish-installer` branch:
+# https://github.com/faho/fish-shell/tree/fish-installer
 # Use Debian 10 for older glib versions.
 FROM debian:buster AS fish-builder
 
@@ -89,6 +90,7 @@ ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
 # Prepare environment
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get upgrade --yes --show-upgraded \
     && apt-get install --yes \
@@ -166,6 +168,7 @@ RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai lsd-rs/lsd && lsd --version \
     && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
+    && dra download -ai dalance/procs && procs --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
     && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
     && dra download -ai stern/stern && upx stern && stern --version \
