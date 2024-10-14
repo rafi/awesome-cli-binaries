@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-set -eu
-_VERSION='0.12.0'
+set -euo pipefail
+_VERSION='0.15.0'
 
 # Show usage.
 function _usage() {

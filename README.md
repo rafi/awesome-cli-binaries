@@ -3,7 +3,8 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/rafib/awesome-cli-binaries)](https://hub.docker.com/r/rafib/awesome-cli-binaries)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/rafib/awesome-cli-binaries)](https://hub.docker.com/r/rafib/awesome-cli-binaries)
 
-> Quickly install the newest utilities on any Linux server, sudo-less! :rocket: :moon:
+> Quickly install the newest utilities on Linux amd64 servers, sudo-less!
+> :rocket: :moon:
 >
 > This repository contains a collection of popular CLI utilities:
 >
@@ -11,29 +12,30 @@
 >   amd64, including latest tmux and fish.
 > - [.files](./.files/) - Dotfiles to copy to remote servers.
 > - [setup.sh](./setup.sh) - Script to provision remote servers.
+>
+> Or just browse the [catalog](#binaries)…
 
-## Use-case
+## Accompanying Provisioning Script
 
-Working on many remote servers? Can't install your favorite tools for some
-reason? With this repo, you can quickly upload them to a remote Linux server,
-together with comfortable pre-made configurations.
-
-## Setup
+Use-case :bulb: Working on many remote servers? Can't install your favorite tools for
+some reason? With this repo, you can quickly upload them to a remote Linux
+server, together with comfortable pre-made configurations.
 
 > [!WARNING]
 > [`.files/*`](./.files/) will be copied to the remote server you provision with
-> this script, so make sure to backup the remote `~/.config` directory first.
+> this script, so make sure to backup the remote `~/.config` directory first, if
+> there's anything valuable there.
 
-### Option 1: Provision on Remote
+### Option ⟪1⟫ :space_invader: Provision from Remote
 
-❗ Login to the **remote server** and run:
+Login and run on **remote server**: (:warning: READ WARNING ABOVE BEFORE!)
 
 ```sh
 ssh my-remote-server
 curl -fL init.rafi.io | bash
 ```
 
-### Option 2: Provision From Workstation
+### Option ⟪2⟫ :computer: Provision from Workstation
 
 Prerequisites: Install [just] on your workstation. (macOS: `brew install just`)
 
