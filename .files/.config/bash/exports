@@ -18,6 +18,11 @@ export  XDG_STATE_HOME="$HOME/.local/state"
 [ -d "$XDG_DATA_HOME" ]   || mkdir -m 0750 "$XDG_DATA_HOME"
 [ -d "$XDG_STATE_HOME" ]  || mkdir -m 0750 "$XDG_STATE_HOME"
 
+# terminfo in config home.
+if [ -d "$XDG_CONFIG_HOME/terminfo" ]; then
+	export TERMINFO="$XDG_CONFIG_HOME/terminfo"
+fi
+
 # Source secrets
 [ -f "$XDG_CONFIG_HOME/.secrets.env" ] && source "$XDG_CONFIG_HOME/.secrets.env"
 
@@ -73,26 +78,5 @@ export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/rc"
 
 export FZF_DEFAULT_OPTS="--margin 1,5% --border --info=inline-right --separator --reverse --height 100% --bind=ctrl-d:page-down,ctrl-u:page-up,ctrl-y:yank,tab:down,btab:up"
 export FZF_DEFAULT_COMMAND='rg --vimgrep --files --follow --hidden --no-ignore-vcs --smart-case --glob !**/.git/*'
-
-# Desktop and shells
-# ----
-
-# Look for terminfo files under data
-if [ -d "$XDG_CONFIG_HOME/terminfo" ]; then
-	export TERMINFO="$XDG_CONFIG_HOME/terminfo"
-	export TERMINFO_DIRS="$TERMINFO"
-fi
-
-# Look for terminfo files under data
-if [ -d "$SSHHOME/.sshrc.d/terminfo" ]; then
-	export TERMINFO="$SSHHOME/.sshrc.d/terminfo"
-fi
-
-if [ -d "/usr/share/terminfo" ]; then
-	export TERMINFO_DIRS="$TERMINFO_DIRS:/usr/share/terminfo"
-fi
-if [ -d "/usr/opt/ncurses/share/terminfo" ]; then
-	export TERMINFO_DIRS="$TERMINFO_DIRS:/usr/opt/ncurses/share/terminfo"
-fi
 
 # vim: set ft=sh ts=2 sw=2 tw=80 noet :
