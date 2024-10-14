@@ -121,14 +121,6 @@ RUN apk add --no-cache bash && rm -rf /etc/apk /lib/apk
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
 
-# tmux
-COPY --from=tmux-builder /opt/tmux/bin/tmux .
-
-# fish-shell
-COPY --from=fish-builder /root/.cargo/bin/fish .
-COPY --from=fish-builder /root/.cargo/bin/fish_indent .
-COPY --from=fish-builder /root/.cargo/bin/fish_key_reader .
-
 # dra (Download Release Assets from GitHub)
 RUN dra_name=x86_64-unknown-linux-musl \
     && dra_version="$(wget -qO- https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
@@ -177,18 +169,24 @@ RUN --mount=type=secret,id=token \
     && dra download -aI yq_linux_amd64 -o yq mikefarah/yq && yq --version \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
-# Non-GitHub binaries
-# ---
-
+# Chafa
 ARG chafa_version=1.14.4
 RUN wget -qO- https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
-# Neovim repos:
-# - neovim/neovim - official releases
-# - neovim/neovim-releases - best-effort, unsupported builds with glibc 2.17
+# Neovim repositories
+# - github.com/neovim/neovim - official releases
+# - github.com/neovim/neovim-releases - best-effort builds with glibc 2.17
 RUN wget -q https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
 
-# dotfiles
+# Pre-built tmux
+COPY --from=tmux-builder /opt/tmux/bin/tmux .
+
+# Pre-built fish-shell
+COPY --from=fish-builder /root/.cargo/bin/fish .
+COPY --from=fish-builder /root/.cargo/bin/fish_indent .
+COPY --from=fish-builder /root/.cargo/bin/fish_key_reader .
+
+# Pre-made dotfiles
 COPY .files/.config /root/.config
 
 # --------------------------------------------------------------------------
