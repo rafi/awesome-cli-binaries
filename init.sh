@@ -55,17 +55,23 @@ function _init_machine() {
 # Downloads binaries by extracting from container image via crane.
 function _download_binaries() {
 	local tmpdir; tmpdir="$(mktemp -d -t 'rafi.XXXXXXX')"
+	mkdir -p ~/.config ~/.local/bin
+	echo ":: Created temporary directory '$tmpdir'"
 	cd "$tmpdir" || exit
 
 	wget -qO- https://github.com/google/go-containerregistry/releases/latest/download/go-containerregistry_Linux_x86_64.tar.gz \
 		| tar xzf - crane && chmod 770 crane
 
-	./crane export rafib/awesome-cli-binaries - | tar xvf - usr/local/bin root/.config
-	mkdir -p ~/.local/bin
+	echo ':: Downloaded crane. Exporting image…'
+	./crane export rafib/awesome-cli-binaries - | tar xf - usr/local/bin root/.config
+
+	echo ':: Setup binaries at ~/.local/bin/'
 	mv -f usr/local/bin/* ~/.local/bin/
+	echo ':: Setup config files at ~/.config/'
 	cp -rf root/.config/* ~/.config/
 	cd ~ || exit
 	rm -rf "$tmpdir"
+	echo 'Done.'
 }
 
 # Run script, unless it's sourced.
