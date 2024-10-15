@@ -94,8 +94,8 @@ function _download_binaries() {
 # Run on remote: Download binaries and ~/.config files.
 function run_on_remote() {
 	local __arch; __arch="$(_detect_arch)"
-	if [ ! "$__arch" = 'amd64' ]; then
-		echo >&2 'ERROR: Only Linux amd64 architecture is currently supported.'
+	if [ ! "$__arch" = 'amd64' ] && [ ! "$__arch" = 'arm64' ]; then
+		echo >&2 'ERROR: Only Linux amd64/arm64 architecture is currently supported.'
 		exit 1
 	fi
 

@@ -25,6 +25,14 @@ docker: validate
     --load \
     -t {{ IMAGE }} .
 
+# build and release docker image
+release: validate
+  docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --secret id=token,env=BUILD_TOKEN \
+    --push \
+    -t {{ IMAGE }} .
+
 # copy binaries locally
 binaries:
   docker run --rm --platform linux/amd64 -v "$PWD":/artifacts {{ IMAGE }} \

@@ -1,15 +1,15 @@
-# Awesome (Linux amd64) CLI Binaries
+# Awesome (Linux amd64/arm64) CLI Binaries
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/rafib/awesome-cli-binaries)](https://hub.docker.com/r/rafib/awesome-cli-binaries)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/rafib/awesome-cli-binaries)](https://hub.docker.com/r/rafib/awesome-cli-binaries)
 
-> Quickly install the newest utilities on Linux amd64 servers, sudo-less!
+> Quickly install the newest utilities on Linux amd64/arm64 servers, sudo-less!
 > :rocket: :moon:
 >
 > This repository contains a collection of popular CLI utilities:
 >
 > - [Dockerfile](./Dockerfile) - Builds all binaries statically linked for Linux
->   amd64, including latest tmux and fish.
+>   amd64 and arm64, including latest tmux and fish.
 > - [.files](./.files/) - Dotfiles to copy to remote servers.
 > - [setup.sh](./setup.sh) - Script to provision remote servers.
 >

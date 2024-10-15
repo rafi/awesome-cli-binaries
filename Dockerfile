@@ -105,27 +105,38 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 WORKDIR /root
 
+ARG BUILD_REVISION=89
 RUN . .cargo/env \
     && cargo install --git https://github.com/faho/fish-shell --branch fish-installer
 
 # --------------------------------------------------------------------------
 
-FROM alpine:3.20 AS downloader
+FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=88
+ARG BUILD_REVISION=89
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
-RUN apk add --no-cache bash && rm -rf /etc/apk /lib/apk
+# RUN apk add --no-cache bash && rm -rf /etc/apk /lib/apk
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get upgrade --yes --show-upgraded \
+    && apt-get install --yes bash wget \
+    && apt-get purge --yes manpages manpages-dev \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/apt/lists/*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
 
 # dra (Download Release Assets from GitHub)
-RUN dra_name=x86_64-unknown-linux-musl \
+RUN arch="$(uname -m)" \
+    && dra_name="${arch}-unknown-linux-$([ "$arch" = x86_64 ] && echo musl || echo gnu)" \
     && dra_version="$(wget -qO- https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
     && dra_url="https://github.com/devmatteini/dra/releases/download/$dra_version/dra-$dra_version-$dra_name.tar.gz" \
+    && echo $dra_url \
     && wget -qO- "$dra_url" | tar -xzo --strip-components 1 "dra-$dra_version-$dra_name/dra" \
+    && ls -al \
     && chmod 770 dra \
     && dra --version
 
@@ -160,13 +171,11 @@ RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai lsd-rs/lsd && lsd --version \
     && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
-    && dra download -ai dalance/procs && procs --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
     && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
     && dra download -ai stern/stern && upx stern && stern --version \
     && dra download -ai ducaale/xh && xh --version \
     && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
-    && dra download -aI yq_linux_amd64 -o yq mikefarah/yq && yq --version \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
