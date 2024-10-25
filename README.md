@@ -32,7 +32,7 @@ Login and run on **remote server**: (:warning: READ WARNING ABOVE BEFORE!)
 
 ```sh
 ssh my-remote-server
-curl -fL init.rafi.io | bash
+curl -sfL init.rafi.io | bash
 ```
 
 ### Option ⟪2⟫ :computer: Provision from Workstation

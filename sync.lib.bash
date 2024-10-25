@@ -69,16 +69,17 @@ function _detect_arch() {
 # Downloads binaries by extracting from container image via crane.
 function _download_binaries() {
 	local tmpdir; tmpdir="$(mktemp -d -t 'init.rafi.io.XXXXXXX')"
-	echo ":: Created temporary directory '$tmpdir'"
+	echo ":: Temporary directory: '$tmpdir'"
 	cd "$tmpdir" || exit
 
+	echo ':: Download crane…'
 	local crane_repo=google/go-containerregistry
 	local crane_file
 	crane_file="go-containerregistry_$(uname -s)_$([ "$__arch" = amd64 ] && uname -m || echo "$__arch").tar.gz"
 	wget -qO- "https://github.com/$crane_repo/releases/latest/download/$crane_file" \
 		| tar xzf - crane && chmod 770 crane
 
-	echo ':: Downloaded crane. Exporting image…'
+	echo ':: Download and export image…'
 	./crane export rafib/awesome-cli-binaries - \
 		| tar xf - usr/local/bin root/.config
 
@@ -99,26 +100,8 @@ function run_on_remote() {
 		exit 1
 	fi
 
-	# Confirm
 	echo -e "Rafi's rootless provisioning script"
 	echo -e '-- USE AT YOUR OWN RISK --\n'
-	echo "ARCH: $__arch"
-	echo "SHELL: $SHELL (bash $BASH_VERSION)"
-	echo "TERM: $TERM"
-	echo "LANG: $LANG"
-	echo
-	echo 'This will overwrite existing files in (if any):'
-	echo '  ~/.config files:'
-	echo '    https://github.com/rafi/awesome-cli-binaries/tree/master/.files'
-	echo '  ~/.local/bin files:'
-	echo '    https://github.com/rafi/awesome-cli-binaries?tab=readme-ov-file#binaries'
-	echo
-	read -p 'Continue? ' -n 1 -r choice
-	echo
-	if [[ ! $choice =~ ^[Yy]$ ]]; then
-		echo >&2 'Aborted.'
-		return
-	fi
 
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
 

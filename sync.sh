@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-_VERSION='0.15.0'
+_VERSION='0.16.0'
 
 # Show usage.
 function _usage() {
@@ -20,6 +20,19 @@ EOF
 function _main() {
 	local SSH_CMD=ssh
 	local host='' hosts=()
+
+	echo -e "Rafi's rootless provisioning script"
+	echo -e '-- USE AT YOUR OWN RISK --\n'
+	echo "SHELL: $SHELL (bash $BASH_VERSION)"
+	echo "TERM: $TERM"
+	echo "LANG: $LANG"
+	echo
+	echo 'This will overwrite existing files in (if any):'
+	echo '  ~/.config files:'
+	echo '    https://github.com/rafi/awesome-cli-binaries/tree/master/.files'
+	echo '  ~/.local/bin files:'
+	echo '    https://github.com/rafi/awesome-cli-binaries?tab=readme-ov-file#binaries'
+	echo
 
 	while [[ $# -gt 0 ]]; do
 		case "${1}" in
