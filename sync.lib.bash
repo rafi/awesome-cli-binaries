@@ -3,8 +3,8 @@ set -euo pipefail
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # !!! This will overwrite files in ~/.config !!!!
 # -----------------------------------------------
-# This file is being sourced by setup.sh --
-# and should NOT be used by itself.
+# This file is being sourced by sync.sh --
+# and should NOT be used by itself!
 
 # Bootstrap a remote host.
 function _init_machine() {

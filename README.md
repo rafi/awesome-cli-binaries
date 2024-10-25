@@ -11,7 +11,7 @@
 > - [Dockerfile](./Dockerfile) - Builds all binaries statically linked for Linux
 >   amd64 and arm64, including latest tmux and fish.
 > - [.files](./.files/) - Dotfiles to copy to remote servers.
-> - [setup.sh](./setup.sh) - Script to provision remote servers.
+> - [sync.sh](./sync.sh) - Script to provision remote servers.
 >
 > Or just browse the [catalog](#binaries)…
 
@@ -44,11 +44,11 @@ git clone git@github.com/rafi/awesome-cli-binaries.git
 cd awesome-cli-binaries
 
 just binaries
-./setup.sh me@myserver.com [more...]
+./sync.sh me@myserver.com [more...]
 ```
 
 `just binaries` copies all binaries to local `./bin/` directory, and the
-[`setup.sh`](./setup.sh) script provisions the remote server.
+[`sync.sh`](./sync.sh) script provisions the remote server.
 
 ## Sync Binaries
 

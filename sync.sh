@@ -49,7 +49,7 @@ function _main() {
 		fi
 
 		echo ":: [${host}] bootstrap remote"
-		source init.sh
+		source sync.lib.bash
 		if ! _run_remotely "${host}" _init_machine
 		then
 			echo "[ERROR] failed bootstrap on '${host}'" && exit 3
