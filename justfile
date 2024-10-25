@@ -22,24 +22,28 @@ build: docker binaries
 dist: build archive
 
 # build docker image
-docker: _validate
+docker arch=ARCH: _validate
   docker buildx build \
-    --platform linux/{{ ARCH }} \
+    --platform linux/{{ arch }} \
     --secret id=token,env=BUILD_TOKEN \
+    --cache-from=rafib/awesome-cli-binaries:{{ arch }} \
     --load \
-    -t {{ IMAGE }} .
+    -t {{ IMAGE }}:{{ arch }} .
 
 # build and release docker image
 release: _validate
   docker buildx build \
     --platform linux/amd64,linux/arm64 \
+    --cache-from type=local,src=/tmp/.buildx-cache \
+    --cache-to type=local,dest=/tmp/.buildx-cache \
     --secret id=token,env=BUILD_TOKEN \
     --push \
-    -t {{ IMAGE }} .
+    -t {{ IMAGE }}:latest .
 
 # copy binaries locally
-binaries arch='amd64':
-  docker run --rm --platform linux/{{ arch }} -v "$PWD":/artifacts {{ IMAGE }} \
+binaries arch=ARCH:
+  docker run --rm --platform linux/{{ arch }} \
+    -v "$PWD":/artifacts {{ IMAGE }}:{{ arch }} \
     cp -r /usr/local/bin /artifacts
 
 # compress local binaries
@@ -66,3 +70,5 @@ distclean: clean
 # erase image and cache
 dockerclean:
   docker rmi -f {{ IMAGE }}
+  docker rmi -f {{ IMAGE }}-amd64
+  docker rmi -f {{ IMAGE }}-arm64

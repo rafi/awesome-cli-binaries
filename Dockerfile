@@ -131,6 +131,10 @@ RUN apt-get update \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
 
+# Pre-defined build arguments
+# See https://docs.docker.com/build/building/variables/#pre-defined-build-arguments
+ARG TARGETARCH
+
 # dra (Download Release Assets from GitHub)
 RUN arch="$(uname -m)" \
     && dra_name="${arch}-unknown-linux-$([ "$arch" = x86_64 ] && echo musl || echo gnu)" \
@@ -178,6 +182,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai stern/stern && upx stern && stern --version \
     && dra download -ai ducaale/xh && xh --version \
     && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
+    && dra download -aI yq_linux_${TARGETARCH} -o yq mikefarah/yq && yq --version \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
