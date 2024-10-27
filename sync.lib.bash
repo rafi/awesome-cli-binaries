@@ -29,9 +29,13 @@ function _init_machine() {
 		fi
 	done
 
-	# Install fish
-	if [ -f ~/.local/bin/fish ] && [ ! -d ~/.local/share/fish/install ]; then
-		~/.local/bin/fish --install=noconfirm || echo >&2 'fish already installed?'
+	# Install fish, unless --no-fish is passed.
+	if [[ "$*" == *"--no-fish"* ]]; then
+		rm -f ~/.local/bin/fish ~/.local/bin/fish_*
+	else
+		if [ -f ~/.local/bin/fish ] && [ ! -d ~/.local/share/fish/install ]; then
+			~/.local/bin/fish --install=noconfirm || echo >&2 'fish already installed?'
+		fi
 	fi
 
 	# Install appimages
@@ -89,7 +93,6 @@ function _download_binaries() {
 	cp -rf root/.config/* ~/.config/
 	cd ~ || exit
 	rm -rf "$tmpdir"
-	echo 'Done.'
 }
 
 # Run on remote: Download binaries and ~/.config files.
@@ -101,16 +104,17 @@ function run_on_remote() {
 	fi
 
 	echo -e "Rafi's rootless provisioning script"
-	echo -e '-- USE AT YOUR OWN RISK --\n'
+	echo -e '~#-- USE AT YOUR OWN RISK --#~\n'
 
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
 
 	_download_binaries
-	_init_machine
+	_init_machine "$@"
 
+	echo 'Done, enjoy!'
 	# shellcheck disable=1090
 	source ~/.config/bash/bashrc
 }
 
 # Run script, unless it's sourced.
-(return 0 2>/dev/null) || run_on_remote
+(return 0 2>/dev/null) || run_on_remote "$@"
