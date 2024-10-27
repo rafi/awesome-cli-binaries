@@ -105,7 +105,8 @@ function _download_binaries() {
 	local crane_repo=google/go-containerregistry
 	local crane_file
 	crane_file="go-containerregistry_$(uname -s)_$([ "$__arch" = amd64 ] && uname -m || echo "$__arch").tar.gz"
-	wget -qO- "https://github.com/$crane_repo/releases/latest/download/$crane_file" \
+	wget -qO- --no-cookie \
+		"https://github.com/$crane_repo/releases/latest/download/$crane_file" \
 		| tar xzf - crane && chmod 770 crane
 
 	echo ':: Download and export image…'
