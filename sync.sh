@@ -21,18 +21,8 @@ function _main() {
 	local SSH_CMD=ssh
 	local host='' hosts=()
 
-	echo -e "Rafi's rootless provisioning script"
-	echo -e '-- USE AT YOUR OWN RISK --\n'
-	echo "SHELL: $SHELL (bash $BASH_VERSION)"
-	echo "TERM: $TERM"
-	echo "LANG: $LANG"
-	echo
-	echo 'This will overwrite existing files in (if any):'
-	echo '  ~/.config files:'
-	echo '    https://github.com/rafi/awesome-cli-binaries/tree/master/.files'
-	echo '  ~/.local/bin files:'
-	echo '    https://github.com/rafi/awesome-cli-binaries?tab=readme-ov-file#binaries'
-	echo
+	source sync.lib.bash
+	_intro
 
 	while [[ $# -gt 0 ]]; do
 		case "${1}" in
@@ -62,7 +52,6 @@ function _main() {
 		fi
 
 		echo ":: [${host}] bootstrap remote"
-		source sync.lib.bash
 		if ! _run_remotely "${host}" _init_machine
 		then
 			echo "[ERROR] failed bootstrap on '${host}'" && exit 3

@@ -6,6 +6,31 @@ set -euo pipefail
 # This file is being sourced by sync.sh --
 # and should NOT be used by itself!
 
+# shellcheck disable=SC2016
+function _intro() {
+	echo "Rafi's rootless work setup"
+	echo '~ USE AT YOUR OWN RISK  ~'
+  echo '         ______         '
+  echo '      .-"      "-.      '
+  echo '     /            \     '
+  echo '    |              |    '
+  echo '    |,  .-.  .-.  ,|    '
+  echo '    | )(__/  \__)( |    '
+  echo '    |/     /\     \|    '
+  echo '    (_     ^^     _)    '
+  echo '     \__|IIIIII|__/     '
+  echo '      | \IIIIII/ |      '
+  echo '      \          /      '
+  echo 'jgs    `--------`       '
+	echo
+	echo 'This will overwrite existing files in (if any):'
+	echo '  ~/.config files:'
+	echo '    https://github.com/rafi/awesome-cli-binaries/tree/master/.files'
+	echo '  ~/.local/bin files:'
+	echo '    https://github.com/rafi/awesome-cli-binaries?tab=readme-ov-file#binaries'
+	echo
+}
+
 # Bootstrap a remote host.
 function _init_machine() {
 	mkdir -p ~/.config ~/.cache ~/.local/opt
@@ -74,7 +99,7 @@ function _detect_arch() {
 function _download_binaries() {
 	local tmpdir; tmpdir="$(mktemp -d -t 'init.rafi.io.XXXXXXX')"
 	echo ":: Temporary directory: '$tmpdir'"
-	cd "$tmpdir" || exit
+	cd "$tmpdir" || { echo >&2 "Unable to cd '$tmpdir'"; exit 1; }
 
 	echo ':: Download crane…'
 	local crane_repo=google/go-containerregistry
@@ -91,30 +116,30 @@ function _download_binaries() {
 	mv -f usr/local/bin/* ~/.local/bin/
 	echo ':: Setup config files at ~/.config/'
 	cp -rf root/.config/* ~/.config/
-	cd ~ || exit
+	cd ~ || { echo >&2 'Unable to cd ~, aborting.'; exit 1; }
 	rm -rf "$tmpdir"
 }
 
 # Run on remote: Download binaries and ~/.config files.
-function run_on_remote() {
+function _run_if_executed_directly() {
 	local __arch; __arch="$(_detect_arch)"
 	if [ ! "$__arch" = 'amd64' ] && [ ! "$__arch" = 'arm64' ]; then
 		echo >&2 'ERROR: Only Linux amd64/arm64 architecture is currently supported.'
 		exit 1
 	fi
 
-	echo -e "Rafi's rootless provisioning script"
-	echo -e '~#-- USE AT YOUR OWN RISK --#~\n'
+	_intro
 
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
 
 	_download_binaries
 	_init_machine "$@"
 
-	echo 'Done, enjoy!'
-	# shellcheck disable=1090
-	source ~/.config/bash/bashrc
+	echo "\\"
+	echo ' | Done, run "source ~/.bashrc" or restart terminal to apply changes.'
+	echo ' | Enjoy!'
+	echo '/'
 }
 
 # Run script, unless it's sourced.
-(return 0 2>/dev/null) || run_on_remote "$@"
+(return 0 2>/dev/null) || _run_if_executed_directly "$@"
