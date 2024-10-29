@@ -97,7 +97,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
 | [stern]       | Tail multiple pods and containers on Kubernetes. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
 | [xh]          | Friendly and fast tool for sending HTTP requests. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
-| [yazi]        | Blazing fast terminal file manager, based on async I/O. | <video src="https://yazi-rs.github.io/videos/input_select.mp4" controls="controls" muted="muted" style="max-height:320px; min-height: 200px"></video> |
+| [yazi]        | Blazing fast terminal file manager, based on async I/O. | <img src="https://repository-images.githubusercontent.com/663900193/c1f495b1-8d69-4dba-a7e3-dbfde3a817f6" /> |
 | [yq]          | Portable command-line YAML, JSON, XML, CSV, TOML and properties processor. | <img src="https://miro.medium.com/v2/resize:fit:640/1*gsqh7A_ivvZM5ht66hx3Xw.png" /> |
 | [zoxide]      | zoxide is a smarter cd command, inspired by z and autojump. | <img src="https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/tutorial.webp" /> |
 
@@ -110,7 +110,7 @@ Awesome lists:
 
 ## License
 
-See each program's license.
+See [LICENSE.spdx](./LICENSE.spdx) for license information.
 
 [bandwhich]: https://github.com/imsnif/bandwhich
 [bat]: https://github.com/sharkdp/bat

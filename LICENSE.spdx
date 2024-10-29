@@ -1,0 +1,52 @@
+SPDXVersion: SPDX-2.1
+PackageName: awesome-cli-binaries
+PackageHomePage: https://github.com/rafi/awesome-cli-binaries
+PackageLicenseDeclared: GPL-3.0
+
+PackageCopyrightText: <text>
+This repository contains binaries of various command line tools for Linux.
+The binaries are compiled from the source code of the respective projects:
+
+bandwhich: MIT https://github.com/imsnif/bandwhich/blob/main/LICENSE.md
+bat: Apache-2.0 https://github.com/sharkdp/bat/blob/master/LICENSE-APACHE
+     MIT https://github.com/sharkdp/bat/blob/master/LICENSE-MIT
+btop: Apache-2.0 https://github.com/aristocratos/btop/blob/main/LICENSE
+chafa: LGPL-3.0 https://github.com/hpjansson/chafa/blob/master/COPYING.LESSER
+       GPL-3.0 https://github.com/hpjansson/chafa/blob/master/COPYING
+crane: Apache License 2.0 https://github.com/google/go-containerregistry/blob/main/LICENSE
+delta: MIT https://github.com/dandavison/delta/blob/main/LICENSE
+diff-so-fancy: MIT https://github.com/so-fancy/diff-so-fancy/blob/next/LICENSE
+dua: MIT https://github.com/Byron/dua-cli/blob/main/LICENSE
+duf: MIT https://github.com/muesli/duf/blob/master/LICENSE
+dust: Apache-2.0 https://github.com/bootandy/dust/blob/master/LICENSE
+dyff: MIT https://github.com/homeport/dyff/blob/main/LICENSE
+erdtree: MIT https://github.com/solidiquis/erdtree/blob/master/LICENSE
+eza: EUPL-1.2 https://github.com/eza-community/eza/blob/main/LICENSE.txt
+fd: Apache-2.0 https://github.com/sharkdp/fd/blob/master/LICENSE-APACHE
+    MIT https://github.com/sharkdp/fd/blob/master/LICENSE-MIT
+fish: GPL-2.0 https://github.com/fish-shell/fish-shell/blob/master/COPYING
+fx: MIT https://github.com/antonmedv/fx/blob/master/LICENSE
+fzf: MIT https://github.com/junegunn/fzf/blob/master/LICENSE
+glow: MIT https://github.com/charmbracelet/glow/blob/master/LICENSE
+hexyl: Apache-2.0 https://github.com/sharkdp/hexyl/blob/master/LICENSE-APACHE
+       MIT https://github.com/sharkdp/hexyl/blob/master/LICENSE-MIT
+hyperfine: Apache-2.0 https://github.com/sharkdp/hyperfine/blob/master/LICENSE-APACHE
+           MIT https://github.com/sharkdp/hyperfine/blob/master/LICENSE-MIT
+jq: License https://github.com/jqlang/jq/blob/master/COPYING
+just: CC0-1.0 https://github.com/casey/just/blob/master/LICENSE
+lsd: Apache-2.0 https://github.com/lsd-rs/lsd/blob/master/LICENSE
+mkcert: BSD-3-Clause https://github.com/FiloSottile/mkcert/blob/master/LICENSE
+procs: MIT https://github.com/dalance/procs/blob/master/LICENSE
+neovim: Apache-2.0 https://github.com/neovim/neovim/blob/master/LICENSE.txt
+ripgrep: The Unlicense https://github.com/BurntSushi/ripgrep/blob/master/UNLICENSE
+         MIT https://github.com/BurntSushi/ripgrep/blob/master/LICENSE-MIT
+starship: ISC https://github.com/starship/starship/blob/master/LICENSE
+stern: Apache-2.0 https://github.com/stern/stern/blob/master/LICENSE
+trashy: Apache-2.0 https://github.com/oberblastmeister/trashy/blob/master/LICENSE-APACHE
+        MIT https://github.com/oberblastmeister/trashy/blob/master/LICENSE-MIT
+tmux: ISC https://github.com/tmux/tmux/blob/master/COPYING
+xh: MIT https://github.com/ducaale/xh/blob/master/LICENSE
+yazi: MIT https://github.com/sxyazi/yazi/blob/main/LICENSE
+yq: MIT https://github.com/mikefarah/yq/blob/master/LICENSE
+zoxide: MIT https://github.com/ajeetdsouza/zoxide/blob/main/LICENSE
+</text>
