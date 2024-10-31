@@ -4,7 +4,7 @@
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/rafib/awesome-cli-binaries)](https://hub.docker.com/r/rafib/awesome-cli-binaries)
 
 > Quickly install the newest utilities on Linux amd64/arm64 servers, sudo-less!
-> :rocket: :moon:
+> 🚀 🌔
 >
 > This repository contains a collection of popular CLI utilities:
 >
@@ -17,8 +17,8 @@
 
 ## Accompanying Provisioning Script
 
-Use-case :bulb: Working on many remote servers? Can't install your favorite tools for
-some reason? With this repo, you can quickly upload them to a remote Linux
+Use-case: 💡 Working on many remote servers? Can't install your favorite tools
+for some reason? With this repo, you can quickly upload them to a remote Linux
 server, together with comfortable pre-made configurations.
 
 > [!WARNING]
@@ -26,16 +26,16 @@ server, together with comfortable pre-made configurations.
 > this script, so make sure to backup the remote `~/.config` directory first, if
 > there's anything valuable there.
 
-### Option ⟪1⟫ :space_invader: Provision from Remote
+### Option ⟪1⟫ 👾 Provision from Remote
 
-Login and run on **remote server**: (:warning: READ WARNING ABOVE BEFORE!)
+Login and run on **remote server**: (⚠️ READ WARNING ABOVE BEFORE!)
 
 ```sh
 ssh my-remote-server
 curl -sfL init.rafi.io | bash
 ```
 
-### Option ⟪2⟫ :computer: Provision from Workstation
+### Option ⟪2⟫ 💻 Provision from Workstation
 
 Prerequisites: Install [just] on your workstation. (macOS: `brew install just`)
 
@@ -43,14 +43,14 @@ Prerequisites: Install [just] on your workstation. (macOS: `brew install just`)
 git clone git@github.com/rafi/awesome-cli-binaries.git
 cd awesome-cli-binaries
 
-just binaries
+just binaries amd64  # or arm64
 ./sync.sh me@myserver.com [more...]
 ```
 
 `just binaries` copies all binaries to local `./bin/` directory, and the
 [`sync.sh`](./sync.sh) script provisions the remote server.
 
-## Sync Binaries
+### Option ⟪3⟫ 🧰 Copy Only Binaries
 
 If you just want to copy or update the binaries on remote, run:
 
@@ -63,7 +63,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 ## Binaries
 
 - [tmux] v3.5a statically linked (+ncurses +libevent)
-- [fish] v4
+- [fish] v4 (rust rewrite)
 - [neovim] build with support for glibc 2.17
 - and:
 
