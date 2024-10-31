@@ -26,9 +26,9 @@ docker arch=ARCH: _validate
   docker buildx build \
     --platform linux/{{ arch }} \
     --secret id=token,env=BUILD_TOKEN \
-    --cache-from=rafib/awesome-cli-binaries:{{ arch }} \
+    --cache-from=rafib/awesome-cli-binaries \
     --load \
-    -t {{ IMAGE }}:{{ arch }} .
+    -t {{ IMAGE }} .
 
 # build and release docker image
 release: _validate
@@ -43,7 +43,7 @@ release: _validate
 # copy binaries locally
 binaries arch=ARCH:
   docker run --rm --platform linux/{{ arch }} \
-    -v "$PWD":/artifacts {{ IMAGE }}:{{ arch }} \
+    -v "$PWD":/artifacts {{ IMAGE }} \
     cp -r /usr/local/bin /artifacts
 
 # compress local binaries
