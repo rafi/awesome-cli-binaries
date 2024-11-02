@@ -1,13 +1,9 @@
-#!/usr/bin/env bash
-set -euo pipefail
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!! This will overwrite files in ~/.config !!!!
-# -----------------------------------------------
-# This file is being sourced by sync.sh --
-# and should NOT be used by itself!
+#!/usr/bin/env sh
+set -eu
 
 # shellcheck disable=SC2016
-function _intro() {
+_intro() {
+	echo
 	echo "Rafi's rootless work setup"
 	echo '~ USE AT YOUR OWN RISK  ~'
 	echo '         ______         '
@@ -32,34 +28,54 @@ function _intro() {
 }
 
 # Bootstrap a remote host.
-function _init_machine() {
+_init_machine() {
 	mkdir -p ~/.config ~/.cache ~/.local/opt
 
 	# Persist custom bashrc import in ~/.bashrc
-	if ! grep -q 'config\/bash\/bashrc' ~/.bashrc; then
-		echo -e "\n[ -f \$HOME/.config/bash/bashrc ] && . \$HOME/.config/bash/bashrc" >> ~/.bashrc
+	custom_bashrc='.config/bash/bashrc'
+	if test -f ~/.bashrc && ! grep -q "$custom_bashrc" ~/.bashrc; then
+		# shellcheck disable=SC2016
+		printf '\n[ -f %s ] && . %s\n' \
+			'$HOME/'"$custom_bashrc" '$HOME/'"$custom_bashrc" \
+			>> ~/.bashrc
 	fi
 
 	# Extract archives in ~/.local/opt and persist PATH
-	local apps_path="$HOME/.local/opt"
+	apps_path="$HOME/.local/opt"
 	for archive in "$HOME"/.local/bin/*tar.gz; do
 		name="${archive##*/}"
 		name="${name%%.*}"
-		if [ -d "${apps_path}/${name}" ]; then
+		app_path="$apps_path/$name"
+		if [ -d "$app_path" ]; then
 			rm -rf "${apps_path:?}/${name}"
 		fi
 		tar -C "$apps_path" -xzf "$archive"
-		if [ -d "${apps_path}/${name}" ]; then
-			echo -e "\nexport PATH=\"${apps_path}/${name}/bin:\$PATH\"" >> ~/.config/bash/exports
+		if [ -d "$app_path" ] && ! grep -q "$app_path" ~/.config/bash/exports; then
+			# shellcheck disable=SC2016
+			printf '\nexport PATH="%s:$PATH"\n' "$app_path/bin" \
+				>> ~/.config/bash/exports
 		fi
 	done
 
+	verbose="${VERBOSE:-0}"
+	skip_fish="${SKIP_FISH:-0}"
+	for arg; do
+		case "$arg" in
+			--no-fish) skip_fish=1;;
+			-h|-\?|--help) info; exit;;
+			-v|--verbose) verbose=$((verbose + 1));;
+			-?*) printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2;;
+		esac
+		shift
+	done
+
 	# Install fish, unless --no-fish is passed.
-	if [[ "$*" == *"--no-fish"* ]]; then
-		rm -f ~/.local/bin/fish ~/.local/bin/fish_*
+	fish_bin=~/.local/bin/fish
+	if [ "$skip_fish" = '1' ]; then
+		rm -f "$fish_bin" "$fish_bin"_*
 	else
-		if [ -f ~/.local/bin/fish ] && [ ! -d ~/.local/share/fish/install ]; then
-			~/.local/bin/fish --install=noconfirm || echo >&2 'fish already installed?'
+		if [ -f "$fish_bin" ] && [ ! -d ~/.local/share/fish/install ]; then
+			"$fish_bin" --install=noconfirm || echo >&2 'fish already installed?'
 		fi
 	fi
 
@@ -74,18 +90,18 @@ function _init_machine() {
 			fi
 			test -d "${apps_path}/${name}" && rm -rf "${apps_path:?}/${name}"
 			mkdir "$apps_path/$name"
-			pushd "$apps_path/$name" 1>/dev/null || return
+			cd "$apps_path/$name" || { echo >&2 'Error cd'; exit 1; }
 			cp -f "$file_path" ./
 			./"${app_image}" --appimage-extract 1>/dev/null
 			ln -vfs "${PWD}"/squashfs-root/AppRun "$HOME"/.local/bin/"${name}"
 			rm -rf ./"${app_image}"
-			popd 1>/dev/null || return
+			cd - || { echo >&2 'Error running cd -'; exit 1; }
 		done
 	fi
 }
 
 # Detects the machine architecture.
-function _detect_arch() {
+_detect_arch() {
 	case "$(uname -m)" in
 		i386|i686) echo '386' ;;
 		arm|armv7l) echo 'arm' ;;
@@ -96,14 +112,13 @@ function _detect_arch() {
 }
 
 # Downloads binaries by extracting from container image via crane.
-function _download_binaries() {
-	local tmpdir; tmpdir="$(mktemp -d -t 'init.rafi.io.XXXXXXX')"
+_download_binaries() {
+	tmpdir="$(mktemp -d -t 'init.rafi.io.XXXXXXX')"
 	echo ":: Temporary directory: '$tmpdir'"
 	cd "$tmpdir" || { echo >&2 "Unable to cd '$tmpdir'"; exit 1; }
 
 	echo ':: Download crane…'
-	local crane_repo=google/go-containerregistry
-	local crane_file
+	crane_repo=google/go-containerregistry
 	crane_file="go-containerregistry_$(uname -s)_$([ "$__arch" = amd64 ] && uname -m || echo "$__arch").tar.gz"
 	wget -qO- --no-cookie \
 		"https://github.com/$crane_repo/releases/latest/download/$crane_file" \
@@ -122,8 +137,8 @@ function _download_binaries() {
 }
 
 # Run on remote: Download binaries and ~/.config files.
-function _run_if_executed_directly() {
-	local __arch; __arch="$(_detect_arch)"
+_main() {
+	__arch="$(_detect_arch)"
 	if [ ! "$__arch" = 'amd64' ] && [ ! "$__arch" = 'arm64' ]; then
 		echo >&2 'ERROR: Only Linux amd64/arm64 architecture is currently supported.'
 		exit 1
@@ -133,7 +148,10 @@ function _run_if_executed_directly() {
 
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
 
-	_download_binaries
+	if [ ! "${SKIP_DOWNLOAD:-}" = "1" ]; then
+		_download_binaries
+	fi
+
 	_init_machine "$@"
 
 	echo "\\"
@@ -142,5 +160,4 @@ function _run_if_executed_directly() {
 	echo '/'
 }
 
-# Run script, unless it's sourced.
-(return 0 2>/dev/null) || _run_if_executed_directly "$@"
+_main "$@"

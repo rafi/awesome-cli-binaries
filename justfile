@@ -1,6 +1,8 @@
-IMAGE := 'rafib/awesome-cli-binaries'
-OUT   := 'bin'
-ARCH  := if arch() == 'x86_64' { 'amd64' } else { 'arm64' }
+# AWESOME CLI BINARIES
+
+IMAGE   := 'rafib/awesome-cli-binaries'
+OUT     := 'bin'
+OS_ARCH := if arch() == 'x86_64' { 'amd64' } else { 'arm64' }
 
 export BUILD_TOKEN := env_var_or_default('GITHUB_TOKEN', env_var_or_default('HOMEBREW_GITHUB_API_TOKEN', ''))
 
@@ -14,15 +16,11 @@ _validate:
     exit 1; \
   fi
 
-# Show system information.
-info:
-  @echo "Default build: linux/{{ ARCH }}"
-
-build: docker binaries
-dist: build archive
+build arch=OS_ARCH: (docker arch) (binaries arch)
+dist arch=OS_ARCH: (build arch) (archive arch)
 
 # build docker image
-docker arch=ARCH: _validate
+docker arch=OS_ARCH: _validate
   docker buildx build \
     --platform linux/{{ arch }} \
     --secret id=token,env=BUILD_TOKEN \
@@ -30,7 +28,7 @@ docker arch=ARCH: _validate
     --load \
     -t {{ IMAGE }} .
 
-# build and release docker image
+# build and push multi-arch release. does not load locally.
 release: _validate
   docker buildx build \
     --platform linux/amd64,linux/arm64 \
@@ -41,13 +39,13 @@ release: _validate
     -t {{ IMAGE }}:latest .
 
 # copy binaries locally
-binaries arch=ARCH:
+binaries arch=OS_ARCH:
   docker run --rm --platform linux/{{ arch }} \
     -v "$PWD":/artifacts {{ IMAGE }} \
     cp -r /usr/local/bin /artifacts
 
 # compress local binaries
-archive:
+archive arch=OS_ARCH: (binaries arch)
   (cd "{{ OUT }}" && tar cvf ../static.tar *)
   xz -T0 -v9 static.tar
 
@@ -67,8 +65,6 @@ clean:
 distclean: clean
   -rm static.tar.xz
 
-# erase image and cache
+# erase container image
 dockerclean:
   docker rmi -f {{ IMAGE }}
-  docker rmi -f {{ IMAGE }}-amd64
-  docker rmi -f {{ IMAGE }}-arm64
