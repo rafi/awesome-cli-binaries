@@ -105,7 +105,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 WORKDIR /root
 
-ARG BUILD_REVISION=92
+ARG BUILD_REVISION=93
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN . .cargo/env \
@@ -115,7 +115,7 @@ RUN . .cargo/env \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=92
+ARG BUILD_REVISION=93
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -126,7 +126,7 @@ RUN apt-get update \
     && apt-get install --yes bash wget \
     && apt-get purge --yes manpages manpages-dev \
     && apt-get autoremove --yes \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
@@ -138,11 +138,9 @@ ARG TARGETARCH
 # dra (Download Release Assets from GitHub)
 RUN arch="$(uname -m)" \
     && dra_name="${arch}-unknown-linux-$([ "$arch" = x86_64 ] && echo musl || echo gnu)" \
-    && dra_version="$(wget -qO- https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
+    && dra_version="$(wget -qO- --no-hsts https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
     && dra_url="https://github.com/devmatteini/dra/releases/download/$dra_version/dra-$dra_version-$dra_name.tar.gz" \
-    && echo $dra_url \
-    && wget -qO- "$dra_url" | tar -xzo --strip-components 1 "dra-$dra_version-$dra_name/dra" \
-    && ls -al \
+    && wget -qO- --no-hsts "$dra_url" | tar -xzo --strip-components 1 "dra-$dra_version-$dra_name/dra" \
     && chmod 770 dra \
     && dra --version
 
@@ -187,12 +185,12 @@ RUN --mount=type=secret,id=token \
 
 # Chafa
 ARG chafa_version=1.14.4
-RUN wget -qO- https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
+RUN wget -qO- --no-hsts https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
 # Neovim repositories
 # - github.com/neovim/neovim - official releases
 # - github.com/neovim/neovim-releases - best-effort builds with glibc 2.17
-RUN wget -q https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
+RUN wget -q --no-hsts https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
 
 # Pre-built tmux
 COPY --from=tmux-builder /opt/tmux/bin/tmux .

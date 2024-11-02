@@ -3,6 +3,7 @@ set -eu
 
 # shellcheck disable=SC2016
 _intro() {
+	repo=https://github.com/rafi/awesome-cli-binaries
 	echo
 	echo "Rafi's rootless work setup"
 	echo '~ USE AT YOUR OWN RISK  ~'
@@ -21,16 +22,14 @@ _intro() {
 	echo
 	echo 'This will overwrite existing files in (if any):'
 	echo '  ~/.config files:'
-	echo '    https://github.com/rafi/awesome-cli-binaries/tree/master/.files'
+	echo "    $repo/tree/master/.files"
 	echo '  ~/.local/bin files:'
-	echo '    https://github.com/rafi/awesome-cli-binaries?tab=readme-ov-file#binaries'
+	echo "    $repo?tab=readme-ov-file#binaries"
 	echo
 }
 
 # Bootstrap a remote host.
 _init_machine() {
-	mkdir -p ~/.config ~/.cache ~/.local/opt
-
 	# Persist custom bashrc import in ~/.bashrc
 	custom_bashrc='.config/bash/bashrc'
 	if test -f ~/.bashrc && ! grep -q "$custom_bashrc" ~/.bashrc; then
@@ -119,8 +118,9 @@ _download_binaries() {
 
 	echo ':: Download crane…'
 	crane_repo=google/go-containerregistry
-	crane_file="go-containerregistry_$(uname -s)_$([ "$__arch" = amd64 ] && uname -m || echo "$__arch").tar.gz"
-	wget -qO- --no-cookie \
+	crane_arch="$([ "$__arch" = amd64 ] && uname -m || echo "$__arch")"
+	crane_file="go-containerregistry_$(uname -s)_$crane_arch.tar.gz"
+	wget -qO- --no-hsts \
 		"https://github.com/$crane_repo/releases/latest/download/$crane_file" \
 		| tar xzf - crane && chmod 770 crane
 
@@ -145,13 +145,10 @@ _main() {
 	fi
 
 	_intro
-
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
-
 	if [ ! "${SKIP_DOWNLOAD:-}" = "1" ]; then
 		_download_binaries
 	fi
-
 	_init_machine "$@"
 
 	echo "\\"
