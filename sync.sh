@@ -41,8 +41,8 @@ _main() {
 		fi
 
 		echo ":: [${host}] bootstrap remote"
-		${SSH_CMD} "$host" SKIP_DOWNLOAD=1 bash -s -- \
-			< "$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"/sync.lib.bash
+		${SSH_CMD} "$host" SKIP_DOWNLOAD=1 sh -- \
+			< "$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"/sync.lib.sh
 
 		echo ':: completed'
 		shift
