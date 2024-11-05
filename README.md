@@ -93,6 +93,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [lsd]         | Rewrite of GNU `ls` with lots of added features. | <img src="https://raw.githubusercontent.com/Peltoche/lsd/assets/screen_lsd.png" /> |
 | [mkcert]      | Make local trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
 | [procs]       | Modern replacement for ps. | <img src="https://user-images.githubusercontent.com/4331004/55446625-5e5fce00-55fb-11e9-8914-69e8640d89d7.png" /> |
+| [rip2]     | Safe and ergonomic alternative to `rm` | |
 | [ripgrep]     | Line-oriented search tool that recursively searches for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
 | [stern]       | Tail multiple pods and containers on Kubernetes. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
@@ -137,6 +138,7 @@ See [LICENSE.spdx](./LICENSE.spdx) for license information.
 [lsd]: https://github.com/lsd-rs/lsd
 [mkcert]: https://github.com/FiloSottile/mkcert
 [procs]: https://github.com/dalance/procs
+[rip2]: https://github.com/MilesCranmer/rip2
 [neovim]: https://github.com/neovim/neovim
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [starship]: https://github.com/starship/starship

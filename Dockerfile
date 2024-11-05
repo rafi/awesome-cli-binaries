@@ -105,7 +105,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 WORKDIR /root
 
-ARG BUILD_REVISION=93
+ARG BUILD_REVISION=94
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN . .cargo/env \
@@ -115,7 +115,7 @@ RUN . .cargo/env \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=93
+ARG BUILD_REVISION=94
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -175,6 +175,7 @@ RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai lsd-rs/lsd && lsd --version \
     && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
+    && dra download -ai MilesCranmer/rip2 && rip --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
     && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
     && dra download -ai stern/stern && upx stern && stern --version \
@@ -185,12 +186,14 @@ RUN --mount=type=secret,id=token \
 
 # Chafa
 ARG chafa_version=1.14.4
-RUN wget -qO- --no-hsts https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
+RUN wget -qO- --no-hsts \
+    https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
 # Neovim repositories
 # - github.com/neovim/neovim - official releases
 # - github.com/neovim/neovim-releases - best-effort builds with glibc 2.17
-RUN wget -q --no-hsts https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
+RUN wget -q --no-hsts \
+    https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
 
 # Pre-built tmux
 COPY --from=tmux-builder /opt/tmux/bin/tmux .
