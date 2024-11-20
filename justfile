@@ -40,7 +40,7 @@ release: _validate
 
 # copy binaries locally
 binaries arch=OS_ARCH:
-  docker run --rm --platform linux/{{ arch }} \
+  docker run --rm --pull always --platform linux/{{ arch }} \
     -v "$PWD":/artifacts {{ IMAGE }} \
     cp -r /usr/local/bin /artifacts
 

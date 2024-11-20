@@ -43,8 +43,6 @@ ripgrep: The Unlicense https://github.com/BurntSushi/ripgrep/blob/master/UNLICEN
          MIT https://github.com/BurntSushi/ripgrep/blob/master/LICENSE-MIT
 starship: ISC https://github.com/starship/starship/blob/master/LICENSE
 stern: Apache-2.0 https://github.com/stern/stern/blob/master/LICENSE
-trashy: Apache-2.0 https://github.com/oberblastmeister/trashy/blob/master/LICENSE-APACHE
-        MIT https://github.com/oberblastmeister/trashy/blob/master/LICENSE-MIT
 tmux: ISC https://github.com/tmux/tmux/blob/master/COPYING
 xh: MIT https://github.com/ducaale/xh/blob/master/LICENSE
 yazi: MIT https://github.com/sxyazi/yazi/blob/main/LICENSE
