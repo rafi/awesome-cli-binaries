@@ -28,6 +28,7 @@ fish: GPL-2.0 https://github.com/fish-shell/fish-shell/blob/master/COPYING
 fx: MIT https://github.com/antonmedv/fx/blob/master/LICENSE
 fzf: MIT https://github.com/junegunn/fzf/blob/master/LICENSE
 glow: MIT https://github.com/charmbracelet/glow/blob/master/LICENSE
+havn: MIT https://github.com/mrjackwills/havn/blob/main/LICENSE
 hexyl: Apache-2.0 https://github.com/sharkdp/hexyl/blob/master/LICENSE-APACHE
        MIT https://github.com/sharkdp/hexyl/blob/master/LICENSE-MIT
 hyperfine: Apache-2.0 https://github.com/sharkdp/hyperfine/blob/master/LICENSE-APACHE
@@ -36,8 +37,8 @@ jq: License https://github.com/jqlang/jq/blob/master/COPYING
 just: CC0-1.0 https://github.com/casey/just/blob/master/LICENSE
 lsd: Apache-2.0 https://github.com/lsd-rs/lsd/blob/master/LICENSE
 mkcert: BSD-3-Clause https://github.com/FiloSottile/mkcert/blob/master/LICENSE
-rip2: GPL-3.0 https://github.com/MilesCranmer/rip2/blob/master/LICENSE
 neovim: Apache-2.0 https://github.com/neovim/neovim/blob/master/LICENSE.txt
+rip2: GPL-3.0 https://github.com/MilesCranmer/rip2/blob/master/LICENSE
 ripgrep: The Unlicense https://github.com/BurntSushi/ripgrep/blob/master/UNLICENSE
          MIT https://github.com/BurntSushi/ripgrep/blob/master/LICENSE-MIT
 starship: ISC https://github.com/starship/starship/blob/master/LICENSE

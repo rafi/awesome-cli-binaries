@@ -86,6 +86,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [fx]          | Terminal JSON viewer. | <img src="https://medv.io/assets/fx/fx-preview.gif" /> |
 | [fzf]         | General-purpose command-line fuzzy finder. | <img src="https://raw.githubusercontent.com/junegunn/i/master/fzf-preview.png" /> |
 | [glow]        | Render markdown on the CLI, with pizzazz. | <img src="https://stuff.charm.sh/glow/glow-1.3-trailer-github.gif" /> |
+| [havn]        | Fast configurable port scanner with reasonable defaults. | <img src="https://raw.githubusercontent.com/mrjackwills/havn/main/.github/screen.webp" /> |
 | [hexyl]       | Simple hex viewer for the terminal. | <img src="https://i.imgur.com/MWO9uSL.png" /> |
 | [hyperfine]   | A command-line benchmarking tool. | <img src="https://i.imgur.com/z19OYxE.gif" /> |
 | [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://jqlang.github.io/jq/jq.png" width="50%" /> |
@@ -130,14 +131,15 @@ See [LICENSE.spdx](./LICENSE.spdx) for license information.
 [fx]: https://github.com/antonmedv/fx
 [fzf]: https://github.com/junegunn/fzf
 [glow]: https://github.com/charmbracelet/glow
+[havn]: https://github.com/mrjackwills/havn
 [hexyl]: https://github.com/sharkdp/hexyl
 [hyperfine]: https://github.com/sharkdp/hyperfine
 [jq]: https://github.com/stedolan/jq
 [just]: https://github.com/casey/just
 [lsd]: https://github.com/lsd-rs/lsd
 [mkcert]: https://github.com/FiloSottile/mkcert
-[rip2]: https://github.com/MilesCranmer/rip2
 [neovim]: https://github.com/neovim/neovim
+[rip2]: https://github.com/MilesCranmer/rip2
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [starship]: https://github.com/starship/starship
 [stern]: https://github.com/stern/stern

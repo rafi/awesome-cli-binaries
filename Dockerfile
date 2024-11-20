@@ -105,7 +105,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 WORKDIR /root
 
-ARG BUILD_REVISION=94
+ARG BUILD_REVISION=96
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN . .cargo/env \
@@ -115,7 +115,7 @@ RUN . .cargo/env \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=94
+ARG BUILD_REVISION=96
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -166,6 +166,7 @@ RUN --mount=type=secret,id=token \
     && dra download -aio fx antonmedv/fx && upx fx && fx --version \
     && dra download -ai junegunn/fzf && fzf --version && (fzf --bash > fzf.bash && fzf --zsh > fzf.zsh && fzf --fish > fzf.fish) \
     && dra download -ai charmbracelet/glow && upx glow && glow --version && rm -rf ~/.cache ~/.config \
+    && dra download -ai mrjackwills/havn && havn --version \
     && dra download -ai sharkdp/hexyl && hexyl --version \
     && dra download -ai sharkdp/hyperfine && hyperfine --version \
     && dra download -aio jq stedolan/jq && jq --version \
