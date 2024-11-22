@@ -173,7 +173,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
-ARG chafa_version=1.14.4
+ARG chafa_version=1.14.5
 RUN wget -qO- --no-hsts \
     https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-1-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
