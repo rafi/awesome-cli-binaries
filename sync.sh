@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -eu
-_VERSION='1.0.0'
+_VERSION='1.1.0'
 
 # Show usage.
 _usage() {
@@ -41,7 +41,7 @@ _main() {
 		fi
 
 		echo ":: [${host}] bootstrap remote"
-		${SSH_CMD} "$host" SKIP_DOWNLOAD=1 sh -- \
+		${SSH_CMD} "$host" NO_DOWNLOAD=1 sh -- \
 			< "$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"/sync.lib.sh
 
 		echo ':: completed'
