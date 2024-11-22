@@ -370,9 +370,6 @@ map('n', '<c-_>',      function() Snacks.terminal(nil, { cwd = LazyVim.root() })
 map('t', '<C-/>', '<cmd>close<cr>', { desc = 'Hide Terminal' })
 map('t', '<c-_>', '<cmd>close<cr>', { desc = 'which_key_ignore' })
 
--- todo.md
-map('n', '<leader>mk', require('rafi.util.todo-md').open, { desc = 'Open todo.md' })
-
 if vim.fn.has('mac') then
 	-- Open the macOS dictionary on current word
 	map('n', '<Leader>?', '<cmd>silent !open dict://<cword><CR>', { desc = 'Dictionary' })
