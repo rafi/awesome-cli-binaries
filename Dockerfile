@@ -82,33 +82,28 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # Build fish-shell from source from faho fork with `fish-installer` branch:
 # https://github.com/faho/fish-shell/tree/fish-installer
-# Use Debian 10 for older glib versions.
-FROM debian:buster AS fish-builder
+# Use Debian 10.x "buster" for older glib versions.
+FROM rust:slim-buster AS fish-builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-    && apt-get upgrade --yes --show-upgraded \
-    && apt-get install --yes build-essential curl \
-    && apt-get purge --yes manpages manpages-dev \
-    && apt-get autoremove --yes \
-    && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/*
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    && apt-get install --no-install-recommends --yes python3-sphinx wget \
+    && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/* /var/lib/*
 
 WORKDIR /root
 
-ARG BUILD_REVISION=96
+ARG BUILD_REVISION=116
 LABEL io.rafi.revision="$BUILD_REVISION"
 
-RUN . .cargo/env \
-    && cargo install --git https://github.com/faho/fish-shell --branch fish-installer
+RUN FISH_BUILD_VERSION="4.0.0-beta-$(wget -qO- --no-hsts https://api.github.com/repos/faho/fish-shell/branches/fish-installer | awk -F\" '/sha/{print substr($(NF-1), 1, 8); exit}')" \
+    cargo install --git https://github.com/faho/fish-shell --branch fish-installer && \
+    rm -rf /usr/local/cargo/registry /usr/local/cargo/git
 
 # --------------------------------------------------------------------------
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=96
+ARG BUILD_REVISION=116
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -121,7 +116,6 @@ RUN apt-get update \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/*
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/local/bin
 
 # Pre-defined build arguments
@@ -193,9 +187,9 @@ RUN wget -q --no-hsts \
 COPY --from=tmux-builder /opt/tmux/bin/tmux .
 
 # Pre-built fish-shell
-COPY --from=fish-builder /root/.cargo/bin/fish .
-COPY --from=fish-builder /root/.cargo/bin/fish_indent .
-COPY --from=fish-builder /root/.cargo/bin/fish_key_reader .
+COPY --from=fish-builder /usr/local/cargo/bin/fish .
+COPY --from=fish-builder /usr/local/cargo/bin/fish_indent .
+COPY --from=fish-builder /usr/local/cargo/bin/fish_key_reader .
 
 # Pre-made dotfiles
 COPY .files/.config /root/.config
