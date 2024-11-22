@@ -54,9 +54,10 @@ return {
 				},
 				sorting = defaults.sorting,
 				experimental = {
-					ghost_text = {
-						hl_group = 'Comment',
-					},
+					-- Only show ghost text when we show ai completions
+					ghost_text = vim.g.ai_cmp and {
+						hl_group = 'CmpGhostText',
+					} or false,
 				},
 				sources = cmp.config.sources({
 					{ name = 'nvim_lsp', priority = 50 },
@@ -88,6 +89,8 @@ return {
 					['<C-u>'] = cmp.mapping.select_prev_item({ count = 5 }),
 					['<C-f>'] = cmp.mapping.scroll_docs(4),
 					['<C-b>'] = cmp.mapping.scroll_docs(-4),
+					['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+					['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 					['<C-c>'] = function(fallback)
 						cmp.close()
 						fallback()
@@ -133,6 +136,7 @@ return {
 	-- Native snippets
 	{
 		'nvim-cmp',
+		optional = true,
 		dependencies = {
 			{
 				'garymjr/nvim-snippets',
@@ -163,6 +167,8 @@ return {
 		'windwp/nvim-autopairs',
 		event = 'InsertEnter',
 		opts = {
+			map_cr = false,
+			avoid_move_to_end = true, -- stay for direct end_key use
 			disable_filetype = { 'TelescopePrompt', 'grug-far', 'spectre_panel' },
 		},
 		keys = {
@@ -287,20 +293,6 @@ return {
 			{ '<Leader>mds', '<cmd>LinediffShow<CR>', desc = 'Line diff show' },
 			{ '<Leader>mdr', '<cmd>LinediffReset<CR>', desc = 'Line diff reset' },
 		},
-	},
-
-	-----------------------------------------------------------------------------
-	-- Delete surrounding function call
-	{
-		'AndrewRadev/dsf.vim',
-		-- stylua: ignore
-		keys = {
-			{ 'dsf', '<Plug>DsfDelete', noremap = true, desc = 'Delete Surrounding Function' },
-			{ 'csf', '<Plug>DsfChange', noremap = true, desc = 'Change Surrounding Function' },
-		},
-		init = function()
-			vim.g.dsf_no_mappings = 1
-		end,
 	},
 
 	-----------------------------------------------------------------------------

@@ -243,7 +243,8 @@ alias krestart '_rafi_k8s_select_resource deployments | xargs kubectl rollout re
 
 # ROLES
 # ---
-alias kgroups "kubectl get clusterrolebindings -o go-template='{{range .items}}{{range .subjects}}{{.kind}} @ {{.name}} {{end -}} - {{.metadata.name}} {{\"\n\"}}{{end}}'"
+alias kgroups "echo 'KIND NAME BINDING ROLE' && kubectl get rolebindings -A -o go-template='{{range .items}}{{\$r := . }}{{range .subjects}}{{.kind}} {{if .namespace}}{{.namespace}}/{{end}}{{.name}} {{\$r.metadata.name}} {{\$r.roleRef.kind}}/{{\$r.roleRef.name}}{{\"\n\"}}{{end -}}{{end}}' | column -t -s' '"
+alias kclustergroups "kubectl get clusterrolebindings -o go-template='{{range .items}}{{\$r := . }}{{range .subjects}}{{.kind}} {{if .namespace}}{{.namespace}}/{{end}}{{.name}} {{\$r.metadata.name}} {{\$r.roleRef.kind}}/{{\$r.roleRef.name}}{{\"\n\"}}{{end -}}{{end}}'"
 
 # NODES
 # ---

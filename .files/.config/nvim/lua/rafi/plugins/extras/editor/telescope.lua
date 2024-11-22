@@ -246,7 +246,10 @@ return {
 				'<localleader>z',
 				function()
 					require('telescope').extensions.zoxide.list({
-						layout_config = { width = 0.5, height = 0.6 },
+						prompt_title = 'Zoxide',
+						previewer = false,
+						path_display = { 'truncate' }, -- TODO: doesn't work
+						layout_config = { width = 0.6, height = 0.6 },
 					})
 				end,
 				desc = 'Zoxide (MRU)',
@@ -300,7 +303,7 @@ return {
 
 			local function find_command()
 				if 1 == vim.fn.executable('rg') then
-					return { 'rg', '--files', '--color', 'never', '-g', '!.git' }
+					return { 'rg', '--files', '--color', 'never', '--no-ignore-vcs', '--smart-case', '-g', '!.git' }
 				elseif 1 == vim.fn.executable('fd') then
 					return { 'fd', '--type', 'f', '--color', 'never', '-E', '.git' }
 				elseif 1 == vim.fn.executable('fdfind') then
@@ -325,6 +328,8 @@ return {
 			table.insert(vimgrep_args, '--no-ignore-vcs')
 			table.insert(vimgrep_args, '--glob')
 			table.insert(vimgrep_args, '!**/.git/*')
+			-- vim.notify('Using vimgrep for searching '..vim.notify(table.concat(vimgrep_args, ' ')), vim.log.levels.INFO)
+			-- rg --color=never --no-heading --with-filename --line-number --column --smart-case --hidden --follow --no-ignore-vcs --glob !**/.git/*
 
 			local path_sep = jit and (jit.os == 'Windows' and '\\' or '/')
 				or package.config:sub(1, 1)

@@ -209,7 +209,6 @@ function kobjevents() {
 # ---
 
 # Show cpu/memory matrix for pods, use with -A or -n <namespace>
-# FIXME: Columns
 function kstats() {
 	local COLS="NAME:.metadata.name"
 	COLS="$COLS,CPU_REQ(cores):.spec.containers[*].resources.requests.cpu"

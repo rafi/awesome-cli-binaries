@@ -9,6 +9,7 @@ function M:peek()
 				tostring(self.area.w),
 				tostring(self.file.url),
 			})
+			:env("CLICOLOR_FORCE", "1")
 			:stdout(Command.PIPED)
 			:stderr(Command.PIPED)
 			:spawn()
@@ -57,9 +58,13 @@ function M:seek(units)
 end
 
 function M:fallback_to_builtin()
-	local _, bound = ya.preview_code(self)
+	local err, bound = ya.preview_code(self)
 	if bound then
-		ya.manager_emit("peek", { tostring(bound), only_if = tostring(self.file.url), upper_bound = "" })
+		ya.manager_emit("peek", { bound, only_if = self.file.url, upper_bound = true })
+	elseif err and not err:find("cancelled", 1, true) then
+		ya.preview_widgets(self, {
+			ui.Paragraph(self.area, { ui.Line(err):reverse() }),
+		})
 	end
 end
 

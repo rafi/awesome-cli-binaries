@@ -34,6 +34,15 @@ function Status:owner()
 	})
 end
 
+local function render_date(spans, ts, prefix, color)
+	local time = ya.round(ts)
+	local ok, fmt = pcall(os.date, "%Y-%m-%d %H:%M", time)
+	if ok then
+		table.insert(spans, ui.Span(prefix .. " "))
+		table.insert(spans, ui.Span(fmt .. " "):fg(color))
+	end
+end
+
 -- Custom date in status bar
 function Status:date()
 	local h = self._tab.current.hovered
@@ -42,21 +51,12 @@ function Status:date()
 	end
 
 	local spans = {}
-	local show = {
-		modified = { "m", "yellow" },
-		created = { "c", "green" },
-		accessed = { "a", "blue" },
-	}
-
-	for key, display in pairs(show) do
-		if h.cha[key] ~= nil and h.cha[key] then
-			local time = ya.round(h.cha[key])
-			local ok, fmt = pcall(os.date, "%Y-%m-%d %H:%M", time)
-			if ok then
-				table.insert(spans, ui.Span(display[1] .. " "))
-				table.insert(spans, ui.Span(fmt .. " "):fg(display[2]))
-			end
-		end
+	render_date(spans, h.cha.btime, 'c', 'blue')
+	if math.abs(h.cha.mtime - h.cha.btime) > 600 then
+		render_date(spans, h.cha.mtime, 'm', 'yellow')
+	end
+	if math.abs(h.cha.mtime - h.cha.atime) > 600 then
+		render_date(spans, h.cha.atime, 'a', 'green')
 	end
 	return ui.Line(spans)
 end
@@ -91,14 +91,14 @@ Header:children_add(Header.tabs, Header.LEFT)
 
 function Linemode:size_and_mtime()
 	local year = os.date("%Y")
-	local time = (self._file.cha.modified or 0) // 1
-
+	local time = (self._file.cha.mtime or 0) // 1
+	local timestr
 	if time > 0 and os.date("%Y", time) == year then
-		time = os.date("%b %d %H:%M", time)
+		timestr = os.date("%b %d %H:%M", time)
 	else
-		time = time and os.date("%b %d  %Y", time) or ""
+		timestr = time and os.date("%b %d  %Y", time) or ""
 	end
 
 	local size = self._file:size()
-	return ui.Line(string.format(" %s %s ", size and ya.readable_size(size) or "-", time))
+	return ui.Line(string.format(" %s %s ", size and ya.readable_size(size) or "-", timestr))
 end

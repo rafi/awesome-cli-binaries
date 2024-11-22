@@ -51,6 +51,7 @@ return {
 			desc = 'Explorer NeoTree (cwd)',
 		},
 		{ '<LocalLeader>e', '<leader>fe', desc = 'Explorer NeoTree (Root Dir)', remap = true },
+		{ '<LocalLeader>E', '<leader>fE', desc = 'Explorer NeoTree (cwd)', remap = true },
 		{
 			'<LocalLeader>a',
 			function()
@@ -122,7 +123,7 @@ return {
 			'qf',
 			'edgy',
 			'Outline',
-			'gitsigns.blame',
+			'gitsigns-blame',
 		},
 		popup_border_style = 'rounded',
 		sort_case_insensitive = true,
@@ -374,7 +375,7 @@ return {
 	},
 	config = function(_, opts)
 		local function on_move(data)
-			LazyVim.lsp.on_rename(data.source, data.destination)
+			Snacks.rename.on_rename_file(data.source, data.destination)
 		end
 
 		local events = require('neo-tree.events')

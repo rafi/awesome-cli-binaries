@@ -4,7 +4,6 @@ function g.
 	git commit -m '.'
 end
 
-
 # Completely remove all unreachable objects from the repository.
 function ggcnow
 	git -c gc.reflogExpireUnreachable=now gc --prune=now

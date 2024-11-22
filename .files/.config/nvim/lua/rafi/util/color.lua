@@ -110,4 +110,24 @@ function M.apply_brightness(color, base_color, brightness_modifier_parameter)
 	end
 end
 
+---@param name string
+---@param bg? boolean
+---@return string?
+function M.get(name, bg)
+	---@type {foreground?:number}?
+	local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name, link = false })
+	---@diagnostic disable-next-line: deprecated
+	or vim.api.nvim_get_hl_by_name(name, true)
+	---@type string?
+	local c = nil
+	if hl then
+		if bg then
+			c = hl.bg or hl.background
+		else
+			c = hl.fg or hl.foreground
+		end
+	end
+	return c and string.format('#%06x', c) or nil
+end
+
 return M

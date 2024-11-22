@@ -1,7 +1,7 @@
 # Super SSH: safe terminfo, persist user name, tmux window name
 function ssh --wraps ssh
 	# Use safest terminfo on remote server
-	if [ -n "$TMUX" ]
+	if set -q TMUX
 		set -gx TERM screen-256color
 	else
 		set -gx TERM xterm
@@ -13,7 +13,7 @@ function ssh --wraps ssh
 		set -gx LC_IDENTIFICATION "$USER"
 	end
 
-	if test -n "$TMUX"
+	if set -q TMUX
 		# Rename tmux window
 		set -l title (string match --invert -- '-*' $argv)
 		set -l session (tmux display-message -p '#{session_id}:#{window_id}')
@@ -30,6 +30,7 @@ function ssh --wraps ssh
 		or set ssh_status $status
 	end
 	# Reset tmux window name
-	test -n $TMUX; and tmux set-window-option -t "$session" automatic-rename "on"
+	set -q TMUX; and tmux set-window-option -t "$session" automatic-rename "on"
+
 	return $ssh_status
 end

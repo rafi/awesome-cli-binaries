@@ -71,7 +71,7 @@ return {
 			},
 
 			-- See: https://github.com/RRethy/nvim-treesitter-endwise
-			endwise = { enable = true },
+			endwise = { enable = false },
 
 			-- See: https://github.com/andymass/vim-matchup
 			matchup = {

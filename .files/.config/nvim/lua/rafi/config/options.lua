@@ -14,7 +14,7 @@ vim.g.elite_mode = false
 -- When enabled, 'q' closes any window
 vim.g.window_q_mapping = true
 
--- File diff program
+-- External file diff program
 vim.g.diffprg = 'bcompare'
 
 -- LazyVim auto format
@@ -26,6 +26,10 @@ vim.g.autoformat = false
 -- enabled with `:LazyExtras`
 vim.g.lazyvim_picker = 'auto'
 
+-- if the completion engine supports the AI source,
+-- use that instead of inline suggestions
+vim.g.ai_cmp = true
+
 -- LazyVim root dir detection
 -- Each entry can be:
 -- * the name of a detector function like `lsp` or `cwd`
@@ -33,27 +37,18 @@ vim.g.lazyvim_picker = 'auto'
 -- * a function with signature `function(buf) -> string|string[]`
 vim.g.root_spec = { 'lsp', { '.git', 'lua' }, 'cwd' }
 
--- LazyVim automatically configures lazygit:
---  * theme, based on the active colorscheme.
---  * editorPreset to nvim-remote
---  * enables nerd font icons
--- Set to false to disable.
-vim.g.lazygit_config = true
+-- Optionally setup the terminal to use
+-- This sets `vim.o.shell` and does some additional configuration for:
+-- * pwsh
+-- * powershell
+-- LazyVim.terminal.setup('pwsh')
 
--- Options for the LazyVim statuscolumn
-vim.g.lazyvim_statuscolumn = {
-	folds_open = false, -- show fold sign when fold is open
-	folds_githl = false, -- highlight fold sign with git sign color
-}
+-- Set LSP servers to be ignored when used with `util.root.detectors.lsp`
+-- for detecting the LSP root
+vim.g.root_lsp_ignore = { 'copilot' }
 
 -- Hide deprecation warnings
 vim.g.deprecation_warnings = false
-
--- Set filetype to `bigfile` for files larger than 1.5 MB
--- Only vim syntax will be enabled (with the correct filetype)
--- LSP, treesitter and other ft plugins will be disabled.
--- mini.animate will also be disabled.
-vim.g.bigfile_size = 1024 * 1024 * 1.5 -- 1.5 MB
 
 -- Show the current document symbols location from Trouble in lualine
 -- You can disable this for a buffer by setting `vim.b.trouble_lualine = false`
@@ -70,12 +65,10 @@ opt.titlestring = '%<%F%=%l/%L - nvim'
 opt.mouse = 'nv'               -- Enable mouse in normal and visual modes only
 opt.virtualedit = 'block'      -- Position cursor anywhere in visual block
 opt.clipboard = 'unnamedplus'  -- Sync with system clipboard
-opt.confirm = true             -- Confirm unsaved changes before exiting buffer
 opt.conceallevel = 2           -- Hide * markup for bold and italic, but not markers with substitutions
+opt.confirm = true             -- Confirm unsaved changes before exiting buffer
 opt.signcolumn = 'yes'         -- Always show signcolumn
-opt.spelllang = { 'en' }
 opt.spelloptions:append('camel')
-opt.spelloptions:append('noplainbuffer')
 opt.updatetime = 200           -- Idle time to write swap and trigger CursorHold
 if not vim.g.vscode then
 	opt.timeoutlen = 500  -- Time out on mappings
@@ -135,8 +128,6 @@ end
 -- ===
 opt.ignorecase = true -- Search ignoring case
 opt.smartcase = true  -- Keep case when searching with *
-opt.inccommand = 'nosplit' -- Preview incremental substitute
-opt.jumpoptions = 'view'
 
 -- Formatting
 -- ===
@@ -168,7 +159,6 @@ opt.laststatus = 3        -- Global statusline
 opt.scrolloff = 4         -- Keep at least 2 lines above/below
 opt.sidescrolloff = 8     -- Keep at least 5 lines left/right
 opt.numberwidth = 2       -- Minimum number of columns to use for the line number
-opt.number = false        -- Don't show line numbers
 opt.ruler = false         -- Disable default status ruler
 opt.list = true           -- Show hidden characters
 opt.foldlevel = 99
@@ -177,7 +167,7 @@ opt.splitbelow = true     -- New split at bottom
 opt.splitright = true     -- New split on right
 opt.splitkeep = 'screen'  -- New split keep the text on the same screen line
 if vim.fn.has('nvim-0.11') == 1 then
-	opt.tabclose = 'uselast,left'
+	opt.tabclose:append({'uselast', 'left'})
 end
 
 opt.cmdheight = 0
@@ -216,7 +206,7 @@ opt.fillchars = {
 	verthoriz = '╋',
 }
 
-opt.statuscolumn = [[%!v:lua.require'lazyvim.util'.ui.statuscolumn()]]
+opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
 if vim.fn.has('nvim-0.10') == 1 then
 	opt.smoothscroll = true
