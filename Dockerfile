@@ -92,10 +92,10 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=116
+ARG BUILD_REVISION=124
 LABEL io.rafi.revision="$BUILD_REVISION"
 
-RUN FISH_BUILD_VERSION="4.0.0-beta-$(wget -qO- --no-hsts https://api.github.com/repos/faho/fish-shell/branches/fish-installer | awk -F\" '/sha/{print substr($(NF-1), 1, 8); exit}')" \
+RUN FISH_BUILD_VERSION="4.0.0-alpha-$(wget -qO- --no-hsts https://api.github.com/repos/faho/fish-shell/branches/fish-installer | awk -F\" '/sha/{print substr($(NF-1), 1, 8); exit}')" \
     cargo install --git https://github.com/faho/fish-shell --branch fish-installer && \
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git
 
@@ -103,11 +103,10 @@ RUN FISH_BUILD_VERSION="4.0.0-beta-$(wget -qO- --no-hsts https://api.github.com/
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=116
+ARG BUILD_REVISION=124
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
-# RUN apk add --no-cache bash && rm -rf /etc/apk /lib/apk
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get upgrade --yes --show-upgraded \

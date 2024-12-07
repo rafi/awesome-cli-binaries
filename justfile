@@ -33,8 +33,8 @@ release: _validate
   docker buildx build \
     --platform linux/amd64,linux/arm64 \
     --cache-from=rafib/awesome-cli-binaries \
-    --cache-from=type=local,src=/tmp/.buildx-cache \
-    --cache-to=type=local,dest=/tmp/.buildx-cache \
+    --cache-from=type=local,src=$HOME/.cache/buildx-cache \
+    --cache-to=type=local,dest=$HOME/.cache/buildx-cache \
     --secret id=token,env=BUILD_TOKEN \
     --push \
     -t {{ IMAGE }}:latest .
