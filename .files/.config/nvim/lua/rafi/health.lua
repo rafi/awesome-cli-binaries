@@ -4,7 +4,7 @@
 local M = {}
 
 local nvim_min_ver = '0.9.5'
-local nvim_max_ver = '0.10.1'
+local nvim_max_ver = '0.10.2'
 
 function M.check()
 	vim.health.start('rafi')

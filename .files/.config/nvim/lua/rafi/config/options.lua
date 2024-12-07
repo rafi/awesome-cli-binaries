@@ -7,12 +7,13 @@
 -- Keyboard leaders
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ';'
+vim.keymap.set('n', 's', '<Nop>')
 
 -- Enable elite-mode (hjkl mode. arrow-keys resize window)
 vim.g.elite_mode = false
 
 -- When enabled, 'q' closes any window
-vim.g.window_q_mapping = true
+vim.g.window_q_mapping = false
 
 -- External file diff program
 vim.g.diffprg = 'bcompare'
@@ -159,7 +160,7 @@ opt.laststatus = 3        -- Global statusline
 opt.scrolloff = 4         -- Keep at least 2 lines above/below
 opt.sidescrolloff = 8     -- Keep at least 5 lines left/right
 opt.numberwidth = 2       -- Minimum number of columns to use for the line number
-opt.ruler = false         -- Disable default status ruler
+opt.ruler = true          -- Enable default status ruler
 opt.list = true           -- Show hidden characters
 opt.foldlevel = 99
 opt.cursorline = true     -- Highlight the text line under the cursor

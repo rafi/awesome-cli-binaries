@@ -153,8 +153,6 @@ return {
 				require('rafi.plugins.lsp.keymaps').on_attach
 			)
 
-			LazyVim.lsp.words.setup(opts.document_highlight)
-
 			-- Diagnostics signs and highlights.
 			if vim.fn.has('nvim-0.10.0') == 0 then
 				if type(opts.diagnostics.signs) ~= 'boolean' then

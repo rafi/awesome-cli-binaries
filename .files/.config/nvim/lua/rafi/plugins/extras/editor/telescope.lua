@@ -257,15 +257,6 @@ return {
 
 			-- Find by...
 			{
-				'<leader>gt',
-				function()
-					require('telescope.builtin').lsp_workspace_symbols({
-						default_text = vim.fn.expand('<cword>'),
-					})
-				end,
-				desc = 'Find Symbol',
-			},
-			{
 				'<leader>gf',
 				function()
 					require('telescope.builtin').find_files({
