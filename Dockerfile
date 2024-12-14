@@ -87,23 +87,24 @@ FROM rust:slim-buster AS fish-builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-    && apt-get install --no-install-recommends --yes python3-sphinx wget \
+    && apt-get install --no-install-recommends --yes git \
     && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/* /var/lib/*
 
 WORKDIR /root
 
-ARG BUILD_REVISION=124
+ARG BUILD_REVISION=126
 LABEL io.rafi.revision="$BUILD_REVISION"
 
-RUN FISH_BUILD_VERSION="4.0.0-alpha-$(wget -qO- --no-hsts https://api.github.com/repos/faho/fish-shell/branches/fish-installer | awk -F\" '/sha/{print substr($(NF-1), 1, 8); exit}')" \
-    cargo install --git https://github.com/faho/fish-shell --branch fish-installer && \
+RUN git clone https://github.com/fish-shell/fish-shell.git && \
+    cd fish-shell && \
+    FISH_BUILD_DOCS=0 cargo build --release && \
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git
 
 # --------------------------------------------------------------------------
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=124
+ARG BUILD_REVISION=126
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -182,13 +183,13 @@ RUN wget -qO- --no-hsts \
 RUN wget -q --no-hsts \
     https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
 
-# Pre-built tmux
+# Copy compiled tmux
 COPY --from=tmux-builder /opt/tmux/bin/tmux .
 
-# Pre-built fish-shell
-COPY --from=fish-builder /usr/local/cargo/bin/fish .
-COPY --from=fish-builder /usr/local/cargo/bin/fish_indent .
-COPY --from=fish-builder /usr/local/cargo/bin/fish_key_reader .
+# Copy compiled fish-shell
+COPY --from=fish-builder /root/fish-shell/target/release/fish .
+COPY --from=fish-builder /root/fish-shell/target/release/fish_indent .
+COPY --from=fish-builder /root/fish-shell/target/release/fish_key_reader .
 
 # Pre-made dotfiles
 COPY .files/.config /root/.config

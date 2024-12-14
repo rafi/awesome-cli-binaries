@@ -41,12 +41,6 @@ _setup_bash() {
 	fi
 }
 
-_setup_fish() {
-	echo ':: Setup fish shell…'
-	~/.local/bin/fish --install=noconfirm \
-		|| echo >&2 'fish-shell already installed?'
-}
-
 _extract_archives() {
 	# Extract archives in ~/.local/opt and persist PATH
 	apps_path="$HOME/.local/opt"
@@ -163,7 +157,6 @@ _main() {
 	fi
 	_extract_archives
 	[ "$no_config" = '1' ] || _setup_bash
-	[ "$no_fish" = '1' ] || _setup_fish
 
 	echo "\\"
 	echo ' | Done, run "source ~/.bashrc" or restart terminal to apply changes.'
