@@ -1,30 +1,20 @@
 #!/usr/bin/env sh
 set -eu
 
-# shellcheck disable=SC2016
 _intro() {
 	repo=https://github.com/rafi/awesome-cli-binaries
 	echo
-	echo "Rafi's rootless work setup"
-	echo '~ USE AT YOUR OWN RISK  ~'
-	echo '         ______         '
-	echo '      .-"      "-.      '
-	echo '     /            \     '
-	echo '    |              |    '
-	echo '    |,  .-.  .-.  ,|    '
-	echo '    | )(__/  \__)( |    '
-	echo '    |/     /\     \|    '
-	echo '    (_     ^^     _)    '
-	echo '     \__|IIIIII|__/     '
-	echo '      | \IIIIII/ |      '
-	echo '      \          /      '
-	echo 'jgs    `--------`       '
-	echo
-	echo 'This will overwrite existing files in (if any):'
-	echo '  ~/.config files:'
-	echo "    $repo/tree/master/.files"
-	echo '  ~/.local/bin files:'
-	echo "    $repo?tab=readme-ov-file#binaries"
+
+	echo "  ⠀⢀⣠⣤⣤⣄⡀⠀ Rafi's rootless workspace setup"
+	echo '  ⣴⣿⣿⣿⣿⣿⣿⣦                                '
+	echo '  ⣿⣿⣿⣿⣿⣿⣿⣿    # USE AT YOUR OWN RISK #    '
+	echo '  ⣇⠈⠉⡿⢿⠉⠁⢸                                '
+	echo '  ⠙⠛⢻⣷⣾⡟⠛⠋  Overwrites files in:          '
+	echo '  ⠀⠀⠀⠈⠁⠀⠀⠀                                '
+	echo '              ~/.config'
+	echo "                $repo/tree/master/.files"
+	echo '              ~/.local/bin'
+	echo "                $repo?tab=readme-ov-file#binaries"
 	echo
 }
 
@@ -135,11 +125,10 @@ _main() {
 		exit 1
 	fi
 
-	_intro
-
 	verbose="${VERBOSE:-0}"
 	no_config="${NO_CONFIG:-0}"
 	no_fish="${NO_FISH:-0}"
+	no_intro="${NO_INTRO:-0}"
 	for arg; do
 		case "$arg" in
 			--no-config) no_config=1;;
@@ -151,17 +140,19 @@ _main() {
 		shift
 	done
 
+	[ "$no_intro" = '1' ] || _intro
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
 	if [ ! "${NO_DOWNLOAD:-}" = '1' ]; then
 		_download_binaries
 	fi
 	_extract_archives
 	[ "$no_config" = '1' ] || _setup_bash
-
-	echo "\\"
-	echo ' | Done, run "source ~/.bashrc" or restart terminal to apply changes.'
-	echo ' | Enjoy!'
-	echo '/'
+	[ "$no_intro" = '1' ] || {
+		echo "\\"
+		echo ' | Done, run "source ~/.bashrc" or restart terminal to apply changes.'
+		echo ' | Enjoy!'
+		echo '/'
+	}
 }
 
 _main "$@"
