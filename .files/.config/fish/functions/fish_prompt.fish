@@ -30,22 +30,30 @@ function fish_prompt --description 'Write out the prompt'
 	set -l statusb_color (set_color $bold_flag $fish_color_status)
 	set -l prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
 
-	if test -n "$SSH_CONNECTION"; or fish_is_root_user
-		echo -n -s (prompt_login)" "
-	end
-	echo -n -s (set_color $color_cwd) (prompt_pwd) $normal " "$prompt_status
+	# Version control status.
+	# if [ "$COLUMNS" -gt 80 ]
+	# 	echo -n -s (fish_vcs_prompt '[%s] ') $normal
+	# end
 
-	if test -n "$CMD_DURATION"; and [ "$CMD_DURATION" -gt 0 ]
-		echo -n -s (format_time $CMD_DURATION 0.5 false ' ')
+	# user@hostname if root.
+	if test -n "$SSH_CONNECTION"; or fish_is_root_user
+		echo -n -s (prompt_login)' '
+	end
+
+	# Show the path.
+	echo -n -s (set_color $color_cwd) (prompt_pwd) $normal ' '$prompt_status
+
+	if test -n "$CMD_DURATION"; and [ "$CMD_DURATION" -gt 999 ]
+		echo -n -s (format_time $CMD_DURATION 1 false ' ')
 	end
 
 	# Show number of jobs
 	set --local njobs (count (jobs -p))
-	if test "$njobs" -gt 0
-		echo -n -s "✦"
-	end
 	if test "$njobs" -gt 1
 		echo -n -s " "$njobs
+	end
+	if test "$njobs" -gt 0
+		echo -n -s "✦"
 	end
 	echo -n -s $suffix
 end
