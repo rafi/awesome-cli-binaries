@@ -22,9 +22,9 @@ local opt = vim.opt
 
 -- Only set clipboard if not in SSH, to make sure the OSC 52
 -- integration works automatically. Requires Neovim >= 0.10.0
-opt.title = true
-opt.titlestring = '%<%F%=%l/%L - nvim'
-opt.mouse = 'nv'               -- Enable mouse in normal and visual modes only
+opt.title = false
+opt.ruler = true
+opt.mouse = ''
 opt.spelloptions:append('camel')
 if not vim.g.vscode then
 	opt.timeoutlen = 500  -- Time out on mappings
@@ -55,6 +55,20 @@ then
 	vim.opt_global.backup = false
 	vim.opt_global.writebackup = false
 	vim.opt_global.shadafile = 'NONE'
+end
+
+if vim.env.SSH_TTY then
+	vim.g.clipboard = {
+		name = 'OSC 52',
+		copy = {
+			['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+			['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+		},
+		paste = {
+			['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+			['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+		},
+	}
 end
 
 -- Formatting

@@ -34,6 +34,14 @@ return {
 	{ 'todo-comments.nvim', enabled = false },
 	{ 'trouble.nvim', enabled = false },
 	{ 'lazydev.nvim', enabled = false },
+	{ 'noice.nvim', enabled = false },
+	{ 'lualine.nvim', enabled = false },
+	{ 'conform.nvim', enabled = false },
+	{ 'nvim-lint', enabled = false },
+	{ 'mason-lspconfig.nvim', enabled = false },
+	{ 'mason.nvim', enabled = false },
+	{ 'nvim-lspconfig', enabled = false },
+	{ 'flash.nvim', enabled = false },
 
 	-----------------------------------------------------------------------------
 	-- Automatic indentation style detection
@@ -278,6 +286,9 @@ return {
 		'which-key.nvim',
 		-- stylua: ignore
 		opts = {
+			delay = function(ctx)
+				return ctx.plugin and 0 or 500
+			end,
 			spec = {
 				{
 					mode = { 'n', 'v' },
@@ -376,7 +387,7 @@ return {
 					end,
 
 					['<2-LeftMouse>'] = 'open',
-					['<CR>'] = 'open_with_window_picker',
+					['<CR>'] = 'open',
 					['l'] = 'open',
 					['h'] = 'close_node',
 					['C'] = 'close_node',
