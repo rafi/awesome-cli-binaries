@@ -102,6 +102,20 @@ RUN git clone https://github.com/fish-shell/fish-shell.git && \
 
 # --------------------------------------------------------------------------
 
+FROM alpine:edge AS nvim-plugins
+
+WORKDIR /root
+
+RUN apk add curl git alpine-sdk neovim --update --no-cache
+
+COPY .files/.config/nvim .config/nvim
+
+RUN nvim --headless "+Lazy! sync" +qa \
+    && rm -rf ~/.cache /tmp/nvim.root \
+    && rm -rf ~/.local/state/nvim/log ~/.local/state/nvim/shada
+
+# --------------------------------------------------------------------------
+
 FROM debian:stable-slim AS downloader
 
 ARG BUILD_REVISION=128
@@ -190,6 +204,11 @@ COPY --from=tmux-builder /opt/tmux/bin/tmux .
 COPY --from=fish-builder /root/fish-shell/target/release/fish .
 COPY --from=fish-builder /root/fish-shell/target/release/fish_indent .
 COPY --from=fish-builder /root/fish-shell/target/release/fish_key_reader .
+
+# Copy downloaded neovim plugins
+COPY --from=nvim-plugins /root/.local/share/nvim /root/.local/share/nvim
+COPY --from=nvim-plugins /root/.local/state/nvim /root/.local/state/nvim
+COPY --from=nvim-plugins /root/.config/nvim/lazy-lock.json /root/.config/nvim/lazy-lock.json
 
 # Pre-made dotfiles
 COPY .files/.config /root/.config
