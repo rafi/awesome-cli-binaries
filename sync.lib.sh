@@ -4,7 +4,6 @@ set -eu
 _intro() {
 	repo=https://github.com/rafi/awesome-cli-binaries
 	echo
-
 	echo "  ⠀⢀⣠⣤⣤⣄⡀⠀ Rafi's rootless workspace setup"
 	echo '  ⣴⣿⣿⣿⣿⣿⣿⣦                                '
 	echo '  ⣿⣿⣿⣿⣿⣿⣿⣿    # USE AT YOUR OWN RISK #    '
@@ -100,7 +99,11 @@ _download_binaries() {
 	# TODO: Does crane detect os/arch?
 	"$tmpdir/crane" export --platform "linux/$__arch" \
 		rafib/awesome-cli-binaries - \
-		| tar xf - -C "$tmpdir" usr/local/bin root/.config
+		| tar xf - -C "$tmpdir" \
+				usr/local/bin \
+				root/.config \
+				root/.local/share/nvim \
+				root/.local/state/nvim
 
 	if [ "$no_fish" = '1' ]; then
 		rm -f "$tmpdir"/usr/local/bin/fish*
@@ -111,7 +114,10 @@ _download_binaries() {
 
 	if [ "$no_config" = '0' ]; then
 		echo ':: Setup config files at ~/.config/'
+		mkdir -p ~/.local/share/nvim ~/.local/state/nvim
 		cp -rf "$tmpdir"/root/.config/* ~/.config/
+		cp -rf "$tmpdir"/root/.local/share/nvim/* ~/.local/share/nvim/
+		cp -rf "$tmpdir"/root/.local/state/nvim/* ~/.local/state/nvim/
 	fi
 
 	# Clean
