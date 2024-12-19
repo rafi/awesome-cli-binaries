@@ -26,6 +26,8 @@ local function get_tree_current_directory(state)
 	return node.path
 end
 
+local has_git = vim.fn.executable('git') == 1
+
 return {
 
 	{ 'nvim-treesitter', enabled = false },
@@ -42,6 +44,8 @@ return {
 	{ 'mason.nvim', enabled = false },
 	{ 'nvim-lspconfig', enabled = false },
 	{ 'flash.nvim', enabled = false },
+	{ 'gitsigns.nvim', cond = has_git },
+	{ 'blink.cmp', cond = has_git },
 
 	-----------------------------------------------------------------------------
 	-- Automatic indentation style detection
@@ -93,6 +97,7 @@ return {
 	},
 
 	-----------------------------------------------------------------------------
+	-- Auto-completion
 	{
 		'blink.cmp',
 		opts = function(_, opts)
@@ -111,14 +116,14 @@ return {
 	},
 
 	-----------------------------------------------------------------------------
-	-- Git signs written in pure lua
+	-- File explorer
 	{
-		'gitsigns.nvim',
+		'fzf-lua',
 		opts = {
-			preview_config = {
-				border = 'rounded',
+			defaults = {
+				git_icons = has_git,
 			},
-		},
+		}
 	},
 
 	-----------------------------------------------------------------------------
@@ -327,6 +332,8 @@ return {
 			},
 		},
 		opts = {
+			sources = { 'filesystem', 'buffers' },
+			enable_git_status = has_git,
 			close_if_last_window = true,
 			popup_border_style = 'rounded',
 			sort_case_insensitive = true,
@@ -439,7 +446,7 @@ return {
 				bind_to_cwd = false,
 				follow_current_file = { enabled = true },
 				group_empty_dirs = true,
-				use_libuv_file_watcher = true,
+				use_libuv_file_watcher = has_git,
 				window = {
 					mappings = {
 						['d'] = 'noop',

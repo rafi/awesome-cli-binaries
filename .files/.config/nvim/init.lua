@@ -1,11 +1,6 @@
 -- Rafi's lazy.nvim initialization
 -- https://github.com/rafi/vim-config (minimal version)
 
-if vim.fn.executable('git') == 0 then
-	print('Please install git to install plugins.')
-	return
-end
-
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
 	print('Installing ' .. lazypath .. '…')
@@ -19,6 +14,8 @@ if not vim.uv.fs_stat(lazypath) then
 	})
 end
 vim.opt.rtp:prepend(lazypath)
+
+local has_git = vim.fn.executable('git') == 1
 
 -- Start lazy.nvim plugin manager.
 require('lazy').setup({
@@ -38,8 +35,8 @@ require('lazy').setup({
 		{ import = 'plugins' },
 	},
 	defaults = { lazy = true, version = false },
-	install = { missing = true, colorscheme = {} },
-	checker = { enabled = true, notify = false },
+	install = { missing = has_git, colorscheme = {} },
+	checker = { enabled = has_git, notify = false },
 	change_detection = { notify = false },
 	ui = {
 		size = { width = 0.8, height = 0.85 },
