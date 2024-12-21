@@ -30,9 +30,6 @@ local has_git = vim.fn.executable('git') == 1
 
 return {
 
-	{ 'nvim-treesitter', enabled = false },
-	{ 'nvim-treesitter-textobjects', enabled = false },
-	{ 'nvim-ts-autotag', enabled = false },
 	{ 'todo-comments.nvim', enabled = false },
 	{ 'trouble.nvim', enabled = false },
 	{ 'lazydev.nvim', enabled = false },
@@ -94,6 +91,71 @@ return {
 			{ '<Leader>mds', '<cmd>LinediffShow<CR>', desc = 'Line diff show' },
 			{ '<Leader>mdr', '<cmd>LinediffReset<CR>', desc = 'Line diff reset' },
 		},
+	},
+
+	-----------------------------------------------------------------------------
+	{
+		'nvim-treesitter',
+		opts = {
+			auto_install = false,
+			sync_install = false,
+			ensure_installed = {
+				'bash',
+				'c',
+				'comment',
+				'css',
+				'csv',
+				'cue',
+				'diff',
+				'dtd',
+				'editorconfig',
+				'fish',
+				'git_config',
+				'git_rebase',
+				'gitattributes',
+				'gitcommit',
+				'gitignore',
+				'graphql',
+				'html',
+				'http',
+				'javascript',
+				'jsdoc',
+				'json5',
+				'just',
+				'lua',
+				'luadoc',
+				'luap',
+				'make',
+				'markdown',
+				'markdown_inline',
+				'printf',
+				'python',
+				'query',
+				'readline',
+				'regex',
+				'scss',
+				'sql',
+				'ssh_config',
+				'svelte',
+				'toml',
+				'vhs',
+				'vim',
+				'vimdoc',
+				'xml',
+				'yaml',
+				'zig',
+			},
+		},
+		---@param opts TSConfig
+		config = function(_, opts)
+			if type(opts.ensure_installed) == 'table' then
+				opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
+			end
+			if not has_git then
+				require('nvim-treesitter.install').ensure_installed = function() end
+			end
+			require('nvim-treesitter.configs').setup(opts)
+		end,
 	},
 
 	-----------------------------------------------------------------------------

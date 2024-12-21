@@ -92,7 +92,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=132
+ARG BUILD_REVISION=133
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN git clone https://github.com/fish-shell/fish-shell.git && \
@@ -110,7 +110,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-RUN nvim --headless "+Lazy! sync" +qa \
+RUN nvim --headless "+Lazy! sync" +TSUpdateSync +qa \
     && rm -rf ~/.cache /tmp/nvim.root \
     && rm -rf ~/.local/state/nvim/log ~/.local/state/nvim/shada
 
@@ -118,7 +118,7 @@ RUN nvim --headless "+Lazy! sync" +qa \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=132
+ARG BUILD_REVISION=133
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
