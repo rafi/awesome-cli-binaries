@@ -48,27 +48,29 @@ fish_add_path node_modules/.bin/
 # }}}
 # Key-bindings {{{
 # See /opt/homebrew/share/fish/functions/fish_vi_key_bindings.fish
+# and /opt/homebrew/share/fish/functions/fish_default_key_bindings.fish
 
 # Disable Escape in Normal mode.
-bind \e true
+# bind \e true
 
 # Map Ctrl-] to yazi function (see functions/yy.fish)
-bind \c] yy
-bind -M insert \c] yy
+bind ctrl-\] yy
+bind -M insert ctrl-\] yy
 
 # Complete autosuggestion with Ctrl-f in both normal and insert modes.
-bind \cF accept-autosuggestion
-bind -M insert \cF accept-autosuggestion
+bind ctrl-f accept-autosuggestion
+bind -M insert ctrl-f accept-autosuggestion
 
 # Mix-in some emacs bindings.
-bind \cA beginning-of-line
-bind -M insert \cA beginning-of-line
-bind \cE end-of-line
-bind -M insert \cE end-of-line
-bind \cP up-or-search
-bind -M insert \cP up-or-search
-bind \cN down-or-search
-bind -M insert \cN down-or-search
+bind -M insert ctrl-a beginning-of-line
+bind -M insert ctrl-e end-of-line
+bind -M insert ctrl-p up-or-search
+bind -M insert ctrl-n down-or-search
+
+bind ctrl-a beginning-of-line
+bind ctrl-e end-of-line
+bind ctrl-p up-or-search
+bind ctrl-n down-or-search
 
 # }}}
 # fzf https://github.com/junegunn/fzf {{{
@@ -79,14 +81,12 @@ end
 # }}}
 # zoxide https://github.com/ajeetdsouza/zoxide {{{
 if command -q zoxide
-	# PERF: ~3ms
 	zoxide init fish | source
 end
 
 # }}}
 # atuin https://github.com/atuinsh/atuin {{{
 if command -q atuin
-	# PERF: ~14ms
 	atuin init fish --disable-up-arrow | source
 end
 

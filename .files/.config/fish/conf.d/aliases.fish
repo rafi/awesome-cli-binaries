@@ -26,7 +26,6 @@ if [ $OS_DARWIN ]
 	command -q gfind; and abbr find gfind
 	command -q gsort; and abbr sort gsort
 	command -q gstat; and abbr stat gstat
-	# command -q gls; and abbr ls gls
 end
 
 # Lists ---------------------------------------------------- l for list -- {{{
@@ -59,12 +58,10 @@ if command -q nvim
 	abbr nvi nvim
 	abbr suvim sudo -E nvim
 	abbr vimpager 'nvim - -c "lua Snacks.terminal.colorize()"'
-	# alias vless="nvim -u $PREFIX/share/nvim/runtime/macros/less.vim"
 else
 	abbr v 'vim (fzf)'
 	abbr vi vim
 	abbr suvim sudo -E vim
-	# alias vless="vim -u $PREFIX/share/vim/vim90/macros/less.vim"
 end
 alias ve 'tmux split-window -h "$EDITOR"'
 # alias vimdiff='vim -d'
@@ -243,11 +240,8 @@ abbr untar 'tar xvf'
 
 abbr ,fontcache 'fc-cache -f -v'
 abbr ,fontfind 'fc-list : family style'
-abbr ,ngrok-http 'ngrok http --authtoken="$(pass tokens/ngrok)"'
 abbr ,sniff "sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 abbr ,spell 'aspell -c -l en_US'
-abbr ,subdl 'subliminal download -l en -d "$XDG_CACHE_HOME/subtitles"'
-abbr ,tt ttdl
 abbr ,urlencode 'python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 abbr ,weather "curl -s wttr.in/Kfar-saba | grep -v Follow"
 abbr ,statuspages "curl https://status.plaintext.sh/t"
