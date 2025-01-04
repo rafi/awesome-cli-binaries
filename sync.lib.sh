@@ -96,7 +96,6 @@ _download_binaries() {
 		| tar xzf - -C "$tmpdir" crane && chmod 770 "$tmpdir"/crane
 
 	echo ':: Download and export image…'
-	# TODO: Does crane detect os/arch?
 	"$tmpdir/crane" export --platform "linux/$__arch" \
 		rafib/awesome-cli-binaries - \
 		| tar xf - -C "$tmpdir" \

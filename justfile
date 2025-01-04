@@ -25,7 +25,7 @@ docker arch=OS_ARCH: _validate
     --platform linux/{{ arch }} \
     --secret id=token,env=BUILD_TOKEN \
     --cache-from=rafib/awesome-cli-binaries \
-    --load \
+    --load --progress=plain \
     -t {{ IMAGE }} .
 
 # build and push multi-arch release. does not load locally.
