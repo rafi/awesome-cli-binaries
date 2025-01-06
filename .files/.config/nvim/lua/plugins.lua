@@ -97,8 +97,7 @@ return {
 	{
 		'nvim-treesitter',
 		opts = {
-			auto_install = false,
-			sync_install = true,
+			sync_install = has_git,
 			ensure_installed = {
 				'bash',
 				'c',
