@@ -1,11 +1,12 @@
 -- Rafi's Neovim autocmds
 -- https://github.com/rafi/vim-config (minimal version)
+-- ===
 
 vim.api.nvim_del_augroup_by_name('lazyvim_highlight_yank')
 vim.api.nvim_del_augroup_by_name('lazyvim_wrap_spell')
 
 local function augroup(name)
-	return vim.api.nvim_create_augroup('rafi_' .. name, {})
+	return vim.api.nvim_create_augroup('rafi_' .. name, { clear = true })
 end
 
 -- Highlight on yank

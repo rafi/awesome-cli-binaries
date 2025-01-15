@@ -1,5 +1,6 @@
 -- Rafi's Neovim keymaps
 -- https://github.com/rafi/vim-config (minimal version)
+-- ===
 
 local map = vim.keymap.set
 
@@ -13,13 +14,15 @@ map({ 'n', 'x' }, '<LocalLeader>r', '<leader>sR', { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>f', '<leader>ff', { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>F', '<leader>fF', { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>g', '<leader>sg', { remap = true })
+map({ 'n', 'x' }, '<LocalLeader>G', '<leader>sG', { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>b', '<leader>,',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>h', '<leader>sH',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>j', '<leader>sj',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>m', '<leader>sm',  { remap = true })
+map({ 'n', 'x' }, '<LocalLeader>o', '<leader>so',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>t', '<leader>sS',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>v', '<leader>s"',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>s', '<leader>ss',  { remap = true })
+map({ 'n', 'x' }, '<LocalLeader>s', '<leader>qS',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>x', '<leader>fr',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>;', '<leader>sc',  { remap = true })
 map({ 'n', 'x' }, '<LocalLeader>:', '<leader>sC',  { remap = true })
@@ -49,7 +52,7 @@ else
 	map('n', '<C-Right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' })
 end
 
-if not vim.env.TMUX or vim.uv.os_uname().sysname == 'Windows_NT' then
+if not LazyVim.has('vim-tmux-navigator') or vim.uv.os_uname().sysname == 'Windows_NT' then
 	-- Move to window using the <ctrl> hjkl keys
 	map('n', '<C-h>', '<C-w>h', { desc = 'Go to Left Window', remap = true })
 	map('n', '<C-j>', '<C-w>j', { desc = 'Go to Lower Window', remap = true })
@@ -214,6 +217,11 @@ map('x', '<Leader>v', 'gc', { remap = true, desc = 'Comment Selection' })
 map('n', 'gco', 'o<Esc>Vcx<Esc><cmd>normal gcc<CR>fxa<BS>', { silent = true, desc = 'Add Comment Below' })
 map('n', 'gcO', 'O<Esc>Vcx<Esc><cmd>normal gcc<CR>fxa<BS>', { silent = true, desc = 'Add Comment Above' })
 
+-- Add undo break-points
+map('i', ',', ',<c-g>u')
+map('i', '.', '.<c-g>u')
+map('i', ';', ';<c-g>u')
+
 -- Macros
 map('n', '<C-q>', 'q', { desc = 'Macro Prefix' })
 
@@ -242,6 +250,14 @@ map('x', '<Leader>dd', '""Y""Pgv', { desc = 'Duplicate selection' })
 -- }}}
 -- Search, substitute, diff {{{
 
+-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
+map('n', 'n', "'Nn'[v:searchforward].'zv'", { expr = true, desc = 'Next Search Result' })
+map('x', 'n', "'Nn'[v:searchforward]", { expr = true, desc = 'Next Search Result' })
+map('o', 'n', "'Nn'[v:searchforward]", { expr = true, desc = 'Next Search Result' })
+map('n', 'N', "'nN'[v:searchforward].'zv'", { expr = true, desc = 'Prev Search Result' })
+map('x', 'N', "'nN'[v:searchforward]", { expr = true, desc = 'Prev Search Result' })
+map('o', 'N', "'nN'[v:searchforward]", { expr = true, desc = 'Prev Search Result' })
+
 -- Switch */g* and #/g#
 map('n', '*', 'g*')
 map('n', 'g*', '*')
@@ -249,9 +265,6 @@ map('n', '#', 'g#')
 map('n', 'g#', '#')
 
 map('n', '<C-c>', 'ciw', { desc = 'Change Inner Word' })
-
--- Clear search with <Esc>
-map('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear hlsearch' })
 
 -- Use backspace key for matching pairs
 map({ 'n', 'x' }, '<BS>', '%', { remap = true, desc = 'Jump to Paren' })
@@ -314,7 +327,7 @@ map('n', '<Leader>a', function()
 	if vim.bo.filetype ~= 'qf' then
 		vim.diagnostic.setloclist({ open = false })
 	end
-	require('util').toggle_list('loclist')
+	_G.toggle_list('loclist')
 end, { desc = 'Open Location List' })
 
 -- Toggle options
@@ -343,6 +356,13 @@ end
 map('n', '<Leader>ui', vim.show_pos, { desc = 'Show Treesitter Node' })
 map('n', '<leader>uI', '<cmd>InspectTree<cr>', { desc = 'Inspect Tree' })
 
+-- Clear search and stop snippet on escape
+map({ 'i', 'n', 's' }, '<esc>', function()
+	vim.cmd("noh")
+	LazyVim.cmp.actions.snippet_stop()
+	return '<esc>'
+end, { expr = true, desc = 'Escape and Clear hlsearch' })
+
 -- Clear search, diff update and redraw taken from runtime/lua/_editor.lua
 map(
 	'n',
@@ -366,13 +386,13 @@ if vim.fn.executable('lazygit') == 1 then
 	---@diagnostic disable-next-line: missing-fields
 	map('n', '<leader>gt', function() Snacks.lazygit( { cwd = LazyVim.root.git() }) end, { desc = 'Lazygit (Root Dir)' })
 	map('n', '<leader>gT', function() Snacks.lazygit() end, { desc = 'Lazygit (cwd)' })
-	map('n', '<leader>gF', function() Snacks.lazygit.log_file() end, { desc = 'Lazygit Current File History' })
+	map('n', '<leader>gF', function() Snacks.picker.git_log_file() end, { desc = 'Git Current File History' })
 	---@diagnostic disable-next-line: missing-fields
-	map('n', '<leader>gl', function() Snacks.lazygit.log({ cwd = LazyVim.root.git() }) end, { desc = 'Lazygit Log' })
-	map('n', '<leader>gL', function() Snacks.lazygit.log() end, { desc = 'Lazygit Log (cwd)' })
+	map('n', '<leader>gl', function() Snacks.picker.git_log({ cwd = LazyVim.root.git() }) end, { desc = 'Git Log' })
+	map('n', '<leader>gL', function() Snacks.picker.git_log() end, { desc = 'Git Log (cwd)' })
 end
 
-map('n', '<leader>gm', function() Snacks.git.blame_line() end, { desc = 'Git Blame Line' })
+map('n', '<leader>gm', function() Snacks.picker.git_log_line() end, { desc = 'Git Blame Line' })
 map({ 'n', 'x' }, '<leader>go', function() Snacks.gitbrowse() end, { desc = 'Git Browse' })
 map({ 'n', 'x' }, '<leader>gY', function()
 	---@diagnostic disable-next-line: missing-fields
@@ -451,7 +471,7 @@ end
 map('n', '<C-x>', '<C-w>x<C-w>w', { remap = true, desc = 'Swap adjacent windows' })
 map('n', '<C-w>d', '<C-W>c', { desc = 'Delete Window', remap = true })
 
-map('n', 's', '<Nop>')
+map('n', 's', '<Nop>', { desc = '+screen' })
 map('n', 'sb', '<cmd>buffer#<CR>', { desc = 'Alternate buffer' })
 map('n', 'sc', '<cmd>close<CR>', { desc = 'Close window' })
 map('n', 'sd', '<cmd>bdelete<CR>', { desc = 'Buffer delete' })
@@ -508,12 +528,6 @@ function _G.get_visual_selection()
 			-- visual line doesn't provide columns
 			cscol, cecol = 0, 999
 		end
-		-- exit visual mode
-		vim.api.nvim_feedkeys(
-			vim.api.nvim_replace_termcodes('<Esc>', true, false, true),
-			'n',
-			true
-		)
 	else
 		-- otherwise, use the last known visual position
 		_, csrow, cscol, _ = unpack(vim.fn.getpos("'<") or { 0, 0, 0, 0 })
@@ -547,6 +561,13 @@ function _G.append_modeline()
 		vim.bo.expandtab and '' or 'no'
 	)
 	local cs = vim.bo.commentstring
+	local ok, tccs = pcall(require, 'ts_context_commentstring.internal')
+	if ok then
+		local ts_cs = tccs.calculate_commentstring()
+		if ts_cs then
+			cs = ts_cs
+		end
+	end
 	if not cs then
 		LazyVim.warn('No commentstring found')
 		return

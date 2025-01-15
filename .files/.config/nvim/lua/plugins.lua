@@ -3,21 +3,6 @@
 
 local tree_width = 30
 
-local function toggle_tree_width()
-	local max = tree_width * 2
-	local cur_width = vim.fn.winwidth(0)
-	local half = math.floor((tree_width + (max - tree_width) / 2) + 0.4)
-	local new_width = tree_width
-	if cur_width == tree_width then
-		new_width = half
-	elseif cur_width == half then
-		new_width = max
-	else
-		new_width = tree_width
-	end
-	vim.cmd(new_width .. ' wincmd |')
-end
-
 local function get_tree_current_directory(state)
 	local node = state.tree:get_node()
 	if node.type ~= 'directory' or not node:is_expanded() then
@@ -483,7 +468,20 @@ return {
 					},
 
 					-- Custom commands
-					['w'] = toggle_tree_width,
+					['w'] = function(state)
+						local max = tree_width * 2
+						local cur_width = vim.fn.winwidth(0)
+						local half = math.floor((tree_width + (max - tree_width) / 2) + 0.4)
+						local new_width = tree_width
+						if cur_width == tree_width then
+							new_width = half
+						elseif cur_width == half then
+							new_width = max
+						else
+							new_width = tree_width
+						end
+						vim.cmd(new_width .. ' wincmd |')
+					end,
 					['Y'] = {
 						function(state)
 							local node = state.tree:get_node()
