@@ -15,8 +15,6 @@ alias upgrade 'ya pack -u && brew upgrade'
 alias outdated 'brew outdated'
 alias work 'cd ~/code/work'
 alias wiki 'cd ~/code/rafi/*/content/wiki'
-alias start '{ test -f .jig* && jig start .; } ||
-	{ jig ls | fzf | xargs jig start; }'
 
 abbr -a --position anywhere --function last_history_item -- !!
 abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat -pl=help"
