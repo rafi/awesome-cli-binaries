@@ -136,14 +136,9 @@ WORKDIR /usr/local/bin
 # See https://docs.docker.com/build/building/variables/#pre-defined-build-arguments
 ARG TARGETARCH
 
-# dra (Download Release Assets from GitHub)
-RUN arch="$(uname -m)" \
-    && dra_name="${arch}-unknown-linux-$([ "$arch" = x86_64 ] && echo musl || echo gnu)" \
-    && dra_version="$(wget -qO- --no-hsts https://api.github.com/repos/devmatteini/dra/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" \
-    && dra_url="https://github.com/devmatteini/dra/releases/download/$dra_version/dra-$dra_version-$dra_name.tar.gz" \
-    && wget -qO- --no-hsts "$dra_url" | tar -xzo --strip-components 1 "dra-$dra_version-$dra_name/dra" \
-    && chmod 770 dra \
-    && dra --version
+# Install dra
+RUN wget -qO- --no-hsts https://raw.githubusercontent.com/devmatteini/dra/refs/heads/main/install.sh \
+    | bash -s && dra --version
 
 RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
