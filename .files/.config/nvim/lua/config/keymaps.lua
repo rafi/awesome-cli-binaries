@@ -10,24 +10,32 @@ map('n', '<leader>mx', '<cmd>LazyExtras<CR>', { desc = 'Open Plugin Extras' })
 
 -- stylua: ignore start
 
-map({ 'n', 'x' }, '<LocalLeader>r', '<leader>sR', { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>f', '<leader>ff', { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>F', '<leader>fF', { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>g', '<leader>sg', { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>G', '<leader>sG', { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>b', '<leader>,',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>h', '<leader>sH',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>j', '<leader>sj',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>m', '<leader>sm',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>o', '<leader>so',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>t', '<leader>sS',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>v', '<leader>s"',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>s', '<leader>qS',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>x', '<leader>fr',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>;', '<leader>sc',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>:', '<leader>sC',  { remap = true })
-map({ 'n', 'x' }, '<LocalLeader>/', '<leader>sb',  { remap = true })
+-- Picker {{{
 
+-- Bind localleader to common LazyVim picker (telescope/fzf/snacks) keymaps.
+map({ 'n', 'x' }, '<LocalLeader>r', '<leader>sR', { remap = true, desc = 'Resume Last' })
+map({ 'n', 'x' }, '<LocalLeader>f', '<leader>ff', { remap = true, desc = 'Find Files (Root Dir)' })
+map({ 'n', 'x' }, '<LocalLeader>F', '<leader>fF', { remap = true, desc = 'Find Files (cwd)' })
+map({ 'n', 'x' }, '<LocalLeader>g', '<leader>sg', { remap = true, desc = 'Grep (Root Dir)' })
+map({ 'n', 'x' }, '<LocalLeader>G', '<leader>sG', { remap = true, desc = 'Grep (cwd)' })
+map({ 'n', 'x' }, '<LocalLeader>b', '<leader>,',  { remap = true, desc = 'Switch Buffer' })
+map({ 'n', 'x' }, '<LocalLeader>h', '<leader>sh',  { remap = true, desc = 'Help Pages' })
+map({ 'n', 'x' }, '<LocalLeader>H', '<leader>sH',  { remap = true, desc = 'Search Highlight Groups' })
+map({ 'n', 'x' }, '<LocalLeader>j', '<leader>sj',  { remap = true, desc = 'Jumplist' })
+map({ 'n', 'x' }, '<LocalLeader>m', '<leader>sm',  { remap = true, desc = 'Jump to Mark' })
+map({ 'n', 'x' }, '<LocalLeader>M', '<leader>sM',  { remap = true, desc = 'Man Pages' })
+map({ 'n', 'x' }, '<LocalLeader>o', '<leader>so',  { remap = true, desc = 'Options' })
+map({ 'n', 'x' }, '<LocalLeader>t', '<leader>ss',  { remap = true, desc = 'Goto Symbol' })
+map({ 'n', 'x' }, '<LocalLeader>T', '<leader>sS',  { remap = true, desc = 'Goto Symbol (Workspace)' })
+map({ 'n', 'x' }, '<LocalLeader>v', '<leader>s"',  { remap = true, desc = 'Registers' })
+map({ 'n', 'x' }, '<LocalLeader>s', '<leader>qS',  { remap = true, desc = 'Sessions' })
+map({ 'n', 'x' }, '<LocalLeader>x', '<leader>fr',  { remap = true, desc = 'Recent' })
+map({ 'n', 'x' }, '<LocalLeader>X', '<leader>fR',  { remap = true, desc = 'Recent (cwd)' })
+map({ 'n', 'x' }, '<LocalLeader>;', '<leader>sc',  { remap = true, desc = 'Command History' })
+map({ 'n', 'x' }, '<LocalLeader>:', '<leader>sC',  { remap = true, desc = 'Commands' })
+map({ 'n', 'x' }, '<LocalLeader>i', '<leader>sb',  { remap = true, desc = 'Buffer' })
+
+-- }}}
 -- Navigation {{{
 
 -- Moves through display-lines, unless count is provided
@@ -208,8 +216,14 @@ map('n', '<Leader>Y', function()
 	vim.notify(path, vim.log.levels.INFO, { title = 'Yanked absolute path' })
 end, { silent = true, desc = 'Yank absolute path' })
 
---- }}}
+-- }}}
 -- Coding {{{
+
+pcall(vim.keymap.del, 'n', 'gra')
+pcall(vim.keymap.del, 'n', 'gri')
+pcall(vim.keymap.del, 'n', 'grr')
+pcall(vim.keymap.del, 'n', 'grn')
+pcall(vim.keymap.del, 'n', 'gc')
 
 -- Comment
 map('n', '<Leader>v', 'gcc', { remap = true, desc = 'Comment Line' })
@@ -293,7 +307,7 @@ end, { expr = true })
 -- Use keywordprg
 map('n', '<leader>K', '<cmd>norm! K<cr>', { desc = 'Keywordprg' })
 
---- }}}
+-- }}}
 -- File operations {{{
 
 -- Switch (tab) to the directory of the current opened buffer
@@ -487,9 +501,9 @@ end, { desc = 'Delete buffer and open new' })
 
 Snacks.toggle.zoom():map('sz'):map('<leader>uZ')
 Snacks.toggle.zen():map('<leader>uz')
--- }}}
 
--- Tabs
+-- }}}
+-- Tabs {{{
 map('n', '<leader><tab>l', '<cmd>tablast<CR>', { desc = 'Last Tab' })
 map('n', '<leader><tab>o', '<cmd>tabonly<CR>', { desc = 'Close Other Tabs' })
 map('n', '<leader><tab>f', '<cmd>tabfirst<CR>', { desc = 'First Tab' })
@@ -507,6 +521,7 @@ if vim.fn.has('nvim-0.11') == 0 then
 		return vim.snippet.active({ direction = -1 }) and '<cmd>lua vim.snippet.jump(-1)<cr>' or '<S-Tab>'
 	end, { expr = true, desc = 'Jump Previous' })
 end
+-- }}}
 
 -- FUNCTIONS
 -- ===
@@ -514,7 +529,7 @@ end
 -- Get visually selected lines.
 -- Source: https://github.com/ibhagwan/fzf-lua/blob/main/lua/fzf-lua/utils.lua
 ---@return string
-function _G.get_visual_selection()
+function _G.get_visual_selection() -- {{{
 	-- this will exit visual mode
 	-- use 'gv' to reselect the text
 	local _, csrow, cscol, cerow, cecol
@@ -549,10 +564,10 @@ function _G.get_visual_selection()
 	lines[n] = string.sub(lines[n], 1, cecol)
 	lines[1] = string.sub(lines[1], cscol)
 	return table.concat(lines, '\n')
-end
+end -- }}}
 
 -- Append modeline at end of file.
-function _G.append_modeline()
+function _G.append_modeline() -- {{{
 	local modeline = string.format(
 		'vim: set ts=%d sw=%d tw=%d %set :',
 		vim.bo.tabstop,
@@ -574,11 +589,11 @@ function _G.append_modeline()
 	end
 	modeline = string.gsub(cs, '%%s', modeline)
 	vim.api.nvim_buf_set_lines(0, -1, -1, false, { modeline })
-end
+end -- }}}
 
 -- Go to newer/older buffer through jumplist.
 ---@param direction 1 | -1
-function _G.jump_buffer(direction)
+function _G.jump_buffer(direction) -- {{{
 	local jumplist, curjump = unpack(vim.fn.getjumplist() or { 0, 0 })
 	if #jumplist == 0 then
 		return
@@ -603,11 +618,11 @@ function _G.jump_buffer(direction)
 			break
 		end
 	end
-end
+end -- }}}
 
 -- Jump to next/previous whitespace error.
 ---@param direction 1 | -1
-function _G.whitespace_jump(direction)
+function _G.whitespace_jump(direction) -- {{{
 	local opts = 'wz'
 	if direction < 1 then
 		opts = opts .. 'b'
@@ -616,11 +631,11 @@ function _G.whitespace_jump(direction)
 	-- Whitespace pattern: Trailing whitespace or mixed tabs/spaces.
 	local pat = '\\s\\+$\\| \\+\\ze\\t'
 	vim.fn.search(pat, opts)
-end
+end -- }}}
 
 -- Toggle list window
 ---@param name "quickfix" | "loclist"
-function _G.toggle_list(name)
+function _G.toggle_list(name) -- {{{
 	for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
 		if vim.api.nvim_win_is_valid(win) and vim.fn.win_gettype(win) == name then
 			vim.api.nvim_win_close(win, false)
@@ -633,6 +648,6 @@ function _G.toggle_list(name)
 	else
 		vim.cmd([[ botright copen ]])
 	end
-end
+end -- }}}
 
 -- vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :
