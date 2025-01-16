@@ -9,6 +9,9 @@ vim.g.maplocalleader = ';'
 -- Enable elite-mode (hjkl mode. arrow-keys resize window)
 vim.g.elite_mode = false
 
+-- Set picker.
+vim.g.lazyvim_picker = 'snacks'
+
 -- Disable LazyVim features.
 vim.g.autoformat = false      -- LazyVim auto format
 vim.g.snacks_animate = false  -- Globally disable all snacks animations

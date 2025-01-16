@@ -165,6 +165,7 @@ return {
 	-- File explorer
 	{
 		'fzf-lua',
+		optional = true,
 		opts = {
 			defaults = {
 				git_icons = has_git,

@@ -33,7 +33,7 @@ require('lazy').setup({
 	},
 	defaults = { lazy = true, version = false },
 	install = { missing = has_git, colorscheme = {} },
-	checker = { enabled = has_git, notify = false },
+	checker = { enabled = false, notify = false },
 	change_detection = { notify = false },
 	ui = {
 		size = { width = 0.8, height = 0.85 },
