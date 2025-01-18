@@ -99,12 +99,22 @@ return {
 	-----------------------------------------------------------------------------
 	-- File explorer
 	{
+		'mini.ai',
+		opts = function(_, opts)
+			return vim.tbl_extend('force', opts or {}, {
+				use_nvim_treesitter = false,
+				custom_textobjects = { o = nil, f = nil, c = nil },
+			})
+		end,
+	},
+
+	-----------------------------------------------------------------------------
+	-- File explorer
+	{
 		'fzf-lua',
 		optional = true,
 		opts = {
-			defaults = {
-				git_icons = has_git,
-			},
+			defaults = { git_icons = has_git },
 		}
 	},
 
@@ -159,6 +169,7 @@ return {
 	},
 
 	-----------------------------------------------------------------------------
+	-- Collection of small QoL plugins
 	{
 		'snacks.nvim',
 		opts = {
@@ -172,31 +183,60 @@ return {
 				},
 			},
 		},
-		-- stylua: ignore
-		keys = {
-			{ '<leader>.',  function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer' },
-			{ '<leader>S',  function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer' },
-			{ '<leader>dps', function() Snacks.profiler.scratch() end, desc = 'Profiler Scratch Buffer' },
-			{
-				'<leader>N',
-				desc = 'Neovim News',
-				function()
-					---@diagnostic disable-next-line: missing-fields
-					Snacks.win({
-						file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1],
-						width = 0.6,
-						height = 0.6,
-						wo = {
-							spell = false,
-							wrap = false,
-							signcolumn = 'yes',
-							statuscolumn = ' ',
-							conceallevel = 3,
-						},
-					})
-				end,
+	},
+	{
+		'snacks.nvim',
+		keys = function(_, keys)
+			if LazyVim.pick.want() ~= 'snacks' then
+				return
+			end
+			-- stylua: ignore
+			local mappings = {
+				{ '<localleader>z', function() Snacks.picker.zoxide() end, mode = { 'n', 'x' }, desc = 'Zoxide' },
+				{ '<leader><localleader>', function() Snacks.picker() end, mode = { 'n', 'x' }, desc = 'Pickers' },
 			}
-		},
+			return vim.list_extend(mappings, keys)
+		end,
+		opts = function(_, opts)
+			if LazyVim.pick.want() ~= 'snacks' then
+				return
+			end
+			return vim.tbl_deep_extend('force', opts or {}, {
+				picker = {
+					hidden = true,
+					win = {
+						input = {
+							keys = {
+								['jj'] = { '<esc>', expr = true, mode = 'i' },
+								['<c-l>'] = { 'cycle_win', mode = { 'n', 'i' } },
+								['sv'] = 'edit_split',
+								['sg'] = 'edit_vsplit',
+								['st'] = 'edit_tab',
+								['.'] = 'toggle_hidden',
+								[','] = 'toggle_ignored',
+								['e'] = 'qflist',
+								['E'] = 'loclist',
+								['K'] = 'select_and_prev',
+								['J'] = 'select_and_next',
+								['*'] = 'select_all',
+							},
+						},
+						list = {
+							keys = {
+								['<c-h>'] = { 'focus_input', mode = { 'n', 'i' } },
+								['<c-l>'] = { 'cycle_win', mode = { 'n', 'i' } },
+							},
+						},
+						preview = {
+							keys = {
+								['<c-h>'] = { 'focus_input', mode = { 'n', 'i' } },
+								['<c-l>'] = { 'cycle_win', mode = { 'n', 'i' } },
+							},
+						},
+					},
+				},
+			})
+		end,
 	},
 
 	-----------------------------------------------------------------------------
@@ -225,9 +265,9 @@ return {
 		},
 	},
 
+	-----------------------------------------------------------------------------
+	-- File explorer written in Lua
 	{
-		-----------------------------------------------------------------------------
-		-- File explorer written in Lua
 		'neo-tree.nvim',
 		branch = 'v3.x',
 		-- stylua: ignore
