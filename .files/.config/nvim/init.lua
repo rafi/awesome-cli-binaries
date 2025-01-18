@@ -3,5 +3,4 @@
 --
 -- since 2014.
 
-vim.uv = vim.uv or vim.loop
 require('config.lazy')

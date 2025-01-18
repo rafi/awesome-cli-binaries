@@ -148,6 +148,16 @@ return {
 	},
 
 	-----------------------------------------------------------------------------
+	-- Show colorcolumn dynamically
+	{
+		'Bekaboo/deadcolumn.nvim',
+		event = { 'BufReadPre', 'BufNewFile' },
+		opts = {
+			scope = 'visible',
+		},
+	},
+
+	-----------------------------------------------------------------------------
 	-- Highlight words quickly
 	{
 		't9md/vim-quickhl',

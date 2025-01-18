@@ -16,8 +16,13 @@ return {
 	-- Automatic indentation style detection
 	{ 'nmac427/guess-indent.nvim', lazy = false, priority = 50, opts = {} },
 
+	-----------------------------------------------------------------------------
 	-- An alternative sudo for Vim and Neovim
 	{ 'lambdalisue/suda.vim', event = 'BufRead' },
+
+	-----------------------------------------------------------------------------
+	-- Edit your filesystem like a buffer
+	{ 'stevearc/oil.nvim', cmd = 'Oil', opts = {} },
 
 	-----------------------------------------------------------------------------
 	-- FZF picker

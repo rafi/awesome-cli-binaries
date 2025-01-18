@@ -40,7 +40,7 @@ return {
 	{ 'nvim-lint', enabled = false },
 
 	-----------------------------------------------------------------------------
-	-- File explorer
+	-- Extend and create a/i textobjects
 	{
 		'mini.ai',
 		opts = function(_, opts)
