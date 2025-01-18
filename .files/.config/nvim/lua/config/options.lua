@@ -2,6 +2,8 @@
 -- https://github.com/rafi/vim-config (minimal version)
 -- ===
 
+-- Extends $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/config/options.lua
+
 -- Keyboard leaders
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ';'
