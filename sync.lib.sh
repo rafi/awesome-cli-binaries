@@ -10,10 +10,10 @@ _intro() {
 	echo '  ⣇⠈⠉⡿⢿⠉⠁⢸                                '
 	echo '  ⠙⠛⢻⣷⣾⡟⠛⠋  Overwrites files in:          '
 	echo '  ⠀⠀⠀⠈⠁⠀⠀⠀                                '
-	echo '              ~/.config'
-	echo "                $repo/tree/master/.files"
-	echo '              ~/.local/bin'
-	echo "                $repo?tab=readme-ov-file#binaries"
+	echo '  ~/.config'
+	echo "    $repo/tree/master/.files"
+	echo '  ~/.local/bin'
+	echo "    $repo?tab=readme-ov-file#binaries"
 	echo
 }
 

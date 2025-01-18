@@ -92,7 +92,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=143
+ARG BUILD_REVISION=145
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN git clone https://github.com/fish-shell/fish-shell.git && \
@@ -110,15 +110,20 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-RUN nvim --headless '+Lazy! sync' +TSUpdateSync +qa \
+RUN nvim --headless '+Lazy! sync' +qa \
     && rm -rf ~/.cache /tmp/nvim.root \
     && rm -rf ~/.local/state/nvim/log ~/.local/state/nvim/shada
+
+RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
+    echo 'Failure during LazyVim install missing plugins.'; \
+    exit 1; \
+    fi
 
 # --------------------------------------------------------------------------
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=143
+ARG BUILD_REVISION=145
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -197,8 +202,6 @@ COPY --from=tmux-builder /opt/tmux/bin/tmux .
 
 # Copy compiled fish-shell
 COPY --from=fish-builder /root/fish-shell/target/release/fish .
-COPY --from=fish-builder /root/fish-shell/target/release/fish_indent .
-COPY --from=fish-builder /root/fish-shell/target/release/fish_key_reader .
 
 # Copy downloaded neovim plugins
 COPY --from=nvim-plugins /root/.local/share/nvim /root/.local/share/nvim

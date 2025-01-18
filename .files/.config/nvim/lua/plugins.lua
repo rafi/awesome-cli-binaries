@@ -1,9 +1,7 @@
 -- Plugins
 -- https://github.com/rafi/vim-config (minimal version)
 
-local tree_width = 30
-
-local function get_tree_current_directory(state)
+local function get_current_directory(state)
 	local node = state.tree:get_node()
 	if node.type ~= 'directory' or not node:is_expanded() then
 		node = state.tree:get_node(node:get_parent_id())
@@ -15,11 +13,12 @@ local has_git = vim.fn.executable('git') == 1
 
 return {
 
+	{ 'nvim-treesitter', enabled = false },
+	{ 'nvim-treesitter-textobjects', enabled = false },
 	{ 'todo-comments.nvim', enabled = false },
 	{ 'trouble.nvim', enabled = false },
 	{ 'lazydev.nvim', enabled = false },
 	{ 'noice.nvim', enabled = false },
-	{ 'lualine.nvim', enabled = false },
 	{ 'conform.nvim', enabled = false },
 	{ 'nvim-lint', enabled = false },
 	{ 'mason-lspconfig.nvim', enabled = false },
@@ -79,70 +78,6 @@ return {
 	},
 
 	-----------------------------------------------------------------------------
-	{
-		'nvim-treesitter',
-		opts = {
-			sync_install = has_git,
-			ensure_installed = {
-				'bash',
-				'c',
-				'comment',
-				'css',
-				'csv',
-				'cue',
-				'diff',
-				'dtd',
-				'editorconfig',
-				'fish',
-				'git_config',
-				'git_rebase',
-				'gitattributes',
-				'gitcommit',
-				'gitignore',
-				'graphql',
-				'html',
-				'http',
-				'javascript',
-				'jsdoc',
-				'json5',
-				'just',
-				'lua',
-				'luadoc',
-				'luap',
-				'make',
-				'markdown',
-				'markdown_inline',
-				'printf',
-				'python',
-				'query',
-				'readline',
-				'regex',
-				'scss',
-				'sql',
-				'ssh_config',
-				'svelte',
-				'toml',
-				'vhs',
-				'vim',
-				'vimdoc',
-				'xml',
-				'yaml',
-				'zig',
-			},
-		},
-		---@param opts TSConfig
-		config = function(_, opts)
-			if type(opts.ensure_installed) == 'table' then
-				opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
-			end
-			if not has_git then
-				require('nvim-treesitter.install').ensure_installed = function() end
-			end
-			require('nvim-treesitter.configs').setup(opts)
-		end,
-	},
-
-	-----------------------------------------------------------------------------
 	-- Auto-completion
 	{
 		'blink.cmp',
@@ -171,25 +106,6 @@ return {
 				git_icons = has_git,
 			},
 		}
-	},
-
-	-----------------------------------------------------------------------------
-	-- Search labels, enhanced character motions
-	{
-		'flash.nvim',
-		---@type Flash.Config
-		opts = {
-			modes = {
-				search = {
-					enabled = false,
-				},
-			},
-		},
-		-- stylua: ignore
-		keys = {
-			{ 's', mode = { 'n', 'x', 'o' }, '<Nop>' },
-			{ 'ss', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Flash' },
-		},
 	},
 
 	-----------------------------------------------------------------------------
@@ -238,55 +154,6 @@ return {
 				get_element_icon = function(opts)
 					return LazyVim.config.icons.ft[opts.filetype]
 				end,
-			},
-		},
-	},
-
-	-----------------------------------------------------------------------------
-	-- Replaces the UI for messages, cmdline and the popupmenu
-	{
-		'noice.nvim',
-		-- stylua: ignore
-		keys = {
-			{ '<S-Enter>', function() require('noice').redirect(tostring(vim.fn.getcmdline())) end, mode = 'c', desc = 'Redirect Cmdline' },
-		},
-		---@type NoiceConfig
-		opts = {
-			messages = { view_search = false },
-			presets = { lsp_doc_border = true },
-			routes = {
-				-- See :h ui-messages
-				{
-					filter = {
-						event = 'msg_show',
-						any = {
-							{ find = '%d+L, %d+B' },
-							{ find = '^%d+ changes?; after #%d+' },
-							{ find = '^%d+ changes?; before #%d+' },
-							{ find = '^Hunk %d+ of %d+$' },
-							{ find = '^%d+ fewer lines;?' },
-							{ find = '^%d+ more lines?;?' },
-							{ find = '^%d+ line less;?' },
-							{ find = '^Already at newest change' },
-							{ kind = 'wmsg' },
-							{ kind = 'emsg', find = 'E486' },
-							{ kind = 'quickfix' },
-						},
-					},
-					view = 'mini',
-				},
-				{
-					filter = {
-						event = 'msg_show',
-						any = {
-							{ find = '^%d+ lines .ed %d+ times?$' },
-							{ find = '^%d+ lines yanked$' },
-							{ kind = 'emsg', find = 'E490' },
-							{ kind = 'search_count' },
-						},
-					},
-					opts = { skip = true },
-				},
 			},
 		},
 	},
@@ -426,7 +293,7 @@ return {
 				},
 			},
 			window = {
-				width = tree_width,
+				width = 30,
 				mappings = {
 					['q'] = 'close_window',
 					['?'] = 'noop',
@@ -463,23 +330,18 @@ return {
 					['N'] = { 'add_directory', config = { show_path = 'relative' } },
 
 					['P'] = 'paste_from_clipboard',
-					['p'] = {
-						'toggle_preview',
-						config = { use_float = true },
-					},
 
 					-- Custom commands
 					['w'] = function(state)
-						local max = tree_width * 2
-						local cur_width = vim.fn.winwidth(0)
-						local half = math.floor((tree_width + (max - tree_width) / 2) + 0.4)
-						local new_width = tree_width
-						if cur_width == tree_width then
-							new_width = half
-						elseif cur_width == half then
-							new_width = max
-						else
-							new_width = tree_width
+						local normal = state.window.width
+						local large = normal * 1.9
+						local small = math.floor(normal / 1.6)
+						local cur_width = state.win_width + 1
+						local new_width = normal
+						if cur_width > normal then
+							new_width = small
+						elseif cur_width == normal then
+							new_width = large
 						end
 						vim.cmd(new_width .. ' wincmd |')
 					end,
@@ -515,16 +377,14 @@ return {
 						['F'] = 'fuzzy_finder',
 						['<C-c>'] = 'clear_filter',
 
-						-- Custom commands
+						-- Find file in path.
 						['gf'] = function(state)
-							require('telescope.builtin').find_files({
-								cwd = get_tree_current_directory(state),
-							})
+							LazyVim.pick('files', { cwd = get_current_directory(state) })()
 						end,
+
+						-- Live grep in path.
 						['gr'] = function(state)
-							require('telescope.builtin').live_grep({
-								cwd = get_tree_current_directory(state),
-							})
+							LazyVim.pick('live_grep', { cwd = get_current_directory(state) })()
 						end,
 					},
 				},

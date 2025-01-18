@@ -51,6 +51,7 @@ opt.sessionoptions:remove({ 'blank', 'buffers', 'terminal' })
 opt.sessionoptions:append({ 'globals', 'skiprtp' })
 
 if vim.env.SSH_TTY then
+	opt.clipboard = 'unnamedplus'
 	vim.g.clipboard = {
 		name = 'OSC 52',
 		copy = {

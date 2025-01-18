@@ -25,6 +25,7 @@ require('lazy').setup({
 			import = 'lazyvim.plugins',
 			---@type LazyVimOptions
 			opts = {
+				colorscheme = 'catppuccin',
 				defaults = { keymaps = false },
 				news = { lazyvim = false },
 			},
