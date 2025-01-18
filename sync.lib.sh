@@ -105,7 +105,7 @@ _download_binaries() {
 				root/.local/state/nvim
 
 	if [ "$no_fish" = '1' ]; then
-		rm -f "$tmpdir"/usr/local/bin/fish*
+		rm -f "$tmpdir"/usr/local/bin/fish
 	fi
 
 	echo ':: Setup binaries at ~/.local/bin/'
