@@ -91,9 +91,10 @@ _download_binaries() {
 	crane_repo=google/go-containerregistry
 	crane_arch="$([ "$__arch" = amd64 ] && uname -m || echo "$__arch")"
 	crane_file="go-containerregistry_$(uname -s)_$crane_arch.tar.gz"
-	wget -qO- --no-hsts \
-		"https://github.com/$crane_repo/releases/latest/download/$crane_file" \
-		| tar xzf - -C "$tmpdir" crane && chmod 770 "$tmpdir"/crane
+	crane_url="https://github.com/$crane_repo/releases/latest/download/$crane_file"
+	{
+		wget -qO- "$crane_url" || curl -sL "$crane_url"
+	} | tar xzf - -C "$tmpdir" crane && chmod 770 "$tmpdir"/crane
 
 	echo ':: Download and export image…'
 	"$tmpdir/crane" export --platform "linux/$__arch" \
@@ -144,6 +145,13 @@ _main() {
 		esac
 		shift
 	done
+
+	# Check free disk space.
+	free_space="$(df . | awk '$3 ~ /[0-9]+/ { print $4 }')"
+	if [ -n "$free_space" ] && [ "$free_space" -lt 1000000 ]; then
+		echo >&2 'ERROR: Not enough disk space to proceed.'
+		exit 1
+	fi
 
 	[ "$no_intro" = '1' ] || _intro
 	mkdir -p ~/.config ~/.cache ~/.local/bin ~/.local/opt
