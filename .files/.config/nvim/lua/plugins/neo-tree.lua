@@ -12,6 +12,7 @@ local function get_current_directory(state)
 end
 
 return {
+
 	-----------------------------------------------------------------------------
 	-- File explorer written in Lua
 	{
