@@ -92,7 +92,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=147
+ARG BUILD_REVISION=151
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN git clone https://github.com/fish-shell/fish-shell.git && \
@@ -123,7 +123,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=147
+ARG BUILD_REVISION=151
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
