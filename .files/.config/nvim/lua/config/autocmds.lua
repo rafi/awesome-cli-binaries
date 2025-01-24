@@ -1,5 +1,5 @@
--- Rafi's Neovim autocmds
--- https://github.com/rafi/vim-config (minimal version)
+-- Rafi's Neovim autocmds (minimal version)
+-- https://github.com/rafi/vim-config
 -- ===
 
 -- Extends $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/config/autocmds.lua
@@ -57,7 +57,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter', 'WinLeave' }, {
 	end,
 })
 
--- Wrap and check for spell in text filetypes
+-- Spell checking in text file types
 vim.api.nvim_create_autocmd('FileType', {
 	group = augroup('wrap_spell'),
 	pattern = { 'text', 'plaintex', 'typst', 'gitcommit', 'markdown' },

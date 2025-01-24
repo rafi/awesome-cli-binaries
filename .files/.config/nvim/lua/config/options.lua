@@ -1,5 +1,5 @@
--- Rafi's Neovim options
--- https://github.com/rafi/vim-config (minimal version)
+-- Rafi's Neovim options (minimal version)
+-- https://github.com/rafi/vim-config
 -- ===
 
 -- Extends $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/config/options.lua

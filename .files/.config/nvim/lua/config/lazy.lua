@@ -1,5 +1,5 @@
--- Rafi's lazy.nvim initialization
--- https://github.com/rafi/vim-config (minimal version)
+-- Rafi's lazy.nvim initialization (minimal version)
+-- https://github.com/rafi/vim-config
 
 -- Clone lazy.nvim if not already installed.
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'

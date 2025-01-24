@@ -1,5 +1,5 @@
 -- Plugins: Coding (minimal version)
--- https://github.com/rafi/vim-config (minimal version)
+-- https://github.com/rafi/vim-config
 
 local has_git = vim.fn.executable('git') == 1
 
