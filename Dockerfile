@@ -92,7 +92,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=154
+ARG BUILD_REVISION=155
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN git clone https://github.com/fish-shell/fish-shell.git && \
@@ -123,7 +123,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=154
+ARG BUILD_REVISION=155
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -143,7 +143,9 @@ ARG TARGETARCH
 
 # Install dra
 RUN wget -qO- --no-hsts https://raw.githubusercontent.com/devmatteini/dra/refs/heads/main/install.sh \
-    | bash -s && dra --version
+    | bash -s \
+    && rm -rf /tmp/tmp* /root/.wget-hsts \
+    && dra --version
 
 RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
@@ -180,7 +182,10 @@ RUN --mount=type=secret,id=token \
     && dra download -ai MilesCranmer/rip2 && rip --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
     && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
-    && dra download -ai stern/stern && upx stern && stern --version \
+    && dra download -ai stern/stern && upx stern && stern --version
+
+RUN --mount=type=secret,id=token \
+    GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai ducaale/xh && xh --version \
     && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
     && dra download -aI yq_linux_${TARGETARCH} -o yq mikefarah/yq && yq --version \
@@ -195,7 +200,7 @@ RUN wget -qO- --no-hsts \
 # - github.com/neovim/neovim - official releases
 # - github.com/neovim/neovim-releases - best-effort builds with glibc 2.17
 RUN wget -q --no-hsts \
-    https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux64.tar.gz
+    https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux-x86_64.tar.gz
 
 # Copy compiled tmux
 COPY --from=tmux-builder /opt/tmux/bin/tmux .
