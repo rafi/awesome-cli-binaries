@@ -26,13 +26,15 @@ map('n', '<localleader>F', '<leader>fF', { remap = true, desc = 'Find Files (cwd
 map('n', '<localleader>g', '<leader>sg', { remap = true, desc = 'Grep (Root Dir)' })
 map('n', '<localleader>G', '<leader>sG', { remap = true, desc = 'Grep (cwd)' })
 map('n', '<localleader>b', '<leader>,',  { remap = true, desc = 'Switch Buffer' })
-map('n', '<localleader>B', '<leader>sB',  { remap = true, desc = 'Grep open buffers' })
+map('n', '<localleader>B', '<leader>sB', { remap = true, desc = 'Grep open buffers' })
 map('n', '<localleader>l', '<leader>sb', { remap = true, desc = 'Buffer lines' })
 map('n', '<localleader>h', '<leader>sh', { remap = true, desc = 'Help Pages' })
+map('n', '<localleader>i', '<leader>si', { remap = true, desc = 'Icons' })
 map('n', '<localleader>H', '<leader>sH', { remap = true, desc = 'Search Highlight Groups' })
 map('n', '<localleader>j', '<leader>sj', { remap = true, desc = 'Jumplist' })
 map('n', '<localleader>m', '<leader>sm', { remap = true, desc = 'Jump to Mark' })
 map('n', '<localleader>M', '<leader>sM', { remap = true, desc = 'Man Pages' })
+map('n', '<localleader>n', '<leader>n', { remap = true, desc = 'Notification History' })
 map('n', '<localleader>o', '<leader>so', { remap = true, desc = 'Options' })
 map('n', '<localleader>t', '<leader>ss', { remap = true, desc = 'Goto Symbol' })
 map('n', '<localleader>T', '<leader>sS', { remap = true, desc = 'Goto Symbol (Workspace)' })
@@ -42,9 +44,11 @@ map('n', '<localleader>x', '<leader>fr', { remap = true, desc = 'Recent' })
 map('n', '<localleader>X', '<leader>fR', { remap = true, desc = 'Recent (cwd)' })
 map('n', '<localleader>;', '<leader>sc', { remap = true, desc = 'Command History' })
 map('n', '<localleader>:', '<leader>sC', { remap = true, desc = 'Commands' })
+map('n', '<localleader>/', '<leader>s/', { remap = true, desc = 'Search History' })
+map('n', '<localleader>.', '<leader>sp', { remap = true, desc = 'Search for Plugin Spec' })
 map('n', '<localleader>p', '<leader>fp', { remap = true, desc = 'Projects' })
-map({ 'n', 'x' }, '<leader>gg', '<leader>sw',  { remap = true, desc = 'Visual selection or word (Root Dir)' })
-map({ 'n', 'x' }, '<leader>gG', '<leader>sW',  { remap = true, desc = 'Visual selection or word (cwd)' })
+map({ 'n', 'x' }, '<leader>gg', '<leader>sw', { remap = true, desc = 'Visual selection or word (Root Dir)' })
+map({ 'n', 'x' }, '<leader>gG', '<leader>sW', { remap = true, desc = 'Visual selection or word (cwd)' })
 
 -- }}}
 -- Navigation {{{
@@ -56,16 +60,6 @@ if vim.F.if_nil(vim.g.elite_mode, false) then
 	map('n', '<Left>', '<cmd>vertical resize +1<cr>', { desc = 'Increase Window Width' })
 	map('n', '<Right>', '<cmd>vertical resize -1<cr>', { desc = 'Decrease Window Width' })
 	unmap('n', { '<C-Up>', '<C-Down>', '<C-Left>', '<C-Right>' })
-else
-	-- Moves through display-lines, unless count is provided
-	map({ 'n', 'x' }, '<Down>', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true, desc = 'Down' })
-	map({ 'n', 'x' }, '<Up>', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, desc = 'Up' })
-
-	-- Resize window using <ctrl> arrow keys
-	map('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
-	map('n', '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
-	map('n', '<C-Left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width' })
-	map('n', '<C-Right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' })
 end
 
 unmap('n', { '<S-h>', '<S-l>' })
@@ -203,7 +197,7 @@ end, { silent = true, desc = 'Yank absolute path' })
 -- Coding {{{
 
 -- Comment
-unmap('n', { 'gra', 'gri', 'grr', 'grn', 'gc' })
+unmap('n', { 'gra', 'gri', 'grr', 'grn' })
 map('n', '<Leader>v', 'gcc', { remap = true, desc = 'Comment Line' })
 map('x', '<Leader>v', 'gc', { remap = true, desc = 'Comment Selection' })
 
@@ -214,7 +208,7 @@ map('n', '<C-q>', 'q', { desc = 'Macro Prefix' })
 map('n', '<leader>cid', '<cmd>LazyDev<CR>', { silent = true, desc = 'Dev' })
 map('n', '<leader>cif', '<cmd>LazyFormatInfo<CR>', { silent = true, desc = 'Formatter Info' })
 map('n', '<leader>cir', '<cmd>LazyRoot<CR>', { silent = true, desc = 'Root' })
-map('n', '<leader>cil', '<cmd>check lspconfig<cr>', { desc = 'LSP info popup' })
+map('n', '<leader>cil', function() Snacks.picker.lsp_config() end, { desc = 'LSP Info' })
 
 -- Start new line from any cursor position in insert-mode
 map('i', '<S-Return>', '<C-o>o', { desc = 'Start Newline' })
@@ -279,16 +273,13 @@ map('n', '<Leader>cd', function()
 end, { desc = 'Change Tab Directory' })
 
 -- Fast saving from all modes
-unmap('n', { '<leader>w', '<leader>wd', '<leader>wm' })
+unmap('n', { '<leader>wd', '<leader>wm' })
 map('n', '<Leader>w', '<cmd>write<CR>', { desc = 'Save File' })
 map('n', '<M-s>', '<cmd>write<CR>', { desc = 'Save File' })
 
 -- }}}
 -- Editor UI {{{
 
--- Toggle list windows
-map('n', '<leader>xl', function() toggle_list('loclist') end, { desc = 'Toggle Location List' })
-map('n', '<leader>xq', function() toggle_list('quickfix') end, { desc = 'Toggle Quickfix List' })
 
 map('n', '<Leader>ce', vim.diagnostic.open_float, { desc = 'Line Diagnostics' })
 
@@ -325,7 +316,7 @@ if vim.fn.executable('lazygit') == 1 then
 end
 
 map('n', '<leader>gm', function() Snacks.picker.git_log_line() end, { desc = 'Git Blame Line' })
-map({ 'n', 'x' }, '<leader>go', function() Snacks.gitbrowse() end, { desc = 'Git Browse' })
+map({ 'n', 'x' }, '<leader>go', function() Snacks.gitbrowse() end, { desc = 'Git Browse (open)' })
 
 -- Terminal Mappings
 map('t', '<C-g>', '<C-\\><C-n>', { desc = 'Enter Normal Mode' })
@@ -384,11 +375,8 @@ if vim.F.if_nil(vim.g.window_q_mapping, false) then
 	end, { desc = 'Close window' })
 end
 
--- Switch with adjacent window
-map('n', '<C-x>', '<C-w>x<C-w>w', { remap = true, desc = 'Swap adjacent windows' })
-map('n', '<C-w>d', '<C-W>c', { desc = 'Delete Window', remap = true })
-
 map('n', 's', '<Nop>', { desc = '+screen' })
+map('n', 's]', '<C-w>x<C-w>w', { remap = true, desc = 'Swap adjacent windows' })
 map('n', 'sb', '<cmd>buffer#<CR>', { desc = 'Alternate buffer' })
 map('n', 'sc', '<cmd>close<CR>', { desc = 'Close window' })
 map('n', 'sd', '<cmd>bdelete<CR>', { desc = 'Buffer delete' })

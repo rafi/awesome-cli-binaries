@@ -11,13 +11,15 @@ return {
 	-- $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/coding/blink.lua
 	{
 		'blink.cmp',
-		cond = has_git,
+		optional = true,
 		opts = function(_, opts)
 			-- Add more candidate navigation keymaps.
 			opts.keymap['<C-j>'] = { 'select_next', 'fallback' }
 			opts.keymap['<C-k>'] = { 'select_prev', 'fallback' }
 			opts.keymap['<C-d>'] = { 'select_next', 'fallback' }
 			opts.keymap['<C-u>'] = { 'select_prev', 'fallback' }
+
+			opts.fuzzy = { implementation = 'lua' }
 
 			-- Remove lazydev from sources.
 			opts.sources.default = vim.tbl_filter(function(source)
@@ -53,9 +55,9 @@ return {
 
 	-----------------------------------------------------------------------------
 	-- Fast and feature-rich surround actions
-	{ import = 'lazyvim.plugins.extras.coding.mini-surround' },
 	{
 		'mini.surround',
+		optional = true,
 		opts = {
 			mappings = {
 				add = 'sa', -- Add surrounding in Normal and Visual modes

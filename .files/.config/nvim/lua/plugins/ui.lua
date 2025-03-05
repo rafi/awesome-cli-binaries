@@ -61,7 +61,7 @@ return {
 	-- $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/plugins/ui.lua
 	-- $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/plugins/util.lua
 	{
-		'snacks.nvim',
+		'folke/snacks.nvim',
 		opts = {
 			dashboard = { enabled = false },
 			scroll = { enabled = false },
@@ -76,78 +76,6 @@ return {
 				},
 			},
 		},
-	},
-	{
-		'snacks.nvim',
-		keys = function(_, keys)
-			if LazyVim.pick.want() ~= 'snacks' then
-				return
-			end
-			-- stylua: ignore
-			local mappings = {
-				{ '<leader><localleader>', function() Snacks.picker() end, mode = { 'n', 'x' }, desc = 'Pickers' },
-				{ '<localleader>i', function() Snacks.picker.icons() end, mode = { 'n', 'x' }, desc = 'Spellcheck' },
-				{ '<localleader>u', function() Snacks.picker.spelling() end, mode = { 'n', 'x' }, desc = 'Spellcheck' },
-				{ '<localleader>/', function() Snacks.picker.search_history() end, mode = { 'n', 'x' }, desc = 'Search History' },
-				{
-					'<localleader>z',
-					mode = { 'n', 'x' },
-					desc = 'Zoxide',
-					function()
-						Snacks.picker.zoxide({
-							confirm = function(picker)
-								picker:close()
-								local item = picker:current()
-								if item and item.file then
-									vim.cmd.tcd(item.file)
-								end
-							end,
-						})
-					end,
-				},
-			}
-			return vim.list_extend(mappings, keys)
-		end,
-		opts = function(_, opts)
-			if LazyVim.pick.want() ~= 'snacks' then
-				return
-			end
-			return vim.tbl_deep_extend('force', opts or {}, {
-				picker = {
-					win = {
-						input = {
-							keys = {
-								['jj'] = { '<esc>', expr = true, mode = 'i' },
-								['sv'] = 'edit_split',
-								['sg'] = 'edit_vsplit',
-								['st'] = 'edit_tab',
-								['.'] = 'toggle_hidden',
-								[','] = 'toggle_ignored',
-								['e'] = 'qflist',
-								['E'] = 'loclist',
-								['K'] = 'select_and_prev',
-								['J'] = 'select_and_next',
-								['*'] = 'select_all',
-								['<c-l>'] = { 'preview_scroll_right', mode = { 'i', 'n' } },
-								['<c-h>'] = { 'preview_scroll_left', mode = { 'i', 'n' } },
-							},
-						},
-						list = {
-							keys = {
-								['<c-l>'] = 'preview_scroll_right',
-								['<c-h>'] = 'preview_scroll_left',
-							},
-						},
-						preview = {
-							keys = {
-								['<c-h>'] = 'focus_input',
-								['<c-l>'] = 'cycle_win',
-							},
-						},
-					},
-				},
-			})
-		end,
 	},
 
 	-----------------------------------------------------------------------------
