@@ -44,7 +44,7 @@ RUN curl --retry 5 -LO "$libevent_url" && \
 # ncurses
 ENV ncurses_version=6.5
 ENV ncurses_name=ncurses-${ncurses_version}
-ENV ncurses_url=https://ftp.gnu.org/pub/gnu/ncurses/${ncurses_name}.tar.gz
+ENV ncurses_url=https://invisible-island.net/archives/ncurses/${ncurses_name}.tar.gz
 RUN curl --retry 5 -LO "$ncurses_url" && \
     tar xvzof "${ncurses_name}.tar.gz" && \
     cd "$ncurses_name" && \
@@ -80,8 +80,7 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # --------------------------------------------------------------------------
 
-# Build fish-shell from source from faho fork with `fish-installer` branch:
-# https://github.com/faho/fish-shell/tree/fish-installer
+# Build fish-shell from source.
 # Use Debian 10.x "buster" for older glib versions.
 FROM rust:slim-buster AS fish-builder
 
@@ -92,10 +91,10 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=156
+ARG BUILD_REVISION=157
 LABEL io.rafi.revision="$BUILD_REVISION"
 
-RUN git clone https://github.com/fish-shell/fish-shell.git && \
+RUN git clone https://github.com/fish-shell/fish-shell.git -b 4.0.2 && \
     cd fish-shell && \
     FISH_BUILD_DOCS=0 cargo build --release && \
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git
@@ -110,7 +109,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=156
+ARG BUILD_REVISION=157
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -126,7 +125,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=156
+ARG BUILD_REVISION=157
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 

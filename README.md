@@ -63,7 +63,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 ## Binaries
 
 - [tmux] v3.5a statically linked (+ncurses +libevent)
-- [fish] v4.0b1
+- [fish] v4.0.2
 - [neovim] build with support for glibc 2.17
 - and:
 
