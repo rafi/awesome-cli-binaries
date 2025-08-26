@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:1
-FROM debian:stable-slim AS tmux-builder
+FROM debian:12-slim AS tmux-builder
 
 # Prepare environment
 ARG DEBIAN_FRONTEND=noninteractive
@@ -91,10 +91,9 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG BUILD_REVISION=158_2
-LABEL io.rafi.revision="$BUILD_REVISION"
+ARG fish_version=4.0.2
 
-RUN git clone https://github.com/fish-shell/fish-shell.git -b 4.0.2 && \
+RUN git clone https://github.com/fish-shell/fish-shell.git -b $fish_version && \
     cd fish-shell && \
     FISH_BUILD_DOCS=0 cargo build --release && \
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git
@@ -109,7 +108,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=158_3
+ARG BUILD_REVISION=159
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -125,7 +124,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=158_2
+ARG BUILD_REVISION=159
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
