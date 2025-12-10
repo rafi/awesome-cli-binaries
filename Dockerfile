@@ -61,7 +61,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     rm -fr "${ncurses_name}.tar.gz" "$ncurses_name"
 
 # tmux
-ENV tmux_version=3.5a
+ENV tmux_version=3.6a
 ENV tmux_name=tmux-${tmux_version}
 ENV tmux_url=https://github.com/tmux/tmux/releases/download/$tmux_version/$tmux_name.tar.gz
 RUN curl --retry 5 -LO "$tmux_url" && \
@@ -81,19 +81,19 @@ RUN "$BUILD_DIR/bin/tmux" -V
 # --------------------------------------------------------------------------
 
 # Build fish-shell from source.
-# Use Debian 10.x "buster" for older glib versions.
-FROM rust:slim-buster AS fish-builder
+# Use Debian 11.x "bullseye" for older glib versions.
+FROM rust:slim-bullseye AS fish-builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-    && apt-get install --no-install-recommends --yes git \
+    && apt-get install --no-install-recommends --yes git gettext \
     && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/* /var/lib/*
 
 WORKDIR /root
 
-ARG fish_version=4.0.2
+ARG fish_version=4.2.1
 
-RUN git clone https://github.com/fish-shell/fish-shell.git -b $fish_version && \
+RUN git clone https://github.com/fish-shell/fish-shell.git --depth 1 -b $fish_version && \
     cd fish-shell && \
     FISH_BUILD_DOCS=0 cargo build --release && \
     rm -rf /usr/local/cargo/registry /usr/local/cargo/git
@@ -108,7 +108,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=159
+ARG BUILD_REVISION=160
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -124,7 +124,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=159
+ARG BUILD_REVISION=160
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -193,7 +193,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
-ARG chafa_version=1.16.2-1
+ARG chafa_version=1.18.0-1
 RUN wget -qO- --no-hsts \
     https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
