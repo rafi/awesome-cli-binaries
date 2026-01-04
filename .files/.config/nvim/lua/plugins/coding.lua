@@ -1,8 +1,6 @@
 -- Plugins: Coding (minimal version)
 -- https://github.com/rafi/vim-config
 
-local has_git = vim.fn.executable('git') == 1
-
 return {
 
 	-----------------------------------------------------------------------------
@@ -21,10 +19,8 @@ return {
 
 			opts.fuzzy = { implementation = 'lua' }
 
-			-- Remove lazydev from sources.
-			opts.sources.default = vim.tbl_filter(function(source)
-				return source ~= 'lazydev'
-			end, opts.sources.default)
+			-- Remove lazydev from blink's sources.
+			opts.sources.per_filetype.lua = nil
 			opts.sources.providers['lazydev'] = nil
 		end,
 	},
@@ -52,6 +48,11 @@ return {
 			})
 		end,
 	},
+
+	-----------------------------------------------------------------------------
+	-- LuaLS support for auto-completion and type checking while editing your
+	-- Neovim configuration.
+	{ "folke/lazydev.nvim", enabled = false },
 
 	-----------------------------------------------------------------------------
 	-- Fast and feature-rich surround actions

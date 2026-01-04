@@ -5,7 +5,7 @@
 -- Extends $XDG_DATA_HOME/nvim/lazy/LazyVim/lua/lazyvim/config/keymaps.lua
 
 local map = vim.keymap.set
-local unmap = function(modes, lhs)
+local unmap = function(modes, lhs, opts)
 	modes = type(modes) == 'string' and { modes } or modes
 	lhs = type(lhs) == 'string' and { lhs } or lhs
 	for _, mode in pairs(modes) do
@@ -20,7 +20,6 @@ end
 -- Picker {{{
 
 -- Bind localleader to common LazyVim picker (telescope/fzf/snacks) keymaps.
-map('n', '<localleader>r', '<leader>sR', { remap = true, desc = 'Resume Last' })
 map('n', '<localleader>f', '<leader>ff', { remap = true, desc = 'Find Files (Root Dir)' })
 map('n', '<localleader>F', '<leader>fF', { remap = true, desc = 'Find Files (cwd)' })
 map('n', '<localleader>g', '<leader>sg', { remap = true, desc = 'Grep (Root Dir)' })
@@ -80,13 +79,20 @@ map('n', 'zh', 'z4h')
 
 -- Toggle fold or select option from popup menu
 map('n', '<CR>', function()
-	return vim.fn.pumvisible() == 1 and '<CR>' or 'za'
+	if vim.fn.pumvisible() == 1 then
+		return '<CR>'
+	end
+	if vim.fn.foldclosed('.') > -1 then
+		return 'zA'
+	end
+	return 'za'
 end, { expr = true, desc = 'Toggle Fold' })
 
 -- Focus the current fold by closing all others
 map('n', '<S-Return>', 'zMzv', { remap = true, desc = 'Focus Fold' })
 
 -- Tabs: Many ways to navigate them
+unmap('n', { '<A-j>', '<A-k>' })
 map('n', '<A-j>', '<cmd>tabnext<CR>', { desc = 'Next Tab' })
 map('n', '<A-k>', '<cmd>tabprevious<CR>', { desc = 'Previous Tab' })
 map('n', '<A-[>', '<cmd>tabprevious<CR>', { desc = 'Previous Tab' })
@@ -278,8 +284,7 @@ map('n', '<Leader>w', '<cmd>write<CR>', { desc = 'Save File' })
 map('n', '<M-s>', '<cmd>write<CR>', { desc = 'Save File' })
 
 -- }}}
--- Editor UI {{{
-
+-- Diagnostics {{{
 
 map('n', '<Leader>ce', vim.diagnostic.open_float, { desc = 'Line Diagnostics' })
 
@@ -303,6 +308,13 @@ map('n', '<Leader>ml', function() append_modeline() end, { desc = 'Append Modeli
 -- Jump entire buffers throughout jumplist
 map('n', 'g<C-i>', function() jump_buffer(1) end, { desc = 'Jump to newer buffer' })
 map('n', 'g<C-o>', function() jump_buffer(-1) end, { desc = 'Jump to older buffer' })
+
+-- Context aware menu. See lua/config/autocmds.lua
+map('n', '<LocalLeader>c', function()
+	-- Only RightMouse triggers MenuPopup event :(
+	vim.api.nvim_exec_autocmds('MenuPopup', { pattern = 'n', modeline = false })
+	pcall(vim.cmd.popup, 'PopUp')
+end, { desc = 'Context-aware menu' })
 
 -- Base64 encode/decode
 map('x', '<leader>64e', function() base64() end, { desc = 'Base64 Encode' })

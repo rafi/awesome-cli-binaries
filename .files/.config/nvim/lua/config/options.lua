@@ -16,9 +16,6 @@ vim.g.lazyvim_picker = 'snacks'
 
 -- Disable LazyVim features.
 vim.g.autoformat = false      -- LazyVim auto format
-vim.g.snacks_animate = false  -- Globally disable all snacks animations
-vim.g.ai_cmp = false
-vim.g.trouble_lualine = false -- Disable document symbols in statusline
 
 local opt = vim.opt
 
@@ -49,7 +46,6 @@ end
 
 -- What to save for views and sessions
 opt.sessionoptions:remove({ 'blank', 'buffers', 'terminal' })
-opt.sessionoptions:append({ 'globals', 'skiprtp' })
 
 if vim.env.SSH_TTY then
 	opt.clipboard = 'unnamedplus'

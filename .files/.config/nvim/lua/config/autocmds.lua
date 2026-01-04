@@ -32,6 +32,31 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 	end,
 })
 
+-- Close some filetypes with <q>
+vim.api.nvim_create_autocmd('FileType', {
+	group = augroup('close_with_q'),
+	pattern = {
+		'blame',
+		'fugitive',
+		'fugitiveblame',
+		'httpResult',
+		'lspinfo',
+	},
+	callback = function(event)
+		vim.bo[event.buf].buflisted = false
+		vim.schedule(function()
+			vim.keymap.set('n', 'q', function()
+				vim.cmd('close')
+				pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+			end, {
+				buffer = event.buf,
+				silent = true,
+				desc = 'Quit buffer',
+			})
+		end)
+	end,
+})
+
 -- Show cursor line only in active window
 vim.api.nvim_create_autocmd({ 'InsertLeave', 'WinEnter' }, {
 	group = augroup('auto_cursorline_show'),
@@ -50,7 +75,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter', 'WinLeave' }, {
 
 -- Spell checking in text file types
 vim.api.nvim_create_autocmd('FileType', {
-	group = augroup('wrap_spell'),
+	group = augroup('spell_checking'),
 	pattern = { 'text', 'plaintex', 'typst', 'gitcommit', 'markdown' },
 	callback = function()
 		vim.opt_local.spell = true
@@ -85,5 +110,87 @@ vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufReadPre' }, {
 		vim.opt_local.swapfile = false
 		vim.opt_global.backup = false
 		vim.opt_global.writebackup = false
+	end,
+})
+
+-- Context-aware popup menu (Overrides $VIMRUNTIME/lua/vim/_defaults.lua)
+vim.api.nvim_create_autocmd('MenuPopup', {
+	group = augroup('popupmenu'),
+	pattern = '*',
+	callback = function()
+		local cword = vim.fn.expand('<cword>')
+		vim.cmd([[
+			aunmenu PopUp
+			autocmd! nvim.popupmenu
+
+			anoremenu PopUp.Inspect                 <cmd>Inspect<CR>
+			anoremenu PopUp.Definition              <cmd>lua vim.lsp.buf.definition()<CR>
+			anoremenu PopUp.References              <cmd>lua vim.lsp.buf.references()<CR>
+			anoremenu PopUp.Implementation          <cmd>lua vim.lsp.buf.implementation()<CR>
+			anoremenu PopUp.Declaration             <cmd>lua vim.lsp.buf.declaration()<CR>
+			anoremenu PopUp.-1-                     <Nop>
+			anoremenu PopUp.Diagnostics\ (Trouble)  <cmd>Trouble diagnostics<CR>
+			anoremenu PopUp.Show\ Diagnostics       <cmd>lua vim.diagnostic.open_float()<CR>
+			anoremenu PopUp.Show\ All\ Diagnostics  <cmd>lua vim.diagnostic.setqflist()<CR>
+			anoremenu PopUp.Configure\ Diagnostics  <cmd>help vim.diagnostic.config()<CR>
+			anoremenu PopUp.-2-                     <Nop>
+			anoremenu PopUp.Find\ symbol            <cmd>lua require'telescope.builtin'.lsp_workspace_symbols({default_text = vim.fn.expand('<cword>')})<CR>
+			anoremenu PopUp.Grep                    <cmd>lua LazyVim.pick('live_grep', { pattern = vim.fn.expand('<cword>') })()<CR>
+			anoremenu PopUp.TODOs                   <cmd>TodoTrouble<CR>
+			anoremenu PopUp.Bookmarks               <cmd>lua require'bookmarks'.bookmark_list()<CR>
+			anoremenu PopUp.LazyGit                 <cmd>lua Snacks.lazygit()<CR>
+			anoremenu PopUp.Open\ Git\ in\ browser  <cmd>lua Snacks.gitbrowse()<CR>
+			anoremenu PopUp.Open\ in\ web\ browser  gx
+			anoremenu PopUp.-3-                     <Nop>
+			vnoremenu PopUp.Cut                     "+x
+			vnoremenu PopUp.Copy                    "+y
+			anoremenu PopUp.Paste                   "+gP
+			vnoremenu PopUp.Paste                   "+P
+			vnoremenu PopUp.Delete                  "_x
+			nnoremenu PopUp.Select\ All             ggVG
+			vnoremenu PopUp.Select\ All             gg0oG$
+			inoremenu PopUp.Select\ All             <C-Home><C-O>VG
+		]])
+
+		-- LSP
+		-- ===
+
+		if cword == '' or not vim.lsp.get_clients({ bufnr = 0, method = 'textDocument/definition' }) then
+			vim.cmd([[amenu disable PopUp.Definition]])
+		end
+		if cword == '' or not vim.lsp.get_clients({ bufnr = 0, method = 'textDocument/references' }) then
+			vim.cmd([[amenu disable PopUp.References]])
+		end
+		if cword == '' or not vim.lsp.get_clients({ bufnr = 0, method = 'textDocument/implementation' }) then
+			vim.cmd([[amenu disable PopUp.Implementation]])
+		end
+		if cword == '' or not vim.lsp.get_clients({ bufnr = 0, method = 'textDocument/declaration' }) then
+			vim.cmd([[amenu disable PopUp.Declaration]])
+		end
+
+		-- Plugins
+		-- ===
+
+		if cword == '' or not LazyVim.has('telescope.nvim') then
+			vim.cmd([[amenu disable PopUp.Find\ symbol]])
+		end
+		if cword == '' or not LazyVim.has_extra('editor.snacks_explorer') then
+			vim.cmd([[amenu disable PopUp.Grep]])
+		end
+		if not LazyVim.has('trouble.nvim') then
+			vim.cmd([[amenu disable PopUp.Diagnostics\ (Trouble)]])
+		end
+		if not LazyVim.has('todo-comments.nvim') then
+			vim.cmd([[amenu disable PopUp.TODOs]])
+		end
+		if not LazyVim.has('bookmarks.nvim') then
+			vim.cmd([[amenu disable PopUp.Bookmarks]])
+		end
+		if not LazyVim.has('snacks.nvim') then
+			vim.cmd([[
+				amenu disable PopUp.LazyGit
+				amenu disable PopUp.Open\ Git\ in\ browser
+			]])
+		end
 	end,
 })
