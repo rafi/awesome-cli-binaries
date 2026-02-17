@@ -91,7 +91,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG fish_version=4.3.3
+ARG fish_version=4.5.0
 
 RUN git clone https://github.com/fish-shell/fish-shell.git --depth 1 -b $fish_version && \
     cd fish-shell && \
@@ -108,7 +108,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=163
+ARG BUILD_REVISION=164
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -124,7 +124,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=163
+ARG BUILD_REVISION=164
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -194,7 +194,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
-ARG chafa_version=1.18.0-1
+ARG chafa_version=1.18.1-1
 RUN wget -qO- --no-hsts \
     https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
