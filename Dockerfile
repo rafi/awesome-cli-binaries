@@ -91,7 +91,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG fish_version=4.6.0
+ARG fish_version=4.7.0
 
 RUN git clone https://github.com/fish-shell/fish-shell.git --depth 1 -b $fish_version && \
     cd fish-shell && \
@@ -194,7 +194,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
-ARG chafa_version=1.18.1-1
+ARG chafa_version=1.18.2-1
 RUN wget -qO- --no-hsts \
     https://hpjansson.org/chafa/releases/static/chafa-${chafa_version}-x86_64-linux-gnu.tar.gz | tar -xzo --strip-components 1
 
