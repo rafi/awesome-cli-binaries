@@ -42,7 +42,7 @@ RUN curl --retry 5 -LO "$libevent_url" && \
     rm -fr "$libevent_name.tar.gz" "$libevent_name"
 
 # ncurses
-ENV ncurses_version=6.5
+ENV ncurses_version=6.6
 ENV ncurses_name=ncurses-${ncurses_version}
 ENV ncurses_url=https://invisible-island.net/archives/ncurses/${ncurses_name}.tar.gz
 RUN curl --retry 5 -LO "$ncurses_url" && \
@@ -108,7 +108,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=169
+ARG BUILD_REVISION=170
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -124,7 +124,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=169
+ARG BUILD_REVISION=170
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
