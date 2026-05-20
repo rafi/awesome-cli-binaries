@@ -1,5 +1,7 @@
-# See https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/yazi-default.toml
-"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+# Yazi base config
+#:schema https://yazi-rs.github.io/schemas/yazi.json
+
+# Defaults: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/yazi-default.toml
 
 [mgr]
 sort_sensitive = true
