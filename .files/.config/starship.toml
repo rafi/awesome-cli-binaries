@@ -7,7 +7,6 @@
 add_newline = false
 
 format = """
-$python\
 $username\
 $hostname\
 $localip\
@@ -32,32 +31,61 @@ $git_status\
 $shell\
 $character"""
 
+[battery]
+full_symbol = '󰁹 '
+charging_symbol = '󰂄 '
+discharging_symbol = '󰂃 '
+unknown_symbol = '󰂑 '
+empty_symbol = '󰂎 '
+
+[container]
+symbol = ' '
+
 [character]
 success_symbol = '[λ](green):'
 error_symbol = '[x](red)'
 
+[cmd_duration]
+min_time = 2500
+format = ' [⏱ $duration]($style) '
+
 [directory]
 format = '[$path/]($style)[$read_only]($read_only_style)'
+read_only = ' 󰌾'
 style = 'blue'
 truncation_length = 4
 
 [git_branch]
 format = '([$symbol](fg:8)[$branch]($style)([:$remote_branch](fg:243)) )'
-symbol = ''
+symbol = ' '
+# symbol = ''
 style = 'green'
+
+[git_commit]
+tag_symbol = '  '
 
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
 
+[username]
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+
 [hostname]
 ssh_only = true
+ssh_symbol = ' '
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 
-# [cmd_duration]
-# format = ' took [$duration]($style)'  # add leading space
+[memory_usage]
+symbol = '󰍛 '
 
-[python]
-format = '([${version}](fg:242)[/](fg:246))'
-pyenv_version_name = true
+[shlvl]
+symbol = '󰹍 '
+
+[status]
+symbol = ' '
+
+[sudo]
+symbol = ' '
 
 [custom.yazi]
 when = ''' test -n "$YAZI_LEVEL" '''
