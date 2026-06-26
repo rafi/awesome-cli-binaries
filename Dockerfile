@@ -91,7 +91,7 @@ RUN apt-get update \
 
 WORKDIR /root
 
-ARG fish_version=4.7.1
+ARG fish_version=4.8.0
 
 RUN git clone https://github.com/fish-shell/fish-shell.git --depth 1 -b $fish_version && \
     cd fish-shell && \
@@ -108,7 +108,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=174
+ARG BUILD_REVISION=175
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -124,7 +124,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=174
+ARG BUILD_REVISION=175
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
