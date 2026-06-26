@@ -63,7 +63,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 ## Binaries
 
 - [tmux] v3.5a statically linked (+ncurses +libevent)
-- [fish] v4.0.2
+- [fish] v4.8.0
 - [neovim] build with support for glibc 2.17
 - and:
 
@@ -95,6 +95,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [mkcert]      | Make local trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
 | [rip2]     | Safe and ergonomic alternative to `rm` | |
 | [ripgrep]     | Line-oriented search tool that recursively searches for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
+| [rmux]     | Universal Rust multiplexer with a typed SDK | <img src="https://rmux.io/web-share-browser.gif" /> |
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
 | [stern]       | Tail multiple pods and containers on Kubernetes. | <img src="https://pepa.holla.cz/wp-content/uploads/2019/08/stern.png" /> |
 | [xh]          | Friendly and fast tool for sending HTTP requests. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
@@ -141,6 +142,7 @@ See [LICENSE.spdx](./LICENSE.spdx) for license information.
 [neovim]: https://github.com/neovim/neovim
 [rip2]: https://github.com/MilesCranmer/rip2
 [ripgrep]: https://github.com/BurntSushi/ripgrep
+[rmux]: https://github.com/Helvesec/rmux
 [starship]: https://github.com/starship/starship
 [stern]: https://github.com/stern/stern
 [tmux]: https://github.com/tmux/tmux
