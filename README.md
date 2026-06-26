@@ -75,7 +75,7 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [chafa]       | View very reasonable approximations of pictures and animations in the terminal. | <img src="https://hpjansson.org/chafa/gallery/maru-geneve-240-rgb.png" width="60%" /> |
 | [crane]       | Crane is a tool for interacting with remote images and registries. | <img src="https://raw.githubusercontent.com/google/go-containerregistry/main/images/crane.png" width="40%" /> |
 | [delta]       | Good-lookin' diffs. | <img src="https://user-images.githubusercontent.com/52205/86275526-76792100-bba1-11ea-9e78-6be9baa80b29.png" /> |
-| [diff-so-fancy] | Syntax-highlighting pager for git, diff, grep, and blame output. | <img src="https://github.com/so-fancy/diff-so-fancy/blob/master/diff-so-fancy.png?raw=true" /> |
+| [diff-so-fancy] | Syntax-highlighting pager for git, diff, grep, and blame output. | <img src="https://raw.githubusercontent.com/so-fancy/diff-so-fancy/next/docs/diff-so-fancy.png" /> |
 | [dua]         | Conveniently learn about the usage of disk space of a given directory. | [![asciicast](https://asciinema.org/a/316444.svg)](https://asciinema.org/a/316444) |
 | [duf]         | Disk Usage/Free Utility - a better 'df' alternative. | <img src="https://raw.githubusercontent.com/muesli/duf/master/duf.png" /> |
 | [dust]        | A more intuitive version of du. | <img src="https://raw.githubusercontent.com/bootandy/dust/master/media/snap.png" /> |
@@ -89,14 +89,14 @@ This will rsync local binaries at `./bin` to remote `~/.local/bin`.
 | [havn]        | Fast configurable port scanner with reasonable defaults. | <img src="https://raw.githubusercontent.com/mrjackwills/havn/main/.github/screen.webp" /> |
 | [hexyl]       | Simple hex viewer for the terminal. | <img src="https://i.imgur.com/MWO9uSL.png" /> |
 | [hyperfine]   | A command-line benchmarking tool. | <img src="https://i.imgur.com/z19OYxE.gif" /> |
-| [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://jqlang.github.io/jq/jq.png" width="50%" /> |
-| [just]        | Handy way to save and run project-specific commands. | <img src="https://raw.githubusercontent.com/casey/just/master/screenshot.png" /> |
+| [jq]          | Lightweight and flexible command-line JSON processor. | <img src="https://camo.githubusercontent.com/b062176121792a6867b2cb9674c4f05d8b63049a8ce83d2c51aa75c4f163604c/68747470733a2f2f696d6775722e636f6d2f656264547456662e706e67" /> |
+| [just]        | Handy way to save and run project-specific commands. | <img src="https://raw.githubusercontent.com/casey/just/master/etc/screenshot.png" /> |
 | [lsd]         | Rewrite of GNU `ls` with lots of added features. | <img src="https://raw.githubusercontent.com/Peltoche/lsd/assets/screen_lsd.png" /> |
 | [mkcert]      | Make local trusted development certificates with any names you'd like. | <img src="https://user-images.githubusercontent.com/1225294/51066373-96d4aa80-15be-11e9-91e2-f4e44a3a4458.png" /> |
 | [rip2]     | Safe and ergonomic alternative to `rm` | |
 | [ripgrep]     | Line-oriented search tool that recursively searches for a regex pattern. | <img src="https://burntsushi.net/stuff/ripgrep1.png" /> |
 | [starship]    | Minimal, blazing-fast, and infinitely customizable prompt for any shell. | <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" /> |
-| [stern]       | Tail multiple pods and containers on Kubernetes. | <img src="https://i0.wp.com/blog.knoldus.com/wp-content/uploads/2021/01/image.png?ssl=1" /> |
+| [stern]       | Tail multiple pods and containers on Kubernetes. | <img src="https://pepa.holla.cz/wp-content/uploads/2019/08/stern.png" /> |
 | [xh]          | Friendly and fast tool for sending HTTP requests. | [![asciicast](https://raw.githubusercontent.com/ducaale/xh/master/assets/xh-demo.gif)](https://asciinema.org/a/475190) |
 | [yazi]        | Blazing fast terminal file manager, based on async I/O. | <img src="https://repository-images.githubusercontent.com/663900193/c1f495b1-8d69-4dba-a7e3-dbfde3a817f6" /> |
 | [yq]          | Portable command-line YAML, JSON, XML, CSV, TOML and properties processor. | <img src="https://miro.medium.com/v2/resize:fit:640/1*gsqh7A_ivvZM5ht66hx3Xw.png" /> |
