@@ -21,16 +21,15 @@
 # purple-600  "#5E409D" pu
 # magenta-600 "#A02F6F" ma
 
+[app]
+overall = { bg = "#FFFCF0" } # bg
+
 [mgr]
 cwd = { fg = "#100F0F", bold = true } # tx
 
-# Hovered
-hovered = { bg = "#F2F0E5" } # bg-2
-preview_hovered = { underline = true }
-
 # Find
-find_keyword = { fg = "#D0A215", reversed = true } # ye-2
-find_position = { fg = "#B7B5AC", bold = true, italic = true } # tx-3
+find_keyword = { fg = "#24837B", reversed = true } # cy
+find_position = { fg = "#24837B", bold = true, italic = true } # cy
 
 # Marker
 marker_copied = { fg = "#66800B", bg = "#66800B" } # gr, gr
@@ -46,6 +45,12 @@ count_selected = { fg = "#24837B", bold = true, reversed = true } # cy
 # Border
 border_symbol = "│"
 border_style = { fg = "#E6E4D9" } # ui
+
+[indicator]
+parent = { underline = true }
+current = { fg = "#100F0F", bg = "#E6E4D9" } # tx, ui
+preview = { underline = true }
+padding = { open = "█", close = "█" }
 
 [tabs]
 active = { fg = "#100F0F", bg = "#CECDC3", bold = true } # tx, ui-3
@@ -84,8 +89,8 @@ progress_error = { bg = "#AF3029" } # re
 [which]
 cols = 3
 mask = { bg = "#F2F0E5" } # bg-2
-cand = { fg = "#AD8301", bold = true } # ye
-rest = { fg = "#AD8301", italic = true } # ye
+cand = { fg = "#24837B", bold = true } # cy
+rest = { fg = "#24837B", italic = true } # cy
 desc = { fg = "#B7B5AC" } # tx-3
 separator = " "
 separator_style = { }
@@ -93,7 +98,7 @@ separator_style = { }
 [confirm]
 border = { fg = "#CECDC3" } # ui-3
 title = { fg = "#B7B5AC", bold = true } # tx-3
-content = { fg = "#100F0F", bold = true } # tx
+body = { fg = "#100F0F", bold = true } # tx
 list = { fg = "#100F0F" } # tx
 btn_yes = { fg = "#100F0F", bg = "#CECDC3", bold = true } # tx, ui-3
 btn_no = { fg = "#6F6E69", bg = "#E6E4D9" } # tx-2, ui
@@ -102,7 +107,7 @@ btn_no = { fg = "#6F6E69", bg = "#E6E4D9" } # tx-2, ui
 border = { fg = "#CECDC3" } # ui-3
 title = { fg = "#B7B5AC", bold = true } # tx-3
 tbl_col = { fg = "#6F6E69" } # tx-2
-tbl_cell = { bg = "#F2F0E5" } # bg-2
+tbl_cell = { fg = "#100F0F", bg = "#E6E4D9" } # tx, ui
 
 [notify]
 # Notification title
@@ -123,45 +128,74 @@ selected = { bg = "#F2F0E5" } # bg-2
 
 [cmp]
 border = { fg = "#CECDC3", bold = true } # ui-3
-active = { fg = "#6F6E69", bg = "#F2F0E5" } # tx-2, bg-2
+active = { fg = "#100F0F", bg = "#E6E4D9" } # tx, ui
 inactive = { fg = "#6F6E69" } # tx-2
 
 [tasks]
 border = { fg = "#CECDC3" } # ui-3
 title = { fg = "#B7B5AC", bold = true } # tx-3
-hovered = { bg = "#F2F0E5" } # bg-2
+hovered = { fg = "#100F0F", bg = "#E6E4D9" } # tx, ui
 
 [help]
 on = { fg = "#205EA6" } # bl
 run = { fg = "#24837B" } # cy
 desc = { fg = "#B7B5AC", italic = true } # tx-3
-hovered = { bg = "#F2F0E5" } # bg-2
-footer = { fg = "#100F0F", bg = "#E6E4D9", bold = true } # tx, ui
+hovered = { bg = "#E6E4D9" } # ui
+footer = { fg = "#FFFCF0", bg = "#24837B", bold = true } # bg, cy
 
 [filetype]
 rules = [
-  # Images
-  { mime = "image/*", fg = "#5E409D" }, # pu
-
-  # Media
-  { mime = "video/*", fg = "#AD8301" }, # ye
-  { mime = "audio/*", fg = "#AD8301" }, # ye
-
-  # Broken symbolic link
-  { name = "*", is = "orphan", fg = "#B7B5AC", crossed = true }, # tx-3
-  { name = "*/", is = "orphan", fg = "#B7B5AC", crossed = true }, # tx-3
-
-  # Symbolic links
-  { name = "*", is = "link", fg = "#24837B" }, # cy
-  { name = "*/", is = "link", fg = "#24837B" }, # cy
-
-  # Executable
-  { name = "*", is = "exec", fg = "#66800B" }, # gr
-
   # Empty files
   { mime = "inode/empty", fg = "#B7B5AC" }, # tx-3
 
+  # Special files
+  { url = "*", is = "orphan", fg = "#B7B5AC" }, # tx-3
+  { url = "*/", is = "orphan", fg = "#B7B5AC" }, # tx-3
+  { url = "*", is = "link", fg = "#24837B" }, # cy
+  { url = "*/", is = "link", fg = "#24837B" }, # cy
+  { url = "*", is = "block", fg = "#100F0F" }, # tx
+  { url = "*", is = "char", fg = "#100F0F" }, # tx
+  { url = "*", is = "fifo", fg = "#A02F6F" }, # ma
+  { url = "*", is = "sock", fg = "#A02F6F" }, # ma
+  { url = "*", is = "sticky", fg = "#100F0F" }, # tx
+  { url = "*", is = "dummy", fg = "#B7B5AC" }, # tx-3
+
   # Fallback
-  { name = "*", fg = "#6F6E69" }, # tx-2
-  { name = "*/", fg = "#100F0F" } # tx
+  { url = "*/", fg = "#100F0F" }, # tx
+  { url = "*", is = "exec", fg = "#66800B" }, # gr
+  { url = "*", fg = "#6F6E69" } # tx-2
+]
+
+[icon]
+dirs = [
+  { name = ".config", text = "", fg = "#24837B" }, # cy
+  { name = ".git", text = "", fg = "#24837B" }, # cy
+  { name = ".github", text = "", fg = "#24837B" }, # cy
+  { name = ".npm", text = "", fg = "#24837B" }, # cy
+  { name = "Desktop", text = "", fg = "#24837B" }, # cy
+  { name = "Development", text = "", fg = "#24837B" }, # cy
+  { name = "Documents", text = "", fg = "#24837B" }, # cy
+  { name = "Downloads", text = "", fg = "#24837B" }, # cy
+  { name = "Library", text = "", fg = "#24837B" }, # cy
+  { name = "Movies", text = "", fg = "#24837B" }, # cy
+  { name = "Music", text = "", fg = "#24837B" }, # cy
+  { name = "Pictures", text = "", fg = "#24837B" }, # cy
+  { name = "Public", text = "", fg = "#24837B" }, # cy
+  { name = "Videos", text = "", fg = "#24837B" } # cy
+]
+conds = [
+  # Special files
+  { if = "orphan", text = "", fg = "#B7B5AC" }, # tx-3
+  { if = "link", text = "", fg = "#24837B" }, # cy
+  { if = "block", text = "", fg = "#100F0F" }, # tx
+  { if = "char", text = "", fg = "#100F0F" }, # tx
+  { if = "fifo", text = "", fg = "#A02F6F" }, # ma
+  { if = "sock", text = "", fg = "#A02F6F" }, # ma
+  { if = "sticky", text = "", fg = "#100F0F" }, # tx
+  { if = "dummy", text = "", fg = "#B7B5AC" }, # tx-3
+
+  # Fallback
+  { if = "dir", text = "", fg = "#24837B" }, # cy
+  { if = "exec", text = "", fg = "#66800B" }, # gr
+  { if = "!dir", text = "", fg = "#6F6E69" } # tx-2
 ]

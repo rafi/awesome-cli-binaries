@@ -1,7 +1,7 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:piper"
-rev = "5d5c4803"
-hash = "384464b6df8cb807425c521f8cd790f3"
+rev = "39aaf6dc"
+hash = "12126fca34f9f1802bb57b88292f57af"
 
 [[plugin.deps]]
 use = "dedukun/bookmarks"
@@ -15,22 +15,22 @@ hash = "4761fffb60a12d37096c34a356380cdf"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "5d5c4803"
+rev = "39aaf6dc"
 hash = "187cc58ba7ac3befd49c342129e6f1b6"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:jump-to-char"
-rev = "5d5c4803"
+rev = "39aaf6dc"
 hash = "7a4b4237223aaa94e589d1c01a23542a"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "5d5c4803"
-hash = "9c7987da2d2a2120dac33abb64132004"
+rev = "39aaf6dc"
+hash = "15e5b67a241172cbb86b8fbf9e63692"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:types"
-rev = "5d5c4803"
+rev = "39aaf6dc"
 hash = "9105494e98299f392aee95340066da9f"
 
 [[plugin.deps]]
@@ -40,8 +40,8 @@ hash = "57056b9728006881d580ccabe8154a9c"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:zoom"
-rev = "5d5c4803"
-hash = "fa268cb59989a87780605fdcfb8d99a9"
+rev = "39aaf6dc"
+hash = "e8e279463ee99c940e6945a14cf4aa9e"
 
 [[flavor.deps]]
 use = "dangooddd/kanagawa"

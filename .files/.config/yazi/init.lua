@@ -32,15 +32,13 @@ end
 -- Custom date in status bar
 Status:children_add(function()
 	local h = cx.active.current.hovered
-	if not h or not h.cha then
-		return "-"
+	if not h then
+		return ""
 	end
 
 	local spans = {}
-	if h.cha.btime then
-		render_date(spans, h.cha.btime, "c", "blue")
-	end
-	if not h.cha.btime or math.abs(h.cha.mtime - h.cha.btime) > 600 then
+	render_date(spans, h.cha.btime, "c", "blue")
+	if math.abs(h.cha.mtime - h.cha.btime) > 600 then
 		render_date(spans, h.cha.mtime, "m", "yellow")
 	end
 	if math.abs(h.cha.mtime - h.cha.atime) > 600 then

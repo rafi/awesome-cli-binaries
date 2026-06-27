@@ -55,6 +55,7 @@ export PROMPT_COMMAND='history -a; printf "\033k%s@%s:%s\033\\" "${USER}" "${HOS
 EDITOR=vim
 if hash nvim 2>/dev/null; then
 	export MANPAGER="nvim +'set cmdheight=2' +Man!"
+	export MANWIDTH=999
 	EDITOR=nvim
 fi
 export EDITOR

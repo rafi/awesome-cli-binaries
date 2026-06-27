@@ -33,8 +33,7 @@ prepend_previewers = [
 	## Piper previews
 	{ url = "*.csv", run = 'piper -- bat -p --color=always "$1"' },
 	{ url = "*.md", run = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"' },
-
-	{ mime = "application/sqlite3", run  = 'piper -- sqlite3 "$1" ".schema --indent"' },
+	{ url = "*.plist", run = 'piper -- plutil -p "$1"' },
 
 	### Archive previewers
 	{ mime = "application/*zip",           run = 'piper --format=url -- ouch list -t -y "$1"' },

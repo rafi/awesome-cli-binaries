@@ -1,4 +1,4 @@
--- luacheck: globals Command Url cx fs ps rt th ui ya
+-- luacheck: globals Command Url Path cx fs ps rt th ui ya
 
 ---@alias Stdio integer
 
@@ -9,6 +9,8 @@
 Command = Command
 ---@type Url
 Url = Url
+---@type Path
+Path = Path
 ---@type cx
 cx = cx
 ---@type fs
@@ -357,7 +359,7 @@ ya = ya
 -- | ---- | ----- |
 -- | Type | `Url` |
 ---@field url Url
--- Cha of the file.
+-- [`Cha`](#cha) of the file.
 -- |      |       |
 -- | ---- | ----- |
 -- | Type | `Cha` |
@@ -624,96 +626,95 @@ ya = ya
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field fg fun(self: self, color: AsColor): self
 -- Apply a background color.
 -- | In/Out  | Type                                        |
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field bg fun(self: self, color: AsColor): self
 -- Apply a bold style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field bold fun(self: self): self
 -- Apply a dim style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field dim fun(self: self): self
 -- Apply an italic style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field italic fun(self: self): self
 -- Apply an underline style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field underline fun(self: self): self
 -- Apply a blink style.
 -- Note that this style may not be supported by all terminals.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink fun(self: self): self
--- Apply a rapid blink style.
--- Note that this style may not be supported by all terminals.
+-- Apply a rapid blink style. Not all terminals support this.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink_rapid fun(self: self): self
 -- Apply a reverse style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reverse fun(self: self): self
 -- Apply a hidden style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field hidden fun(self: self): self
 -- Apply a crossed style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field crossed fun(self: self): self
 -- Apply a reset style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reset fun(self: self): self
--- Patch the style with `another`.
--- | In/Out    | Type                            |
--- | --------- | ------------------------------- |
--- | `self`    | `Self`                          |
--- | `another` | `Self`                          |
--- | Return    | `self`                          |
--- | Private   | This method can't be inherited. |
----@field patch fun(self: self, another: self): self
+-- Patch the style with `other`.
+-- | In/Out  | Type                            |
+-- | ------- | ------------------------------- |
+-- | `self`  | `Self`                          |
+-- | `other` | `Self`                          |
+-- | Return  | `Self`                          |
+-- | Private | This method can't be inherited. |
+---@field patch fun(self: self, another: ): self
 -- Make a new style.
--- | In/Out  | Type    |
--- | ------- | ------- |
--- | Return  | `Self`  |
+-- | In/Out | Type   |
+-- | ------ | ------ |
+-- | Return | `Self` |
 ---@overload fun(): ui.Style
 
 -- `ui.Span` is the smallest unit of text, yet a component of `ui.Line`. Create a span:
 -- ```lua
 -- ui.Span("foo")
 -- ```
--- For convenience, `ui.Span` can also accept itself as a argument:
+-- For convenience, `ui.Span` can also accept another `ui.Span` as an argument:
 -- ```lua
 -- ui.Span(ui.Span("bar"))
 -- ```
@@ -748,76 +749,75 @@ ya = ya
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field fg fun(self: self, color: AsColor): self
 -- Apply a background color.
 -- | In/Out  | Type                                        |
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field bg fun(self: self, color: AsColor): self
 -- Apply a bold style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field bold fun(self: self): self
 -- Apply a dim style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field dim fun(self: self): self
 -- Apply an italic style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field italic fun(self: self): self
 -- Apply an underline style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field underline fun(self: self): self
 -- Apply a blink style.
 -- Note that this style may not be supported by all terminals.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink fun(self: self): self
--- Apply a rapid blink style.
--- Note that this style may not be supported by all terminals.
+-- Apply a rapid blink style. Not all terminals support this.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink_rapid fun(self: self): self
 -- Apply a reverse style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reverse fun(self: self): self
 -- Apply a hidden style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field hidden fun(self: self): self
 -- Apply a crossed style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field crossed fun(self: self): self
 -- Apply a reset style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reset fun(self: self): self
 -- Make a new span.
 -- | In/Out  | Type                                      |
@@ -888,76 +888,75 @@ ya = ya
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field fg fun(self: self, color: AsColor): self
 -- Apply a background color.
 -- | In/Out  | Type                                        |
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field bg fun(self: self, color: AsColor): self
 -- Apply a bold style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field bold fun(self: self): self
 -- Apply a dim style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field dim fun(self: self): self
 -- Apply an italic style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field italic fun(self: self): self
 -- Apply an underline style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field underline fun(self: self): self
 -- Apply a blink style.
 -- Note that this style may not be supported by all terminals.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink fun(self: self): self
--- Apply a rapid blink style.
--- Note that this style may not be supported by all terminals.
+-- Apply a rapid blink style. Not all terminals support this.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink_rapid fun(self: self): self
 -- Apply a reverse style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reverse fun(self: self): self
 -- Apply a hidden style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field hidden fun(self: self): self
 -- Apply a crossed style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field crossed fun(self: self): self
 -- Apply a reset style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reset fun(self: self): self
 -- Make a new line.
 -- | In/Out  | Type                                      |
@@ -1030,76 +1029,75 @@ ya = ya
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field fg fun(self: self, color: AsColor): self
 -- Apply a background color.
 -- | In/Out  | Type                                        |
 -- | ------- | ------------------------------------------- |
 -- | `self`  | `Self`                                      |
 -- | `color` | [`AsColor`](/docs/plugins/aliases#as-color) |
--- | Return  | `self`                                      |
+-- | Return  | `Self`                                      |
 ---@field bg fun(self: self, color: AsColor): self
 -- Apply a bold style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field bold fun(self: self): self
 -- Apply a dim style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field dim fun(self: self): self
 -- Apply an italic style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field italic fun(self: self): self
 -- Apply an underline style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field underline fun(self: self): self
 -- Apply a blink style.
 -- Note that this style may not be supported by all terminals.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink fun(self: self): self
--- Apply a rapid blink style.
--- Note that this style may not be supported by all terminals.
+-- Apply a rapid blink style. Not all terminals support this.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field blink_rapid fun(self: self): self
 -- Apply a reverse style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reverse fun(self: self): self
 -- Apply a hidden style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field hidden fun(self: self): self
 -- Apply a crossed style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field crossed fun(self: self): self
 -- Apply a reset style.
 -- | In/Out | Type   |
 -- | ------ | ------ |
 -- | `self` | `Self` |
--- | Return | `self` |
+-- | Return | `Self` |
 ---@field reset fun(self: self): self
 -- Make a new text.
 -- | In/Out  | Type                                      |
@@ -1733,7 +1731,7 @@ ya = ya
 -- | ---- | ----- |
 -- | Type | `Url` |
 ---@field url Url
--- Cha of the file.
+-- [`Cha`](#cha) of the file.
 -- |      |       |
 -- | ---- | ----- |
 -- | Type | `Cha` |
@@ -2018,20 +2016,6 @@ ya = ya
 
 -- 
 ---@class (exact) ya
--- Hide Yazi to the secondary screen by returning to the terminal, completely controlled by the requested plugin.
--- ```lua
--- local permit = ya.hide()
--- ```
--- This method returns a `permit` for this resource. When it's necessary to restore the TUI display, call its `drop()` method:
--- ```lua
--- permit:drop()
--- ```
--- Note that since there's always only one available terminal control resource, `ya.hide()` cannot be called again before the previous `permit` is dropped, otherwise an error will be thrown, effectively avoiding deadlocks.
--- | In/Out    | Type               |
--- | --------- | ------------------ |
--- | Return    | `Permit`           |
--- | Available | Async context only |
----@field hide fun(): Permit
 -- Calculate the cached [Url](/docs/plugins/types#url) corresponding to the given file.
 -- ```lua
 -- ya.file_cache {
@@ -2048,30 +2032,18 @@ ya = ya
 -- | `opts` | `{ file: File, skip: integer }` |
 -- | Return | `Url?`                          |
 ---@field file_cache fun(opts: { file: File, skip: integer }): Url?
--- Re-render the UI:
+-- Send an action to the [`[mgr]`](/docs/configuration/keymap#mgr) without waiting for the executor to execute:
 -- ```lua
--- local update_state = ya.sync(function(self, new_state)
---   self.state = new_state
---   ya.render()
--- end)
--- ```
--- | In/Out    | Type              |
--- | --------- | ----------------- |
--- | Return    | `unknown`         |
--- | Available | Sync context only |
----@field render fun(): unknown
--- Send a command to the [`[mgr]`](/docs/configuration/keymap#mgr) without waiting for the executor to execute:
--- ```lua
--- ya.emit("my-cmd", { "hello", 123, foo = true, bar_baz = "world" })
+-- ya.emit("action", { "hello", 123, foo = true, bar_baz = "world" })
 -- -- Equivalent to:
--- -- my-cmd "hello" "123" --foo --bar-baz="world"
+-- -- action "hello" "123" --foo --bar-baz="world"
 -- ```
--- | In/Out | Type                              | Note                                                                                    |
--- | ------ | --------------------------------- | --------------------------------------------------------------------------------------- |
--- | `cmd`  | `string`                          | -                                                                                       |
--- | `args` | `{ [integer\|string]: Sendable }` | Table values are [Sendable][sendable] that follow [Ownership transfer rules][ownership] |
--- | Return | `unknown`                         | -                                                                                       |
----@field emit fun(cmd: string, args: { [integer|string]: Sendable }): unknown
+-- | In/Out   | Type                              | Note                                                                                    |
+-- | -------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+-- | `action` | `string`                          | -                                                                                       |
+-- | `args`   | `{ [integer\|string]: Sendable }` | Table values are [Sendable][sendable] that follow [Ownership transfer rules][ownership] |
+-- | Return   | `unknown`                         | -                                                                                       |
+---@field emit fun(action: string, args: { [integer|string]: Sendable }): unknown
 -- Display the image of `url` within the `rect`, and the image will downscale to fit the area automatically:
 -- | In/Out    | Type               |
 -- | --------- | ------------------ |
@@ -2282,7 +2254,7 @@ ya = ya
 -- local function entry()
 --   local cwd = cx.active.current.cwd
 --   ya.async(function ()
---     ya.dbg(cwd)    -- `cwd` is a Url, which is sendable
+--     ya.dbg(cwd)    -- `cwd` is a Url and is sendable
 --   end)
 -- end
 -- return { entry }
@@ -2324,21 +2296,6 @@ ya = ya
 -- | `str`  | `string` |
 -- | Return | `string` |
 ---@field quote fun(str: string): string
--- Truncate the `text` to the specified width and return the truncated result:
--- ```lua
--- ya.truncate("Hello, World!", {
---   -- Maximum width of the text.
---   max = 5,
---   -- Whether to truncate the text from right-to-left.
---   rtl = false
--- })
--- ```
--- | In/Out | Type                              |
--- | ------ | --------------------------------- |
--- | `text` | `string`                          |
--- | `opts` | `{ max: integer, rtl: boolean? }` |
--- | Return | `string`                          |
----@field truncate fun(text: string, opts: { max: integer, rtl: boolean? }): string
 -- Get or set the content of the system clipboard:
 -- ```lua
 -- -- Get contents from the clipboard if no argument is provided
@@ -2412,6 +2369,226 @@ ya = ya
 -- | Available | Unix-like systems only |
 ---@field host_name fun(): string?
 
+-- The following functions can only be used within an async context.
+---@class (exact) fs
+-- Get the current working directory (CWD) of the process.
+-- This API was added to compensate for the lack of a [`getcwd`][getcwd] in Lua; it is used to retrieve the directory of the last [`chdir`][chdir] call:
+-- ```lua
+-- local url, err = fs.cwd()
+-- ```
+-- You probably will never need it, and more likely, you'll need [`cx.active.current.cwd`][folder-cwd], which is the current directory where the user is working.
+-- Specifically, when the user changes the directory, `cx.active.current.cwd` gets updated immediately, while synchronizing this update with the file system via `chdir` involves I/O operations, such as checking if the directory is valid.
+-- So, there may be some delay, which is particularly noticeable on slow devices. For example, when an HDD wakes up from sleep, it typically takes 3~4 seconds.
+-- It is useful if you just need a valid directory as the CWD of a process to start some work that doesn't depend on the CWD.
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | Return    | `Url?, Error?`     |
+-- | Available | Async context only |
+-- [getcwd]: https://man7.org/linux/man-pages/man3/getcwd.3.html
+-- [chdir]: https://man7.org/linux/man-pages/man2/chdir.2.html
+-- [folder-cwd]: /docs/plugins/context#tab-folder.cwd
+---@field cwd fun(): Url?, Error?
+-- Get the [Cha][cha] of the specified `url`:
+-- ```lua
+-- -- Not following symbolic links
+-- local cha, err = fs.cha(url)
+-- -- Follow symbolic links
+-- local cha, err = fs.cha(url, true)
+-- ```
+-- Returns `(cha, err)`:
+-- - `cha`: The [Cha][cha] of the specified `url` if the operation succeeds.
+-- - `err`: [`Error`][error] of the failure.
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | `url`     | `Url`              |
+-- | `follow`  | `boolean?`         |
+-- | Return    | `Cha?, Error?`     |
+-- | Available | Async context only |
+---@field cha fun(url: Url, follow: boolean?): Cha?, Error?
+-- Write `data` to the specified `url`:
+-- ```lua
+-- local ok, err = fs.write(url, "hello world")
+-- ```
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | `url`     | `Url`              |
+-- | `data`    | `string`           |
+-- | Return    | `boolean, Error?`  |
+-- | Available | Async context only |
+---@field write fun(url: Url, data: string): boolean, Error?
+-- Create an [`Access`](#access) with which to access the filesystem.
+-- ```lua
+-- local access = fs.access()
+-- ```
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | Return    | `Access`           |
+-- | Available | Async context only |
+---@field access fun(): Access
+-- Create directories at the given filesystem `url`:
+-- ```lua
+-- local ok, err = fs.create("dir_all", Url("/tmp/test/nest/nested"))
+-- ```
+-- Where `type` can be one of the following:
+-- - `"dir"`: Creates a new, empty directory.
+-- - `"dir_all"`: Recursively create a directory and all of its parents if they are missing.
+-- Returns `(ok, err)`:
+-- - `ok`: Whether the operation succeeds, which is a `boolean`.
+-- - `err`: [`Error`][error] of the failure.
+-- | In/Out    | Type                               |
+-- | --------- | ---------------------------------- |
+-- | `type`    | `string` \| `"dir"` \| `"dir_all"` |
+-- | `url`     | `Url`                              |
+-- | Return    | `boolean, Error?`                  |
+-- | Available | Async context only                 |
+---@field create fun(type: string|"dir"|"dir_all", url: Url): boolean, Error?
+-- Remove file(s) at the `url` of the file system:
+-- ```lua
+-- local ok, err = fs.remove("file", Url("/tmp/test.txt"))
+-- ```
+-- Where `type` can be one of the following:
+-- - `"file"`: Removes a file from the file system.
+-- - `"dir"`: Removes an existing, empty directory.
+-- - `"dir_all"`: Removes a directory at this url, after removing all its contents. Use carefully!
+-- - `"dir_clean"`: Remove all empty directories under it, and if the directory itself is empty afterward, remove it as well.
+-- Returns `(ok, err)`:
+-- - `ok`: Whether the operation succeeds, which is a `boolean`.
+-- - `err`: [`Error`][error] of the failure.
+-- | In/Out    | Type                                                            |
+-- | --------- | --------------------------------------------------------------- |
+-- | `type`    | `string` \| `"file"` \| `"dir"` \| `"dir_all"` \| `"dir_clean"` |
+-- | `url`     | `Url`                                                           |
+-- | Return    | `boolean, Error?`                                               |
+-- | Available | Async context only                                              |
+---@field remove fun(type: string|"file"|"dir"|"dir_all"|"dir_clean", url: Url): boolean, Error?
+-- Reads the directory contents of `url`:
+-- ```lua
+-- local files, err = fs.read_dir(url, {
+--   -- Glob pattern to filter files out if provided.
+--   glob = nil,
+--   -- Maximum number of files to read, defaults to unlimited.
+--   limit = 10,
+--   -- Whether to resolve symbolic links, defaults to `false`.
+--   resolve = false,
+-- })
+-- ```
+-- | In/Out    | Type                                                    |
+-- | --------- | ------------------------------------------------------- |
+-- | `url`     | `Url`                                                   |
+-- | `options` | `{ glob: string?, limit: integer?, resolve: boolean? }` |
+-- | Return    | `File[]?, Error?`                                       |
+-- | Available | Async context only                                      |
+---@field read_dir fun(url: Url, options: { glob: string?, limit: integer?, resolve: boolean? }): File[]?, Error?
+-- Copy a file from the source `from`, to the destination `to`:
+-- ```lua
+-- local len, err = fs.copy(Url("/tmp/src.txt"), Url("/tmp/dest.txt"))
+-- ```
+-- Returns `(len, err)`:
+-- - `len`: Length of the copied content, which is an `integer`, or `nil` if the operation fails.
+-- - `err`: [`Error`][error] of the failure.
+-- Note that:
+-- - This function will overwrite the destination file.
+-- - This function follows symbolic links for both `from` and `to`.
+-- - If `from` and `to` are the same file, the file will likely be truncated by this operation.
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | `from`    | `Url`              |
+-- | `to`      | `Url`              |
+-- | Return    | `integer?, Error?` |
+-- | Available | Async context only |
+---@field copy fun(from: Url, to: Url): integer?, Error?
+-- Rename a file from the source `from`, to the destination `to`.
+-- ```lua
+-- local ok, err = fs.rename(Url("/tmp/old.txt"), Url("/tmp/new.txt"))
+-- ```
+-- Returns `(ok, err)`:
+-- - `ok`: Whether the operation succeeds, which is a `boolean`.
+-- - `err`: [`Error`][error] of the failure.
+-- Note that:
+-- - This function will overwrite the destination file.
+-- - This function does not work if `from` and `to` are on different file systems.
+-- To move files across file systems, use a combination of [`fs.copy()`](#fs.copy) and [`fs.remove()`](#fs.remove):
+-- ```lua
+-- local from = Url("/mnt/dev1/a")
+-- local to = Url("/mnt/dev2/b")
+-- local ok, err = fs.rename(from, to)
+-- if not ok and err.kind == "CrossesDevices" then
+--   local len, err = fs.copy(from, to)
+--   if len and not err then
+--     fs.remove("file", from)
+--   end
+-- end
+-- ```
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | `from`    | `Url`              |
+-- | `to`      | `Url`              |
+-- | Return    | `boolean, Error?`  |
+-- | Available | Async context only |
+---@field rename fun(from: Url, to: Url): boolean, Error?
+-- Create a file or a directory with the unique name from the given `url` to ensure it's unique in the file system:
+-- ```lua
+-- local url, err = fs.unique("file", Url("/tmp/test.txt"))
+-- ```
+-- Where `type` can be one of the following:
+-- - `"file"`: Creates a file with the unique name.
+-- - `"dir"`: Creates a directory with the unique name.
+-- If the file already exists, it will append `_n` to the filename, where `n` is a number, and keep incrementing until the first available name is found.
+-- Returns `(url, err)`:
+-- - `url`: The [`Url`][url] with the unique filename.
+-- - `err`: [`Error`][error] of the failure.
+-- | In/Out    | Type                |
+-- | --------- | ------------------- |
+-- | `type`    | `"file"` \| `"dir"` |
+-- | `url`     | `Url`               |
+-- | Return    | `Url?, Error?`      |
+-- | Available | Async context only  |
+---@field unique fun(type: "file"|"dir", url: Url): Url?, Error?
+
+-- APIs related to the user interface.
+---@class (exact) ui
+-- Hide Yazi to the secondary screen by returning to the terminal, completely controlled by the requested plugin.
+-- ```lua
+-- local permit = ui.hide()
+-- ```
+-- This method returns a `permit` for this resource. When it's necessary to restore the TUI display, call its `drop()` method:
+-- ```lua
+-- permit:drop()
+-- ```
+-- Note that since there's always only one available terminal control resource, `ui.hide()` cannot be called again before the previous `permit` is dropped, otherwise an error will be thrown, effectively avoiding deadlocks.
+-- | In/Out    | Type               |
+-- | --------- | ------------------ |
+-- | Return    | `Permit`           |
+-- | Available | Async context only |
+---@field hide fun(): Permit
+-- Re-render the UI:
+-- ```lua
+-- local update_state = ya.sync(function(self, new_state)
+--   self.state = new_state
+--   ui.render()
+-- end)
+-- ```
+-- | In/Out    | Type              |
+-- | --------- | ----------------- |
+-- | Return    | `unknown`         |
+-- | Available | Sync context only |
+---@field render fun(): unknown
+-- Truncate the `text` to the specified width and return the truncated result:
+-- ```lua
+-- ui.truncate("Hello, World!", {
+--   -- Maximum width of the text.
+--   max = 5,
+--   -- Whether to truncate the text from right-to-left.
+--   rtl = false
+-- })
+-- ```
+-- | In/Out | Type                              |
+-- | ------ | --------------------------------- |
+-- | `text` | `string`                          |
+-- | `opts` | `{ max: integer, rtl: boolean? }` |
+-- | Return | `string`                          |
+---@field truncate fun(text: string, opts: { max: integer, rtl: boolean? }): string
+
 -- Yazi's DDS (Data Distribution Service) uses a Lua-based publish-subscribe model as its carrier. That is, you can achieve cross-instance communication and state persistence through the `ps` API. See [DDS](/docs/dds) for details.
 -- The following functions can only be used within a sync context.
 ---@class (exact) ps
@@ -2483,168 +2660,121 @@ ya = ya
 -- | Return | `unknown` | -                 |
 ---@field unsub_remote fun(kind: string): unknown
 
--- The following functions can only be used within an async context.
----@class (exact) fs
--- Get the current working directory (CWD) of the process.
--- This API was added to compensate for the lack of a [`getcwd`][getcwd] in Lua; it is used to retrieve the directory of the last [`chdir`][chdir] call:
+-- This object is created by [`fs.access()`](#fs.access) and represents the options for interacting with a file.
+---@class (exact) Access
+-- Sets the operation for read access.
 -- ```lua
--- local url, err = fs.cwd()
+-- local access = fs.access():read(true)
 -- ```
--- You probably will never need it, and more likely, you'll need [`cx.active.current.cwd`][folder-cwd], which is the current directory where the user is working.
--- Specifically, when the user changes the directory, `cx.active.current.cwd` gets updated immediately, while synchronizing this update with the file system via `chdir` involves I/O operations, such as checking if the directory is valid.
--- So, there may be some delay, which is particularly noticeable on slow devices. For example, when an HDD wakes up from sleep, it typically takes 3~4 seconds.
--- It is useful if you just need a valid directory as the CWD of a process to start some work that doesn't depend on the CWD.
--- | In/Out    | Type               |
--- | --------- | ------------------ |
--- | Return    | `Url?, Error?`     |
--- | Available | Async context only |
--- [getcwd]: https://man7.org/linux/man-pages/man3/getcwd.3.html
--- [chdir]: https://man7.org/linux/man-pages/man2/chdir.2.html
--- [folder-cwd]: /docs/plugins/context#tab-folder.cwd
----@field cwd fun(): Url?, Error?
--- Get the [Cha][cha] of the specified `url`:
+-- | In/Out | Type      |
+-- | ------ | --------- |
+-- | `self` | `Self`    |
+-- | `read` | `boolean` |
+-- | Return | `self`    |
+---@field read fun(self: self, read: boolean): self
+-- Sets the operation for write access.
 -- ```lua
--- -- Not following symbolic links
--- local cha, err = fs.cha(url)
--- -- Follow symbolic links
--- local cha, err = fs.cha(url, true)
+-- local access = fs.access():write(true)
 -- ```
--- Returns `(cha, err)`:
--- - `cha`: The [Cha][cha] of the specified `url` if the operation succeeds.
+-- | In/Out  | Type      |
+-- | ------- | --------- |
+-- | `self`  | `Self`    |
+-- | `write` | `boolean` |
+-- | Return  | `self`    |
+---@field write fun(self: self, write: boolean): self
+-- Sets the operation for the append mode.
+-- ```lua
+-- local access = fs.access():append(true)
+-- ```
+-- | In/Out   | Type      |
+-- | -------- | --------- |
+-- | `self`   | `Self`    |
+-- | `append` | `boolean` |
+-- | Return   | `self`    |
+---@field append fun(self: self, append: boolean): self
+-- Sets the operation for truncating a previous file.
+-- ```lua
+-- local access = fs.access():truncate(true)
+-- ```
+-- | In/Out     | Type      |
+-- | ---------- | --------- |
+-- | `self`     | `Self`    |
+-- | `truncate` | `boolean` |
+-- | Return     | `self`    |
+---@field truncate fun(self: self, truncate: boolean): self
+-- Sets the operation to create a new file, or open it if it already exists.
+-- ```lua
+-- local access = fs.access():create(true)
+-- ```
+-- | In/Out   | Type      |
+-- | -------- | --------- |
+-- | `self`   | `Self`    |
+-- | `create` | `boolean` |
+-- | Return   | `self`    |
+---@field create fun(self: self, create: boolean): self
+-- Sets the operation to create a new file, failing if it already exists.
+-- ```lua
+-- local access = fs.access():create_new(true)
+-- ```
+-- | In/Out       | Type      |
+-- | ------------ | --------- |
+-- | `self`       | `Self`    |
+-- | `create_new` | `boolean` |
+-- | Return       | `self`    |
+---@field create_new fun(self: self, create_new: boolean): self
+-- Opens a file at `url` with the mode specified.
+-- ```lua
+-- local url = Url("/tmp/test.txt")
+-- local fd, err = fs.access():read(true):open(url)
+-- ```
+-- Returns `(fd, err)`:
+-- - `fd`: [Fd](#fd) (file descriptor) if the operation succeeds; otherwise, `nil`.
 -- - `err`: [`Error`][error] of the failure.
 -- | In/Out    | Type               |
 -- | --------- | ------------------ |
+-- | `self`    | `Self`             |
 -- | `url`     | `Url`              |
--- | `follow`  | `boolean?`         |
--- | Return    | `Cha?, Error?`     |
+-- | Return    | `Fd?, Error?`      |
 -- | Available | Async context only |
----@field cha fun(url: Url, follow: boolean?): Cha?, Error?
--- Write `data` to the specified `url`:
+---@field open fun(self: self, url: Url): Fd?, Error?
+
+-- This object is created by [`Access:open()`](#access.open) and contains the methods for working with the opened file.
+---@class (exact) Fd
+-- Writes all `bytes` to the file descriptor.
 -- ```lua
--- local ok, err = fs.write(url, "hello world")
+-- local url = Url("/tmp/test.txt")
+-- local fd, err = fs.access():write(true):open(url)
+-- assert(fd, err)
+-- local ok, err = fd:write_all("Hello, World!")
+-- assert(ok, err)
 -- ```
+-- Returns `(ok, err)`:
+-- - `ok`: Whether the operation succeeds, which is a `boolean`.
+-- - `err`: [`Error`][error] of the failure.
 -- | In/Out    | Type               |
 -- | --------- | ------------------ |
--- | `url`     | `Url`              |
--- | `data`    | `string`           |
+-- | `self`    | `Self`             |
+-- | `bytes`   | `string`           |
 -- | Return    | `boolean, Error?`  |
 -- | Available | Async context only |
----@field write fun(url: Url, data: string): boolean, Error?
--- Create file(s) at the `url` of the file system:
+---@field write_all fun(self: self, bytes: string): boolean, Error?
+-- Flushes the file descriptor, making sure all data gets written to the underlying storage.
 -- ```lua
--- local ok, err = fs.create("dir_all", Url("/tmp/test/nest/nested"))
--- ```
--- Where `type` can be one of the following:
--- - `"dir"`: Creates a new, empty directory.
--- - `"dir_all"`: Recursively create a directory and all of its parents if they are missing.
--- Returns `(ok, err)`:
--- - `ok`: Whether the operation succeeds, which is a `boolean`.
--- - `err`: [`Error`][error] of the failure.
--- | In/Out    | Type                               |
--- | --------- | ---------------------------------- |
--- | `type`    | `string` \| `"dir"` \| `"dir_all"` |
--- | `url`     | `Url`                              |
--- | Return    | `boolean, Error?`                  |
--- | Available | Async context only                 |
----@field create fun(type: string|"dir"|"dir_all", url: Url): boolean, Error?
--- Remove file(s) at the `url` of the file system:
--- ```lua
--- local ok, err = fs.remove("file", Url("/tmp/test.txt"))
--- ```
--- Where `type` can be one of the following:
--- - `"file"`: Removes a file from the file system.
--- - `"dir"`: Removes an existing, empty directory.
--- - `"dir_all"`: Removes a directory at this url, after removing all its contents. Use carefully!
--- - `"dir_clean"`: Remove all empty directories under it, and if the directory itself is empty afterward, remove it as well.
--- Returns `(ok, err)`:
--- - `ok`: Whether the operation succeeds, which is a `boolean`.
--- - `err`: [`Error`][error] of the failure.
--- | In/Out    | Type                                                            |
--- | --------- | --------------------------------------------------------------- |
--- | `type`    | `string` \| `"file"` \| `"dir"` \| `"dir_all"` \| `"dir_clean"` |
--- | `url`     | `Url`                                                           |
--- | Return    | `boolean, Error?`                                               |
--- | Available | Async context only                                              |
----@field remove fun(type: string|"file"|"dir"|"dir_all"|"dir_clean", url: Url): boolean, Error?
--- Reads the directory contents of `url`:
--- ```lua
--- local files, err = fs.read_dir(url, {
---   -- Glob pattern to filter files out if provided.
---   glob = nil,
---   -- Maximum number of files to read, defaults to unlimited.
---   limit = 10,
---   -- Whether to resolve symbolic links, defaults to `false`.
---   resolve = false,
--- })
--- ```
--- | In/Out    | Type                                                    |
--- | --------- | ------------------------------------------------------- |
--- | `url`     | `Url`                                                   |
--- | `options` | `{ glob: string?, limit: integer?, resolve: boolean? }` |
--- | Return    | `File[]?, Error?`                                       |
--- | Available | Async context only                                      |
----@field read_dir fun(url: Url, options: { glob: string?, limit: integer?, resolve: boolean? }): File[]?, Error?
--- Copy a file from the source `from`, to the destination `to`:
--- ```lua
--- local len, err = fs.copy(Url("/tmp/src.txt"), Url("/tmp/dest.txt"))
--- ```
--- Returns `(len, err)`:
--- - `len`: Length of the copied content, which is an `integer`, or `nil` if the operation fails.
--- - `err`: [`Error`][error] of the failure.
--- Note that:
--- - This function will overwrite the destination file.
--- - If `from` and `to` are the same file, the file will likely be truncated by this function.
--- - This function follows symlinks for both `from` and `to`.
--- | In/Out    | Type               |
--- | --------- | ------------------ |
--- | `from`    | `Url`              |
--- | `to`      | `Url`              |
--- | Return    | `integer?, Error?` |
--- | Available | Async context only |
----@field copy fun(from: Url, to: Url): integer?, Error?
--- Rename a file from the source `from`, to the destination `to`.
--- ```lua
--- local ok, err = fs.rename(Url("/tmp/old.txt"), Url("/tmp/new.txt"))
+-- local url = Url("/tmp/test.txt")
+-- local fd, err = fs.access():write(true):open(url)
+-- assert(fd, err)
+-- local ok, err = fd:flush()
+-- assert(ok, err)
 -- ```
 -- Returns `(ok, err)`:
 -- - `ok`: Whether the operation succeeds, which is a `boolean`.
 -- - `err`: [`Error`][error] of the failure.
--- Note that:
--- - This function will overwrite the destination file.
--- - This function does not work if `from` and `to` are on different file systems.
---   To move files across file systems, use a combination of [`fs.copy()`](#fs.copy) and [`fs.remove()`](#fs.remove):
--- ```lua
--- local from = Url("/mnt/dev1/a")
--- local to = Url("/mnt/dev2/b")
--- local ok, err = fs.rename(from, to)
--- if not ok and err.kind == "CrossesDevices" then
---   local len, err = fs.copy(from, to)
---   if len and not err then
---   fs.remove("file", from)
---   end
--- end
--- ```
 -- | In/Out    | Type               |
 -- | --------- | ------------------ |
--- | `from`    | `Url`              |
--- | `to`      | `Url`              |
--- | Return    | `integer?, Error?` |
+-- | `self`    | `Self`             |
+-- | Return    | `boolean, Error?`  |
 -- | Available | Async context only |
----@field rename fun(from: Url, to: Url): integer?, Error?
--- Get a unique name from the given `url` to ensure it's unique in the file system:
--- ```lua
--- local url, err = fs.unique_name(Url("/tmp/test.txt"))
--- ```
--- If the file already exists, it will append `_n` to the filename, where `n` is a number, and keep incrementing until the first available name is found.
--- Returns `(url, err)`:
--- - `url`: The [`Url`][url] with the unique filename.
--- - `err`: [`Error`][error] of the failure.
--- | In/Out    | Type               |
--- | --------- | ------------------ |
--- | `url`     | `Url`              |
--- | Return    | `Url?, Error?`     |
--- | Available | Async context only |
----@field unique_name fun(url: Url): Url?, Error?
+---@field flush fun(self: self): boolean, Error?
 
 -- You can invoke external programs through:
 -- ```lua
@@ -2793,21 +2923,21 @@ ya = ya
 -- - Data comes from stdout, if event is 0.
 -- - Data comes from stderr, if event is 1.
 -- - No data to read from both stdout and stderr, if event is 2.
--- | In/Out | Type              |
--- | ------ | ----------------- |
--- | `self` | `Self`            |
--- | `len`  | `integer`         |
--- | Return | `string, integer` |
----@field read fun(self: self, len: integer): string, integer
+-- | In/Out | Type               |
+-- | ------ | ------------------ |
+-- | `self` | `Self`             |
+-- | `len`  | `integer`          |
+-- | Return | `string?, integer` |
+---@field read fun(self: self, len: integer): string?, integer
 -- Same as [`read()`](#Child.read), except it reads data line by line:
 -- ```lua
 -- local line, event = child:read_line()
 -- ```
--- | In/Out | Type              |
--- | ------ | ----------------- |
--- | `self` | `Self`            |
--- | Return | `string, integer` |
----@field read_line fun(self: self): string, integer
+-- | In/Out | Type               |
+-- | ------ | ------------------ |
+-- | `self` | `Self`             |
+-- | Return | `string?, integer` |
+---@field read_line fun(self: self): string?, integer
 -- Same as [`read_line()`](#Child.read_line), except it accepts a table of options:
 -- ```lua
 -- local line, event = child:read_line_with {
@@ -2815,14 +2945,14 @@ ya = ya
 --   timeout = 500,
 -- }
 -- ```
--- It has a extra event:
--- - Timeout, if event is 3.
+-- It has an extra event:
+-- - Timeout, if `event` is 3.
 -- | In/Out | Type                   |
 -- | ------ | ---------------------- |
 -- | `self` | `Self`                 |
 -- | `opts` | `{ timeout: integer }` |
--- | Return | `string, integer`      |
----@field read_line_with fun(self: self, opts: { timeout: integer }): string, integer
+-- | Return | `string?, integer`     |
+---@field read_line_with fun(self: self, opts: { timeout: integer }): string?, integer
 -- Writes all `src` to the stdin of the child process:
 -- ```lua
 -- local ok, err = child:write_all(src)
@@ -3004,7 +3134,7 @@ ya = ya
 -- ```lua
 -- ui.Span("foo")
 -- ```
--- For convenience, `ui.Span` can also accept itself as a argument:
+-- For convenience, `ui.Span` can also accept another `ui.Span` as an argument:
 -- ```lua
 -- ui.Span(ui.Span("bar"))
 -- ```

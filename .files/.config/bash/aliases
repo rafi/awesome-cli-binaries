@@ -109,7 +109,7 @@ fi
 
 # }}}
 # Git ------------------------------------------------------- g for git -- {{{
-# See more in ./functions.d/git.bash
+# See more in ./functions/git.bash
 alias g=git
 alias ga='git add'
 alias gb='git branch'
@@ -181,7 +181,7 @@ fi # }}}
 
 # }}}
 # Kubernetes ----------------------------------------- k for kubernetes -- {{{
-# See more in functions.d/kubernetes.bash
+# See more in functions/kubernetes.bash
 alias k=kubectl
 alias kc=kubectx
 alias ki='kubectl config-import'
@@ -262,6 +262,7 @@ alias dum='df -hT -x devtmpfs -x tmpfs'
 # }}}
 # Misc ------------------------------------------------------------------- {{{
 
+alias gpgl='gpg --list-secret-keys --keyid-format long --with-subkey-fingerprint --list-options show-unusable-subkeys'
 alias ,fontcache='fc-cache -f -v'
 alias ,fontfind='fc-list : family style'
 alias ,freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'

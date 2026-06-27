@@ -11,7 +11,7 @@ function fish_prompt --description 'Write out the prompt'
 		if set -q fish_color_cwd_root
 			set color_cwd $fish_color_cwd_root
 		end
-		set suffix $suffix ''  #  
+		set suffix $suffix ''
 	else
 		set suffix $suffix 'λ'
 	end
@@ -28,23 +28,20 @@ function fish_prompt --description 'Write out the prompt'
 	set __fish_prompt_status_generation $status_generation
 	set -l status_color (set_color $fish_color_status)
 	set -l statusb_color (set_color $bold_flag $fish_color_status)
-	set -l prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
+	set -l prompt_status (__fish_print_pipestatus '[' ']' '|' "$status_color" "$statusb_color" $last_pipestatus)
 
-	# Version control status.
-	# if [ "$COLUMNS" -gt 80 ]
-	# 	echo -n -s (fish_vcs_prompt '[%s] ') $normal
-	# end
-
-	# user@hostname if root.
+	# user@hostname if root or ssh.
 	if test -n "$SSH_CONNECTION"; or fish_is_root_user
 		echo -n -s (prompt_login)' '
 	end
 
 	# Show the path.
-	echo -n -s (set_color $color_cwd) (prompt_pwd) $normal ' '$prompt_status
+	echo -n -s (set_color $color_cwd) (prompt_pwd) $normal \
+		([ "$COLUMNS" -gt 80 ] && fish_vcs_prompt '%s') \
+		' '$prompt_status
 
-	if test -n "$CMD_DURATION"; and [ "$CMD_DURATION" -gt 999 ]
-		echo -n -s (format_time $CMD_DURATION 1 false ' ')
+	if test -n "$CMD_DURATION";
+		echo -n -s (format_time $CMD_DURATION 0.99 false ' ')
 	end
 
 	# Show number of jobs
@@ -53,7 +50,7 @@ function fish_prompt --description 'Write out the prompt'
 		echo -n -s " "$njobs
 	end
 	if test "$njobs" -gt 0
-		echo -n -s "✦"
+		echo -n -s (set_color blue)'✦'(set_color normal)
 	end
-	echo -n -s $suffix
+	echo -en -s $suffix
 end

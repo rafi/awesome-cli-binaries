@@ -11,7 +11,7 @@ abbr clear ' clear'
 abbr cal 'task cal; or ncal -wC3; or command cal -B1 -A1'
 
 alias update 'brew update && brew outdated'
-alias upgrade 'ya pack -u && brew upgrade'
+alias upgrade 'ya pkg upgrade && brew upgrade'
 alias outdated 'brew outdated'
 alias work 'cd ~/code/work'
 alias wiki 'cd ~/code/rafi/*/content/wiki'
@@ -135,7 +135,7 @@ end
 
 # }}}
 # Git ------------------------------------------------------- g for git -- {{{
-# See more in ./functions.d/git.bash
+# See more in ./functions/git.fish
 abbr g   git
 abbr ga  git add
 abbr gb  git branch
@@ -162,6 +162,8 @@ abbr ck git checkout
 # Docker ------------------------------------------------- d for docker -- {{{
 abbr d docker
 abbr dk docker compose
+abbr drarm 'docker run --rm -it --platform linux/arm64'
+abbr dramd 'docker run --rm -it --platform linux/amd64'
 alias dps 'docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
 alias dls 'docker ps -a --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{ .Ports }}\\t{{.RunningFor}}\\t{{.Command}}\\t{{ .ID }}" | cut -c-$(tput cols)'
 # alias dim 'docker images --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}\\t{{.CreatedSince}}" | cut -c-$(tput cols)'
@@ -180,7 +182,7 @@ alias dtag 'docker inspect --format "{{.Name}}
 
 # }}}
 # Kubernetes ----------------------------------------- k for kubernetes -- {{{
-# See more in functions.d/kubernetes.bash
+# See more in conf.d/kubernetes.fish
 abbr k kubectl
 abbr kc  kubectx
 abbr ki  kubectl config-import
@@ -236,6 +238,7 @@ abbr untar 'tar xvf'
 # }}}
 # Misc ------------------------------------------------------------------- {{{
 
+abbr gpgl 'gpg --list-secret-keys --keyid-format long --with-subkey-fingerprint --list-options show-unusable-subkeys'
 abbr ,fontcache 'fc-cache -f -v'
 abbr ,fontfind 'fc-list : family style'
 abbr ,sniff "sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"

@@ -48,6 +48,7 @@ set -gx XAUTHORITY "$XDG_CACHE_HOME/Xauthority"
 
 # Pagers
 set -gx MANPAGER "nvim +'set cmdheight=2' +Man!"
+set -gx MANWIDTH 999
 
 # Less
 if not set -q LESSVERSION
@@ -78,12 +79,14 @@ set -gx CLOUDSDK_CONFIG "$XDG_STATE_HOME/gcloud"
 set -gx GNUPGHOME "$XDG_CONFIG_HOME/gnupg"
 set -gx INPUTRC "$XDG_CONFIG_HOME/bash/inputrc"
 set -gx PASSWORD_STORE_DIR "$HOME/docs/pass/"
+set -gx SOPS_AGE_KEY_FILE "$HOME/docs/pass/default.agekey"
 set -gx ZDOTDIR "$XDG_CONFIG_HOME/zsh"
 
 set -gx CARGO_HOME "$XDG_DATA_HOME"/cargo
 set -gx GEMRC "$XDG_CONFIG_HOME/gemrc/config"
 set -gx GEM_SPEC_CACHE "$XDG_CACHE_HOME/gem/specs"
 set -gx GOPATH "$XDG_DATA_HOME"/go
+set -gx PNPM_HOME "$XDG_DATA_HOME"/pnpm
 set -gx NPM_CONFIG_USERCONFIG "$XDG_CONFIG_HOME/npm/npmrc"
 set -gx PIPX_BIN_DIR "$XDG_DATA_HOME/python/pipx/bin"
 set -gx PIPX_HOME "$XDG_DATA_HOME/python/pipx"
@@ -95,14 +98,18 @@ set -gx PYENV_ROOT $XDG_DATA_HOME/python/pyenv
 set -gx RUSTUP_HOME "$XDG_DATA_HOME"/rustup
 set -gx RYE_HOME $XDG_DATA_HOME/python/rye
 
+set -gx CUPS_CACHEDIR "$XDG_STATE_HOME/cups"
+set -gx CUPS_STATEDIR "$XDG_STATE_HOME/cups"
+set -gx CUPS_DATADIR "$XDG_STATE_HOME/cups"
 set -gx COINTOP_CONFIG "$XDG_CONFIG_HOME/cointop/config.toml"
 set -gx INTELLI_HOME "$XDG_STATE_HOME/intellishell"
 set -gx JIG_SESSION_CONFIG_PATH "$HOME/.local/opt/jig"
 set -gx JK_DIRS "$XDG_DATA_HOME/tldr:$HOME/docs/cheatsheets"
 set -gx KREW_ROOT "$XDG_DATA_HOME/krew"
 set -gx KUBECTL_EXTERNAL_DIFF 'diff -u -N --color=always'
-set -gx LIMA_HOME "$XDG_DATA_HOME/lima"
+set -gx KUBECTL_KUBERC "true"
 set -gx MINIKUBE_HOME "$XDG_DATA_HOME/minikube"
+set -gx LIMA_HOME "$XDG_DATA_HOME/lima"
 set -gx MPV_HOME "$XDG_CONFIG_HOME/mpv"
 set -gx MYSQL_HISTFILE "$XDG_CACHE_HOME/mysql_history"
 set -gx PACKER_CACHE_DIR "$XDG_CACHE_HOME/packer"
