@@ -69,6 +69,11 @@ export LESSHISTFILE="$XDG_CACHE_HOME/less_history"
 # On newer versions of less, use the following to support Nerdfonts.
 export LESSUTFCHARDEF="E000-F8FF:p,F0000-FFFFD:p,100000-10FFFD:p"
 
+# Prompt
+# ----
+
+export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/config.toml"
+
 # Finders
 # ----
 
