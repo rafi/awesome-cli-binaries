@@ -80,26 +80,6 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # --------------------------------------------------------------------------
 
-# Build fish-shell from source.
-# Use Debian 11.x "bullseye" for older glib versions.
-FROM rust:slim-bullseye AS fish-builder
-
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update \
-    && apt-get install --no-install-recommends --yes git gettext \
-    && rm -rf /var/lib/apt/lists/* /var/cache/* /var/log/* /var/lib/*
-
-WORKDIR /root
-
-ARG fish_version=4.8.0
-
-RUN git clone https://github.com/fish-shell/fish-shell.git --depth 1 -b $fish_version && \
-    cd fish-shell && \
-    FISH_BUILD_DOCS=0 cargo build --release && \
-    rm -rf /usr/local/cargo/registry /usr/local/cargo/git
-
-# --------------------------------------------------------------------------
-
 FROM alpine:edge AS nvim-plugins
 
 WORKDIR /root
@@ -108,7 +88,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=179
+ARG BUILD_REVISION=181
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -124,7 +104,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=179
+ARG BUILD_REVISION=181
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -168,6 +148,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai solidiquis/erdtree && erd --version \
     && dra download -ai eza-community/eza && eza --version \
     && dra download -ai sharkdp/fd && fd --version \
+    && dra download -ai fish-shell/fish-shell && fish --version \
     && dra download -aio fx antonmedv/fx && upx fx && fx --version \
     && dra download -ai junegunn/fzf && fzf --version && (fzf --bash > fzf.bash && fzf --zsh > fzf.zsh && fzf --fish > fzf.fish) \
     && dra download -ai charmbracelet/glow && upx glow && glow --version && rm -rf ~/.cache ~/.config \
@@ -215,9 +196,6 @@ RUN wget -q --no-hsts \
 
 # Copy compiled tmux
 COPY --from=tmux-builder /opt/tmux/bin/tmux .
-
-# Copy compiled fish-shell
-COPY --from=fish-builder /root/fish-shell/target/release/fish .
 
 # Copy downloaded neovim plugins
 COPY --from=nvim-plugins /root/.local/share/nvim /root/.local/share/nvim
