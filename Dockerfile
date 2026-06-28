@@ -88,7 +88,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=181
+ARG BUILD_REVISION=182
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -104,7 +104,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=181
+ARG BUILD_REVISION=182
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -173,15 +173,6 @@ RUN --mount=type=secret,id=token \
     && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
     && dra download -aI yq_linux_${TARGETARCH} -o yq mikefarah/yq && yq --version \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
-
-RUN --mount=type=secret,id=token \
-    GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
-    && dra download -a Helvesec/rmux \
-    && tar xzv --strip-components 1 --wildcards -f rmux-*.tar.gz '*/bin' '*/libexec' \
-    && mv bin/* . \
-    && rm -rf bin \
-    && rm -rf rmux-*.tar.gz \
-    && rmux list-commands
 
 # Chafa
 ARG chafa_version=1.18.2-1
