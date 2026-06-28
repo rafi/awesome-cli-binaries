@@ -61,7 +61,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     rm -fr "${ncurses_name}.tar.gz" "$ncurses_name"
 
 # tmux
-ENV tmux_version=3.6b
+ENV tmux_version=3.7
 ENV tmux_name=tmux-${tmux_version}
 ENV tmux_url=https://github.com/tmux/tmux/releases/download/$tmux_version/$tmux_name.tar.gz
 RUN curl --retry 5 -LO "$tmux_url" && \
