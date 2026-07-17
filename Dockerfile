@@ -61,7 +61,7 @@ RUN curl --retry 5 -LO "$ncurses_url" && \
     rm -fr "${ncurses_name}.tar.gz" "$ncurses_name"
 
 # tmux
-ENV tmux_version=3.7
+ENV tmux_version=3.7b
 ENV tmux_name=tmux-${tmux_version}
 ENV tmux_url=https://github.com/tmux/tmux/releases/download/$tmux_version/$tmux_name.tar.gz
 RUN curl --retry 5 -LO "$tmux_url" && \
@@ -88,7 +88,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=183
+ARG BUILD_REVISION=185
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -109,7 +109,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=183
+ARG BUILD_REVISION=185
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
