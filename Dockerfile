@@ -166,8 +166,7 @@ RUN --mount=type=secret,id=token \
     && dra download -ai lsd-rs/lsd && lsd --version \
     && dra download -ai MilesCranmer/rip2 && rip --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
-    && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
-    && dra download -ai stern/stern && upx stern && stern --version
+    && dra download -ai starship/starship && starship -V && rm -rf ~/.cache
 
 RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
