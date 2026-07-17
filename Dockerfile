@@ -80,7 +80,7 @@ RUN "$BUILD_DIR/bin/tmux" -V
 
 # --------------------------------------------------------------------------
 
-FROM alpine:edge AS nvim-plugins
+FROM alpine:3 AS nvim-plugins
 
 WORKDIR /root
 
@@ -88,12 +88,17 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=182
+ARG BUILD_REVISION=183
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
     && rm -rf ~/.cache /tmp/nvim.root \
-    && rm -rf ~/.local/state/nvim/log ~/.local/state/nvim/shada
+    && rm -rf ~/.local/state/nvim/*log ~/.local/state/nvim/shada \
+    && rm -rf ~/.local/share/nvim/lazy/snacks.nvim/tests \
+    && rm -rf ~/.local/share/nvim/lazy/lazy.nvim/manifest \
+    && rm -rf ~/.local/share/nvim/lazy/grug-far.nvim/tests \
+    && rm -rf ~/.local/share/nvim/lazy/tokyonight.nvim/extras \
+    && rm -rf ~/.local/share/nvim/lazy/gitsigns.nvim/test
 
 RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
     echo 'Failure during LazyVim plugin install.'; \
@@ -104,7 +109,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=182
+ARG BUILD_REVISION=183
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -140,8 +145,7 @@ RUN --mount=type=secret,id=token \
     && dra download -s diff-so-fancy so-fancy/diff-so-fancy && chmod ug+x diff-so-fancy \
     && dra download -ai Byron/dua-cli && dua --version \
     && dra download -ai muesli/duf && duf -version \
-    && dra download -ai bootandy/dust && dust --version \
-    && dra download -ai homeport/dyff && dyff version
+    && dra download -ai bootandy/dust && dust --version
 
 RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
@@ -151,7 +155,6 @@ RUN --mount=type=secret,id=token \
     && dra download -ai fish-shell/fish-shell && fish --version \
     && dra download -aio fx antonmedv/fx && upx fx && fx --version \
     && dra download -ai junegunn/fzf && fzf --version && (fzf --bash > fzf.bash && fzf --zsh > fzf.zsh && fzf --fish > fzf.fish) \
-    && dra download -ai charmbracelet/glow && upx glow && glow --version && rm -rf ~/.cache ~/.config \
     && dra download -ai mrjackwills/havn && havn --version \
     && dra download -ai sharkdp/hexyl && hexyl --version \
     && dra download -ai sharkdp/hyperfine && hyperfine --version \
@@ -161,7 +164,6 @@ RUN --mount=type=secret,id=token \
 RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
     && dra download -ai lsd-rs/lsd && lsd --version \
-    && dra download -aio mkcert FiloSottile/mkcert && mkcert --version \
     && dra download -ai MilesCranmer/rip2 && rip --version \
     && dra download -ai BurntSushi/ripgrep && rg --version \
     && dra download -ai starship/starship && starship -V && rm -rf ~/.cache \
@@ -169,9 +171,7 @@ RUN --mount=type=secret,id=token \
 
 RUN --mount=type=secret,id=token \
     GITHUB_TOKEN="$(cat /run/secrets/token)" && export GITHUB_TOKEN \
-    && dra download -ai ducaale/xh && xh --version \
     && dra download -ai sxyazi/yazi && yazi --version && rm -rf ~/.local /tmp/yazi* \
-    && dra download -aI yq_linux_${TARGETARCH} -o yq mikefarah/yq && yq --version \
     && dra download -ai ajeetdsouza/zoxide && zoxide --version
 
 # Chafa
@@ -185,8 +185,15 @@ RUN wget -qO- --no-hsts \
 RUN wget -q --no-hsts \
     https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux-x86_64.tar.gz
 
+# --------------------------------------------------------------------------
+
+FROM gcr.io/distroless/static-debian13:latest
+
+# Copy all binaries
+COPY --from=downloader /usr/local/bin /usr/local/bin
+
 # Copy compiled tmux
-COPY --from=tmux-builder /opt/tmux/bin/tmux .
+COPY --from=tmux-builder /opt/tmux/bin/tmux /usr/local/bin/
 
 # Copy downloaded neovim plugins
 COPY --from=nvim-plugins /root/.local/share/nvim /root/.local/share/nvim

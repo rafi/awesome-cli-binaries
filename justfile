@@ -16,7 +16,7 @@ _validate:
     exit 1; \
   fi
 
-build arch=OS_ARCH: (docker arch) (binaries arch)
+build arch=OS_ARCH: (docker arch)
 dist arch=OS_ARCH: (build arch) (archive arch)
 
 # build docker image
@@ -41,9 +41,9 @@ release: _validate
 
 # copy binaries locally
 binaries arch=OS_ARCH:
-  docker run --rm --platform linux/{{ arch }} \
-    -v "$PWD":/artifacts {{ IMAGE }} \
-    cp -r /usr/local/bin /artifacts
+  crane export --platform linux/{{ arch }} \
+    rafib/awesome-cli-binaries - \
+    | tar xf - -C bin/ --strip-components 3 usr/local/bin
 
 # compress local binaries
 archive arch=OS_ARCH: (binaries arch)
