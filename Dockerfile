@@ -88,7 +88,7 @@ RUN apk add curl git alpine-sdk neovim --update --no-cache
 
 COPY .files/.config/nvim .config/nvim
 
-ARG BUILD_REVISION=185
+ARG BUILD_REVISION=186
 LABEL io.rafi.revision="$BUILD_REVISION"
 
 RUN nvim --headless '+Lazy! sync' +qa \
@@ -109,7 +109,7 @@ RUN if test -f ~/.local/share/nvim/lazy/*.cloning; then \
 
 FROM debian:stable-slim AS downloader
 
-ARG BUILD_REVISION=185
+ARG BUILD_REVISION=186
 LABEL io.rafi.source="https://github.com/rafi/awesome-cli-binaries"
 LABEL io.rafi.revision="$BUILD_REVISION"
 
@@ -143,7 +143,7 @@ RUN --mount=type=secret,id=token \
     && dra download -aI crane google/go-containerregistry && upx crane && crane version \
     && dra download -ai dandavison/delta && delta --version \
     && dra download -s diff-so-fancy so-fancy/diff-so-fancy && chmod ug+x diff-so-fancy \
-    && dra download -ai Byron/dua-cli && dua --version \
+    && dra download -ait v2.41.1 Byron/dua-cli && dua --version \
     && dra download -ai muesli/duf && duf -version \
     && dra download -ai bootandy/dust && dust --version
 
